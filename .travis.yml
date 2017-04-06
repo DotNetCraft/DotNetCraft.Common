@@ -1,0 +1,31 @@
+# Travis-CI Build for DotNetCraft.Common
+# see travis-ci.org for details
+
+language: csharp
+sudo: required
+solution: DotNetCraft.Common.sln
+
+before_install:
+  - export EnableNuGetPackageRestore=true
+
+# Make sure build dependencies are installed.
+install:
+ - sudo apt-get install -y gtk-sharp2
+ #- travis_retry nuget install .nuget/packages.config -SolutionDirectory packages
+ - travis_retry nuget restore DotNetCraft.Common.sln -Verbosity detailed
+ - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+ 
+#cache: 
+# - apt
+# - directories:
+#   - packages
+
+# Run the build script
+script:
+ - xbuild /p:Configuration=Release DotNetCraft.Common.sln
+ #- mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./DotNetCraft.ConfigurationParserTests/bin/Release/DotNetCraft.ConfigurationParserTests.dll
+
+# Only watch the master branch.
+branches:
+ only:
+   - master
