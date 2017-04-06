@@ -1,0 +1,17 @@
+.vs/DotNetCraft.Common/v14/.suo
+Implementation/DotNetCraft.Common.DataAccessLayer/bin/
+Implementation/DotNetCraft.Common.DataAccessLayer/obj/
+DotNetCraft.Common.sln.DotSettings.user
+DotNetCraft.Common.BuildAll/obj/
+DotNetCraft.Common.BuildAll/bin/
+Core/DotNetCraft.Common.Core/obj/
+Implementation/DotNetCraft.Common.Domain/obj/
+Implementation/DotNetCraft.Common.Domain/bin/
+obj/
+Utils/DotNetCraft.Common.NLogger/bin/
+Core/DotNetCraft.Common.Core.Utils/bin/
+Core/DotNetCraft.Common.Core.Domain/bin/
+Core/DotNetCraft.Common.Core/bin/
+DotNetCraft.Common.BuildAll/DotNetCraft.Common.BuildAll.csproj.user
+Core/DotNetCraft.Common.Core/DotNetCraft.Common.Core.csproj.user
+.vs/
