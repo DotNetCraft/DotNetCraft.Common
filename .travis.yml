@@ -12,10 +12,9 @@ before_install:
 install:
  - sudo apt-get install -y gtk-sharp2
  - nuget # lets get version number
- - nuget install .nuget/packages.config -SolutionDirectory packages
  - nuget restore DotNetCraft.Common.sln -Verbosity detailed
  - nuget update  DotNetCraft.Common.sln -Verbosity detailed
- - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
+# - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
  
 #cache: 
 # - apt
