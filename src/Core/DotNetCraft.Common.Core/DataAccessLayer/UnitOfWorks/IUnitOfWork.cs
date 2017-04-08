@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using DotNetCraft.Common.Core.BaseEntities;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks
@@ -8,6 +9,11 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks
     /// </summary>
     public interface IUnitOfWork : IDisposable
     {
+        /// <summary>
+        /// Flag shows that transaction opened.
+        /// </summary>
+        bool IsTransactionOpened { get; }
+
         /// <summary>
         /// Insert an entity.
         /// </summary>

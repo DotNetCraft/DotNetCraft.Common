@@ -22,6 +22,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         /// </summary>
         /// <param name="logger">The <see cref="ICommonLogger"/> instance.</param>
         /// <exception cref="ArgumentNullException"><paramref name="logger"/> is <see langword="null" />.</exception>
+        /// <exception cref="UnitOfWorkException">There was an exception during opening a transaction.</exception>
         public UnitOfWork(IDataContext dataContext, ICommonLogger logger) : base(logger)
         {
             if (dataContext == null)
@@ -64,16 +65,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             if (isDisposing)
             {
                 if (IsTransactionOpened)
-                {
-                    try
-                    {
-                        Rollback();
-                    }
-                    catch (UnitOfWorkException unitOfWorkException)
-                    {
-                        logger.WriteError(unitOfWorkException, "Disposing will be continue...");
-                    }
-                }
+                    Rollback();
                 dataContext.Dispose();
             }
         }
@@ -109,7 +101,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
                     {"EntityType", typeof(TEntity).ToString()},
                     {"Entity", entity.ToString()}
                 };
-                throw new UnitOfWorkException("There was a problem during inserting a new entity into the database", ex, errorParameters);
+                throw new DataAccessLayerException("There was a problem during inserting a new entity into the database", ex, errorParameters);
             }
         }
 
@@ -141,16 +133,8 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             if (IsTransactionOpened == false)
                 throw new UnitOfWorkException("Transaction has been closed");
 
-            try
-            {
-                dataContext.Commit();
-                IsTransactionOpened = false;
-            }
-            catch (Exception ex)
-            {
-                logger.WriteError(ex, "There was an exception during committing changes.");
-                throw new UnitOfWorkException("There was an exception during committing changes.", ex);
-            }
+            dataContext.Commit();
+            IsTransactionOpened = false;            
         }
 
         /// <summary>
@@ -161,16 +145,8 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             if (IsTransactionOpened == false)
                 throw new UnitOfWorkException("Transaction has been closed");
 
-            try
-            {
-                dataContext.RollBack();
-                IsTransactionOpened = false;
-            }
-            catch (Exception ex)
-            {
-                logger.WriteError(ex, "There was an exception during rolling back changes.");
-                throw new UnitOfWorkException("There was an exception during rolling back changes.", ex);
-            }
+            dataContext.RollBack();
+            IsTransactionOpened = false;
         }
 
         #endregion        
