@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using DotNetCraft.Common.Core;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.DataAccessLayer;
@@ -11,6 +10,22 @@ namespace DataAccessLayer.Tests
     [TestFixture]
     public class DataContextPoolItemTests
     {
+        [Test]
+        public void ConstructorTest()
+        {
+            IDataContext dataContext = Substitute.For<IDataContext>();
+            IDataContextPoolItem dataContextPoolItem = new DataContextPoolItem(dataContext);
+            Assert.AreEqual(1, dataContextPoolItem.ReferenceCount);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ConstructorNullParameterTest()
+        {
+            new DataContextPoolItem(null);
+            Assert.Fail("ArgumentNullException expected");
+        }
+
         [Test]
         [TestCase(1)]
         [TestCase(2)]
@@ -55,6 +70,6 @@ namespace DataAccessLayer.Tests
 
             dataContextPoolItem.DecreaseRef();
             Assert.Fail("Exception expected");
-        }
+        }        
     }
 }

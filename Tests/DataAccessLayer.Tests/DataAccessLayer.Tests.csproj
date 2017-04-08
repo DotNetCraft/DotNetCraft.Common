@@ -54,6 +54,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="UnitOfWorkTests.cs" />
     <Compile Include="DataContextPoolItemTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -61,6 +62,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\DotNetCraft.Common.Core.Utils\DotNetCraft.Common.Core.Utils.csproj">
+      <Project>{cb52ab07-d66a-4953-a4e4-47bb608b09fe}</Project>
+      <Name>DotNetCraft.Common.Core.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\DotNetCraft.Common.Core\DotNetCraft.Common.Core.csproj">
       <Project>{784430D4-9160-4CE8-9AED-04C07A8878E1}</Project>
       <Name>DotNetCraft.Common.Core</Name>

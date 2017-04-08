@@ -23,7 +23,7 @@ install:
 # Run the build script
 script:
  - xbuild /p:Configuration=Release DotNetCraft.Common.sln
- - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe .Tests/DataAccessLayer.Tests/bin/Release/DataAccessLayer.Tests.dll
+ - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Tests/DataAccessLayer.Tests/bin/Release/DataAccessLayer.Tests.dll
 
 # Only watch the master branch.
 branches:
