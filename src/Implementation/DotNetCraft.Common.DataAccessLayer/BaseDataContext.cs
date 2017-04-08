@@ -112,7 +112,7 @@ namespace DotNetCraft.Common.DataAccessLayer
             }
         }        
 
-        public TEntity Update<TEntity>(TEntity entity) 
+        public void Update<TEntity>(TEntity entity) 
             where TEntity : class, IEntity
         {
             throw new NotImplementedException();

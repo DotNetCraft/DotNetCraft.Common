@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 using DotNetCraft.Common.Core.BaseEntities;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks
@@ -27,14 +26,14 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks
         /// </summary>
         /// <param name="entity">The entity.</param>        
         void Update<TEntity>(TEntity entity)
-            where TEntity : IEntity;
+            where TEntity : class, IEntity;
 
         /// <summary>
         /// Delete an entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
         void Delete<TEntity>(TEntity entity)
-            where TEntity : IEntity;
+            where TEntity : class, IEntity;
 
         /// <summary>
         /// Commit transaction.

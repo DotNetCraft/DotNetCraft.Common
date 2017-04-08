@@ -2,10 +2,11 @@
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.Utils.Logging;
+using DotNetCraft.Common.DataAccessLayer.Exceptions;
 
 namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 {
-    public class UnitOfWorkFactory: BaseLoggerObject, IUnitOfWorkFactory
+    public class UnitOfWorkFactory : BaseLoggerObject, IUnitOfWorkFactory
     {
         protected readonly IDataContextFactory dataContextFactory;
 
@@ -26,9 +27,17 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 
         public IUnitOfWork CreateUnitOfWork(IContextSettings contextSettings)
         {
-            IDataContext context = dataContextFactory.CreateDataContext(contextSettings);
-            IUnitOfWork unitOfWork = new UnitOfWork(context, logger);
-            return unitOfWork;
+            try
+            {
+                IDataContext context = dataContextFactory.CreateDataContext(contextSettings);
+                IUnitOfWork unitOfWork = new UnitOfWork(context, logger);
+                return unitOfWork;
+            }
+            catch (Exception ex)
+            {
+                logger.WriteError(ex, "There was an exception during creating a data context.");
+                throw new UnitOfWorkException("There was an exception during creating a data context.", ex);
+            }
         }
 
         #endregion

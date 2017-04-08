@@ -55,9 +55,11 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitOfWorkTests.cs" />
+    <Compile Include="UnitOfWorks\SimpleUnitOfWorks\UnitOfWorkFactoryTests.cs" />
+    <Compile Include="UnitOfWorks\SimpleUnitOfWorks\UnitOfWorkTests.cs" />
     <Compile Include="DataContextPoolItemTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWorkFactoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -76,6 +78,7 @@
       <Name>DotNetCraft.Common.DataAccessLayer</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

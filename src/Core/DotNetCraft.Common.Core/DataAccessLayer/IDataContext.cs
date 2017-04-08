@@ -20,7 +20,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer
         TEntity Insert<TEntity>(TEntity entity)
             where TEntity : class, IEntity;
 
-        TEntity Update<TEntity>(TEntity entity)
+        void Update<TEntity>(TEntity entity)
             where TEntity : class, IEntity;
 
         void Delete<TEntity>(TEntity entity)

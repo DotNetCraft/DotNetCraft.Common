@@ -8,11 +8,13 @@ using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace DataAccessLayer.Tests
+namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
 {
     [TestFixture]
     public class UnitOfWorkTests
     {
+        #region Constructors...
+
         [Test]
         public void ConstructorTest()
         {
@@ -59,6 +61,10 @@ namespace DataAccessLayer.Tests
 
             Assert.Fail("ArgumentNullException expected");
         }
+
+        #endregion
+
+        #region Commit...
 
         [Test]
         public void CommitTest()
@@ -107,6 +113,10 @@ namespace DataAccessLayer.Tests
             dataContext.Received(1).Dispose();
         }
 
+        #endregion
+
+        #region Rollback
+
         [Test]
         public void RollbackTest()
         {
@@ -154,6 +164,10 @@ namespace DataAccessLayer.Tests
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().Commit();
         }
+
+        #endregion
+
+        #region Insert
 
         [Test]
         public void InsertCommitTest()
@@ -228,5 +242,163 @@ namespace DataAccessLayer.Tests
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().Commit();
         }
+
+        #endregion
+
+        #region Update
+
+        [Test]
+        public void UpdateCommitTest()
+        {
+            IDataContext dataContext = Substitute.For<IDataContext>();
+            ICommonLogger logger = Substitute.For<ICommonLogger>();
+            IEntity entity = Substitute.For<IEntity>();
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            {
+                unitOfWork.Update(entity);
+                unitOfWork.Commit();
+            }
+            dataContext.Received(1).BeginTransaction();
+            dataContext.Received(1).Update(entity);
+            dataContext.Received(1).Commit();
+            dataContext.Received(1).Dispose();
+            dataContext.DidNotReceive().RollBack();
+        }
+
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void UpdateRollbackTest(bool useRollbackMethod)
+        {
+            IDataContext dataContext = Substitute.For<IDataContext>();
+            ICommonLogger logger = Substitute.For<ICommonLogger>();
+            IEntity entity = Substitute.For<IEntity>();
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            {
+                unitOfWork.Update(entity);
+                if (useRollbackMethod)
+                    unitOfWork.Rollback();
+            }
+            dataContext.Received(1).BeginTransaction();
+            dataContext.Received(1).Update(entity);
+            dataContext.Received(1).RollBack();
+            dataContext.Received(1).Dispose();
+            dataContext.DidNotReceive().Commit();
+        }
+
+        [Test]
+        public void UpdateExceptionTest()
+        {
+            IDataContext dataContext = Substitute.For<IDataContext>();
+            ICommonLogger logger = Substitute.For<ICommonLogger>();
+            IEntity entity = Substitute.For<IEntity>();
+
+            dataContext.When(x => x.Update(entity)).Do(
+                x =>
+                {
+                    throw new Exception();
+                });
+
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            {
+                try
+                {
+                    unitOfWork.Update(entity);
+                    unitOfWork.Commit();
+                }
+                catch (UnitOfWorkException)
+                {
+                }
+                catch (Exception)
+                {
+                    Assert.Fail("UnitOfWorkException expected");
+                }
+            }
+            dataContext.Received(1).BeginTransaction();
+            dataContext.Received(1).Update(entity);
+            dataContext.Received(1).RollBack();
+            dataContext.Received(1).Dispose();
+            dataContext.DidNotReceive().Commit();
+        }
+
+        #endregion
+
+        #region Delete
+
+        [Test]
+        public void DeleteCommitTest()
+        {
+            IDataContext dataContext = Substitute.For<IDataContext>();
+            ICommonLogger logger = Substitute.For<ICommonLogger>();
+            IEntity entity = Substitute.For<IEntity>();
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            {
+                unitOfWork.Delete(entity);
+                unitOfWork.Commit();
+            }
+            dataContext.Received(1).BeginTransaction();
+            dataContext.Received(1).Delete(entity);
+            dataContext.Received(1).Commit();
+            dataContext.Received(1).Dispose();
+            dataContext.DidNotReceive().RollBack();
+        }
+
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void DeleteRollbackTest(bool useRollbackMethod)
+        {
+            IDataContext dataContext = Substitute.For<IDataContext>();
+            ICommonLogger logger = Substitute.For<ICommonLogger>();
+            IEntity entity = Substitute.For<IEntity>();
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            {
+                unitOfWork.Delete(entity);
+                if (useRollbackMethod)
+                    unitOfWork.Rollback();
+            }
+            dataContext.Received(1).BeginTransaction();
+            dataContext.Received(1).Delete(entity);
+            dataContext.Received(1).RollBack();
+            dataContext.Received(1).Dispose();
+            dataContext.DidNotReceive().Commit();
+        }
+
+        [Test]
+        public void DeleteExceptionTest()
+        {
+            IDataContext dataContext = Substitute.For<IDataContext>();
+            ICommonLogger logger = Substitute.For<ICommonLogger>();
+            IEntity entity = Substitute.For<IEntity>();
+
+            dataContext.When(x => x.Delete(entity)).Do(
+                x =>
+                {
+                    throw new Exception();
+                });
+
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            {
+                try
+                {
+                    unitOfWork.Delete(entity);
+                    unitOfWork.Commit();
+                }
+                catch (UnitOfWorkException)
+                {
+                }
+                catch (Exception)
+                {
+                    Assert.Fail("UnitOfWorkException expected");
+                }
+            }
+            dataContext.Received(1).BeginTransaction();
+            dataContext.Received(1).Delete(entity);
+            dataContext.Received(1).RollBack();
+            dataContext.Received(1).Dispose();
+            dataContext.DidNotReceive().Commit();
+        }
+
+        #endregion
     }
 }
