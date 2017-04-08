@@ -50,6 +50,7 @@
     <Compile Include="DataAccessLayer\UnitOfWorks\IUnitOfWork.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\IUnitOfWorkFactory.cs" />
     <Compile Include="DataAccessLayer\Specofications\SimpleSpecificationRequest.cs" />
+    <Compile Include="IDataContextPoolItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

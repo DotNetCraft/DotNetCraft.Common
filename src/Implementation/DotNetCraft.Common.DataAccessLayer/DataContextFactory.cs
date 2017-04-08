@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using DotNetCraft.Common.Core;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
@@ -12,7 +13,7 @@ namespace DotNetCraft.Common.DataAccessLayer
         where TContextSettings : IContextSettings
     {
 
-        private readonly Dictionary<int, DataContextPoolItem> dataContextPool;
+        private readonly Dictionary<int, IDataContextPoolItem> dataContextPool;
 
         #region Implementation of IDataContextFactory
 
@@ -23,7 +24,7 @@ namespace DotNetCraft.Common.DataAccessLayer
         /// <exception cref="ArgumentNullException"><paramref name="loggerFactory"/> is <see langword="null" />.</exception>
         protected DataContextFactory(ICommonLoggerFactory loggerFactory) : base(loggerFactory)
         {
-            dataContextPool = new Dictionary<int, DataContextPoolItem>();
+            dataContextPool = new Dictionary<int, IDataContextPoolItem>();
         }
 
         /// <summary>
@@ -40,10 +41,10 @@ namespace DotNetCraft.Common.DataAccessLayer
                 TDataContext dataContext;
                 lock (dataContextPool)
                 {
-                    DataContextPoolItem dataContextPoolItem;
+                    IDataContextPoolItem dataContextPoolItem;
                     if (dataContextPool.TryGetValue(threadId, out dataContextPoolItem))
                     {
-                        dataContextPoolItem.IncreseRef();
+                        dataContextPoolItem.IncreaseRef();
                         dataContext = (TDataContext) dataContextPoolItem.DataContext;
                     }
                     else
@@ -85,7 +86,7 @@ namespace DotNetCraft.Common.DataAccessLayer
 
                 lock (dataContextPool)
                 {
-                    DataContextPoolItem dataContextPoolItem;
+                    IDataContextPoolItem dataContextPoolItem;
                     if (dataContextPool.TryGetValue(threadId, out dataContextPoolItem))
                     {
                         int currentRefCount = dataContextPoolItem.DecreaseRef();
