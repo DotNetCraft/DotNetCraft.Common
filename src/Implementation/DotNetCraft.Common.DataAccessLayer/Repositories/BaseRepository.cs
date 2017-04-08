@@ -13,18 +13,18 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories
     public abstract class BaseRepository<TEntity, TEntityId> : BaseLoggerObject, IRepository<TEntity, TEntityId>
         where TEntity : class, IEntity<TEntityId>
     {
-        protected readonly IDataBaseSettings dataBaseSettings;
+        protected readonly IContextSettings contextSettings;
 
         protected readonly IDataContextFactory dataContextFactory;
 
-        protected BaseRepository(IDataBaseSettings dataBaseSettings, IDataContextFactory dataContextFactory, ICommonLoggerFactory loggerFactory): base(loggerFactory)
+        protected BaseRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory, ICommonLoggerFactory loggerFactory): base(loggerFactory)
         {
-            if (dataBaseSettings == null)
-                throw new ArgumentNullException(nameof(dataBaseSettings));
+            if (contextSettings == null)
+                throw new ArgumentNullException(nameof(contextSettings));
             if (dataContextFactory == null)
                 throw new ArgumentNullException(nameof(dataContextFactory));
 
-            this.dataBaseSettings = dataBaseSettings;
+            this.contextSettings = contextSettings;
             this.dataContextFactory = dataContextFactory;
         }
 
@@ -80,7 +80,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories
         {
             try
             {
-                using (IDataContext dataContext = dataContextFactory.CreateDataContext(dataBaseSettings))
+                using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
                     return OnGet(entityId, dataContext);
                 }
@@ -104,7 +104,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories
         {
             try
             {
-                using (IDataContext dataContext = dataContextFactory.CreateDataContext(dataBaseSettings))
+                using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
                     return OnGetAll(dataContext);
                 }
@@ -128,7 +128,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories
         {
             try
             {
-                using (IDataContext dataContext = dataContextFactory.CreateDataContext(dataBaseSettings))
+                using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
                     return OnGetBySpecification(specification, dataContext);
                 }

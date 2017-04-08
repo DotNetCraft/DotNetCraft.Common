@@ -21,7 +21,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories
         /// </summary>
         /// <param name="loggerFactory">The <see cref="ICommonLoggerFactory"/> instance.</param>
         /// <exception cref="ArgumentNullException"><paramref name="loggerFactory"/> is <see langword="null" />.</exception>
-        protected BaseSmartRepository(IDataBaseSettings dataBaseSettings, IDataContextFactory dataContextFactory, IDotNetCraftMapper dotNetCraftMapper, ICommonLoggerFactory loggerFactory) : base(dataBaseSettings, dataContextFactory, loggerFactory)
+        protected BaseSmartRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory, IDotNetCraftMapper dotNetCraftMapper, ICommonLoggerFactory loggerFactory) : base(contextSettings, dataContextFactory, loggerFactory)
         {
             if (dotNetCraftMapper == null)
                 throw new ArgumentNullException(nameof(dotNetCraftMapper));
@@ -40,7 +40,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories
         {
             try
             {
-                using (IDataContext dataContext = dataContextFactory.CreateDataContext(dataBaseSettings))
+                using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
                     TypeConverter converter = TypeDescriptor.GetConverter(typeof(TEntityId));
                     TEntityId entityId = (TEntityId) converter.ConvertFrom(modelId);
@@ -69,7 +69,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories
         {
             try
             {
-                using (IDataContext dataContext = dataContextFactory.CreateDataContext(dataBaseSettings))
+                using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
                     ICollection<TEntity> entities = OnGetAll(dataContext);
                     ICollection<TModel> models = dotNetCraftMapper.Map<TEntity, TModel>(entities);
@@ -96,7 +96,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories
         {
             try
             {
-                using (IDataContext dataContext = dataContextFactory.CreateDataContext(dataBaseSettings))
+                using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
                     ICollection<TEntity> entities = OnGetBySpecification(specification, dataContext);
                     ICollection<TModel> models = dotNetCraftMapper.Map<TEntity, TModel>(entities);

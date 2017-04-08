@@ -8,9 +8,9 @@
         /// <summary>
         /// Create a new data context.
         /// </summary>
-        /// <param name="dataBaseSettings"></param>
+        /// <param name="contextSettings"></param>
         /// <returns>The IDataContext instance.</returns>
-        IDataContext CreateDataContext(IDataBaseSettings dataBaseSettings);
+        IDataContext CreateDataContext(IContextSettings contextSettings);
 
         /// <summary>
         /// Release an existing data context.

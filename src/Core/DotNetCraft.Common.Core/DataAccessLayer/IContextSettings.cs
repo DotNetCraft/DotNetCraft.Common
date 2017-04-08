@@ -1,6 +1,6 @@
 ﻿namespace DotNetCraft.Common.Core.DataAccessLayer
 {
-    public interface IDataBaseSettings
+    public interface IContextSettings
     {
     }
 }

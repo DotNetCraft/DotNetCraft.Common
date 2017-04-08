@@ -26,9 +26,9 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
 
         #region Implementation of IUnitOfWorkFactory
 
-        public ISmartUnitOfWork CreateSmartUnitOfWork(IDataBaseSettings dataBaseSettings)
+        public ISmartUnitOfWork CreateSmartUnitOfWork(IContextSettings contextSettings)
         {
-            IDataContext context = dataContextFactory.CreateDataContext(dataBaseSettings);
+            IDataContext context = dataContextFactory.CreateDataContext(contextSettings);
             ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(context, dotNetCraftMapper, logger);
             return unitOfWork;
         }

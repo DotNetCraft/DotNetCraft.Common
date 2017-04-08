@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2ABA4234-5911-4A41-BCFB-F60C70B70A15}</ProjectGuid>
+    <ProjectGuid>{784430D4-9160-4CE8-9AED-04C07A8878E1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DotNetCraft.Common.BuildAll</RootNamespace>
-    <AssemblyName>DotNetCraft.Common.BuildAll</AssemblyName>
+    <RootNamespace>DotNetCraft.Common.Core</RootNamespace>
+    <AssemblyName>DotNetCraft.Common.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\DotNetCraft.Libraries\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -34,10 +34,23 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseEntities\BaseEntity.cs" />
+    <Compile Include="BaseEntities\IEntity.cs" />
+    <Compile Include="DataAccessLayer\IContextSettings.cs" />
+    <Compile Include="DataAccessLayer\IDataContext.cs" />
+    <Compile Include="DataAccessLayer\IDataContextFactory.cs" />
+    <Compile Include="DataAccessLayer\IEntityModelMapper.cs" />
+    <Compile Include="DataAccessLayer\IObjectIdentity.cs" />
+    <Compile Include="DataAccessLayer\Repositories\IRepository.cs" />
+    <Compile Include="DataAccessLayer\Repositories\ISmartRepository.cs" />
+    <Compile Include="DataAccessLayer\UnitOfWorks\ISmartUnitOfWork.cs" />
+    <Compile Include="DataAccessLayer\UnitOfWorks\ISmartUnitOfWorkFactory.cs" />
+    <Compile Include="DataAccessLayer\Specofications\ISpecification.cs" />
+    <Compile Include="DataAccessLayer\Specofications\ISpecificationRequest.cs" />
+    <Compile Include="DataAccessLayer\UnitOfWorks\IUnitOfWork.cs" />
+    <Compile Include="DataAccessLayer\UnitOfWorks\IUnitOfWorkFactory.cs" />
+    <Compile Include="DataAccessLayer\Specofications\SimpleSpecificationRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

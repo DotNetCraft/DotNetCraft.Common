@@ -15,3 +15,15 @@ Core/DotNetCraft.Common.Core/bin/
 DotNetCraft.Common.BuildAll/DotNetCraft.Common.BuildAll.csproj.user
 Core/DotNetCraft.Common.Core/DotNetCraft.Common.Core.csproj.user
 .vs/
+src/DotNetCraft.Common.BuildAll/bin/
+src/Core/DotNetCraft.Common.Core/bin/
+src/Utils/DotNetCraft.Common.NLogger/bin/
+src/Utils/DotNetCraft.Common.NLogger/DotNetCraft.Common.NLogger.csproj.user
+src/Implementation/DotNetCraft.Common.DataAccessLayer/bin/
+Packages/
+src/Core/DotNetCraft.Common.Core.Domain/bin/
+src/Core/DotNetCraft.Common.Core.Utils/bin/
+DataAccessLayer.Tests/bin/
+src/DotNetCraft.Common.BuildAll/DotNetCraft.Common.BuildAll.csproj.user
+src/Implementation/DotNetCraft.Common.Domain/bin/
+Tests/DataAccessLayer.Tests/bin/

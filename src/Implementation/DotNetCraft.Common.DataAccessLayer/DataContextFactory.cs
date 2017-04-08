@@ -7,9 +7,9 @@ using DotNetCraft.Common.DataAccessLayer.Exceptions;
 
 namespace DotNetCraft.Common.DataAccessLayer
 {
-    public abstract class DataContextFactory<TDataContext, TSettings> : BaseLoggerObject, IDataContextFactory
+    public abstract class DataContextFactory<TDataContext, TContextSettings> : BaseLoggerObject, IDataContextFactory
         where TDataContext: IDataContext
-        where TSettings : IDataBaseSettings
+        where TContextSettings : IContextSettings
     {
 
         private readonly Dictionary<int, DataContextPoolItem> dataContextPool;
@@ -29,9 +29,9 @@ namespace DotNetCraft.Common.DataAccessLayer
         /// <summary>
         /// Create a new data context.
         /// </summary>
-        /// <param name="dataBaseSettings"></param>
+        /// <param name="contextSettings"></param>
         /// <returns>The IDataContext instance.</returns>
-        public IDataContext CreateDataContext(IDataBaseSettings dataBaseSettings)
+        public IDataContext CreateDataContext(IContextSettings contextSettings)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace DotNetCraft.Common.DataAccessLayer
                     }
                     else
                     {
-                        TSettings settings = (TSettings) dataBaseSettings;
+                        TContextSettings settings = (TContextSettings) contextSettings;
                         dataContext = OnCreateDataContext(settings);
                         dataContextPoolItem = new DataContextPoolItem(dataContext);
                         dataContextPool.Add(threadId, dataContextPoolItem);
@@ -61,9 +61,9 @@ namespace DotNetCraft.Common.DataAccessLayer
             {
                 Dictionary<string, string> errorParameters = new Dictionary<string, string>
                 {
-                    {"DataBaseSettings", dataBaseSettings.ToString()},
+                    {"DataBaseSettings", contextSettings.ToString()},
                     {"Type of DataContext", typeof(TDataContext).ToString()},
-                    {"Type of Settings", typeof(TSettings).ToString()}
+                    {"Type of Settings", typeof(TContextSettings).ToString()}
                 };
                 throw new DataAccessLayerException("There was a problem during creating a data context", ex, errorParameters);
             }
@@ -105,13 +105,13 @@ namespace DotNetCraft.Common.DataAccessLayer
                 {
                     {"dataContext", dataContext.ToString()},
                     {"Type of DataContext", typeof(TDataContext).ToString()},
-                    {"Type of Settings", typeof(TSettings).ToString()}
+                    {"Type of Settings", typeof(TContextSettings).ToString()}
                 };
                 throw new DataAccessLayerException("There was a problem during releasering the data context", ex, errorParameters);
             }
         }
 
-        protected abstract TDataContext OnCreateDataContext(TSettings dataBaseSettings);
+        protected abstract TDataContext OnCreateDataContext(TContextSettings dataBaseSettings);
 
         #endregion
     }

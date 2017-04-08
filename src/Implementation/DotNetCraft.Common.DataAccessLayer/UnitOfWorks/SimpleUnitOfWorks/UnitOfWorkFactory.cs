@@ -24,9 +24,9 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 
         #region Implementation of IUnitOfWorkFactory
 
-        public IUnitOfWork CreateUnitOfWork(IDataBaseSettings dataBaseSettings)
+        public IUnitOfWork CreateUnitOfWork(IContextSettings contextSettings)
         {
-            IDataContext context = dataContextFactory.CreateDataContext(dataBaseSettings);
+            IDataContext context = dataContextFactory.CreateDataContext(contextSettings);
             IUnitOfWork unitOfWork = new UnitOfWork(context, logger);
             return unitOfWork;
         }
