@@ -5,10 +5,11 @@ using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
+using DotNetCraft.Common.Utils.Disposal;
 
 namespace DotNetCraft.Common.DataAccessLayer
 {
-    public abstract class BaseDataContext : BaseLoggerObject, IDataContext
+    public abstract class BaseDataContext : DisposableLoggerObject, IDataContext
     {
         private readonly IDataContextFactory owner;
         private bool isDisposed;
@@ -21,43 +22,33 @@ namespace DotNetCraft.Common.DataAccessLayer
             this.owner = owner;
         }
 
-        /// <summary>
-        /// Destructor.
-        /// </summary>
-        ~BaseDataContext()
-        {
-            OnDispose(false);
-        }
 
-        #region Implementation of IDisposable
-
-
+        #region Implementation of DisposableObject
+        
         /// <summary>
         /// Occurs when object is disposing.
         /// </summary>
         /// <param name="isDisposing">Flag shows that object is disposing or not.</param>
-        protected abstract void OnDisposing(bool isDisposing);
+        protected abstract void OnDataContextDisposing(bool isDisposing);
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// Releases resources held by the object.
         /// </summary>
-        public void Dispose()
+        /// <param name="disposing"><c>True</c> if called manually, otherwise by GC.</param>
+        public override void Dispose(bool disposing)
         {
-            OnDispose(true);
-        }
-        
-        private void OnDispose(bool isDisposing)
-        {
-            if (isDisposing)
+            if (disposing)
             {
                 bool canDispose = owner.ReleaseDataContext(this);
-                if (canDispose)
-                    OnDisposing(true);
+                if (canDispose == false)
+                    return;
+                OnDataContextDisposing(true);
             }
             else
             {
-                OnDisposing(false);
+                OnDataContextDisposing(false);
             }
+            base.Dispose(disposing);
         }
 
         #endregion

@@ -1,11 +1,9 @@
 ﻿using System;
+using DotNetCraft.Common.Core.Utils.Logging;
 
-namespace DotNetCraft.Common.Core.Utils.Logging
+namespace DotNetCraft.Common.Utils.Disposal
 {
-    /// <summary>
-    /// Base class for objects that should have logger.
-    /// </summary>
-    public abstract class BaseLoggerObject
+    public class DisposableLoggerObject: DisposableObject
     {
         /// <summary>
         /// The <see cref="ICommonLogger"/> instance.
@@ -17,7 +15,7 @@ namespace DotNetCraft.Common.Core.Utils.Logging
         /// </summary>
         /// <param name="loggerFactory">The <see cref="ICommonLoggerFactory"/> instance.</param>
         /// <exception cref="ArgumentNullException"><paramref name="loggerFactory"/> is <see langword="null" />.</exception>
-        protected BaseLoggerObject(ICommonLoggerFactory loggerFactory)
+        protected DisposableLoggerObject(ICommonLoggerFactory loggerFactory)
         {
             if (loggerFactory == null)
                 throw new ArgumentNullException("loggerFactory");
@@ -30,7 +28,7 @@ namespace DotNetCraft.Common.Core.Utils.Logging
         /// </summary>
         /// <param name="logger">The <see cref="ICommonLogger"/> instance.</param>
         /// <exception cref="ArgumentNullException"><paramref name="logger"/> is <see langword="null" />.</exception>
-        protected BaseLoggerObject(ICommonLogger logger)
+        protected DisposableLoggerObject(ICommonLogger logger)
         {
             if (logger == null)
                 throw new ArgumentNullException("logger");

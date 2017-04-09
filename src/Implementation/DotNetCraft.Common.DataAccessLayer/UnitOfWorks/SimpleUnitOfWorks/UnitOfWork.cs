@@ -5,10 +5,11 @@ using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
+using DotNetCraft.Common.Utils.Disposal;
 
 namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 {
-    public class UnitOfWork: BaseLoggerObject, IUnitOfWork
+    public class UnitOfWork: DisposableLoggerObject, IUnitOfWork
     {
         protected readonly IDataContext dataContext;
 
@@ -43,27 +44,15 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             }
         }
 
-        /// <summary>
-        /// Destructor.
-        /// </summary>
-        ~UnitOfWork()
-        {
-            OnDisposing(false);
-        }
-
-        #region Implementation of IDisposable
+        #region Overrides of DisposableObject
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// Releases resources held by the object.
         /// </summary>
-        public void Dispose()
+        /// <param name="disposing"><c>True</c> if called manually, otherwise by GC.</param>
+        public override void Dispose(bool disposing)
         {
-            OnDisposing(true);
-        }
-
-        protected virtual void OnDisposing(bool isDisposing)
-        {
-            if (isDisposing)
+            if (disposing)
             {
                 logger.WriteTrace("Disposing UnitOfWork: IsTransactionOpened = {0}...", IsTransactionOpened);
                 if (IsTransactionOpened)
@@ -82,6 +71,8 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
                 dataContext.Dispose();
                 logger.WriteTrace("The object has been disposed.");
             }
+
+            base.Dispose(disposing);
         }
 
         #endregion

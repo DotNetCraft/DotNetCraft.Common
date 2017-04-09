@@ -78,6 +78,10 @@
       <Project>{81476D69-0BF6-4F24-A936-0334B8025B09}</Project>
       <Name>DotNetCraft.Common.DataAccessLayer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Utils\DotNetCraft.Common.Utils\DotNetCraft.Common.Utils.csproj">
+      <Project>{502D5E08-5557-4D1F-BD1D-29A7B0CCB683}</Project>
+      <Name>DotNetCraft.Common.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Choose>

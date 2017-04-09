@@ -5,6 +5,7 @@ using DotNetCraft.Common.Core;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
+using DotNetCraft.Common.Utils.Logging;
 
 namespace DotNetCraft.Common.DataAccessLayer
 {

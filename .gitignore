@@ -27,3 +27,5 @@ DataAccessLayer.Tests/bin/
 src/DotNetCraft.Common.BuildAll/DotNetCraft.Common.BuildAll.csproj.user
 src/Implementation/DotNetCraft.Common.Domain/bin/
 Tests/DataAccessLayer.Tests/bin/
+src/Utils/DotNetCraft.Common.Utils/bin/
+Net45/

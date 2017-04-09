@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>DotNetCraft.Common</id>
+    <version>1.0.1</version>
+    <title>DotNetCraft.Common For .NET</title>
+    <summary>DotNetCraft.Common For .NET</summary>
+    <description>Common base library for DotNetCraft projects.</description>
+    <releaseNotes />
+    <language>en-US</language>
+    <iconUrl>https://github.com/DotNetCraft/ConfigurationParser/blob/master/Avatar.png</iconUrl>
+    <licenseUrl>https://github.com/DotNetCraft/DotNetCraft.Common/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/DotNetCraft/DotNetCraft.Common</projectUrl>
+    <authors>DotNetCraft</authors>
+    <owners>DotNetCraft</owners>
+    <copyright>DotNetCraft 2017</copyright>
+    <tags>DAL UnitOfWork Repository Data Access Layer</tags>
+  </metadata>
+  <files>
+    <file src="..\net45\*.dll" target="lib\net45" />    
+	<file src="..\net45\*.pdb" target="lib\net45" />    
+  </files>
+</package>
