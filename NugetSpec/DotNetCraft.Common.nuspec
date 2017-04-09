@@ -8,7 +8,7 @@
     <description>Common base library for DotNetCraft projects.</description>
     <releaseNotes />
     <language>en-US</language>
-    <iconUrl>https://github.com/DotNetCraft/ConfigurationParser/blob/master/Avatar.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/DotNetCraft/ConfigurationParser/master/Avatar.png</iconUrl>
     <licenseUrl>https://github.com/DotNetCraft/DotNetCraft.Common/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/DotNetCraft/DotNetCraft.Common</projectUrl>
     <authors>DotNetCraft</authors>
