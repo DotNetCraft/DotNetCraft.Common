@@ -38,7 +38,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
             try
             {
                 TEntity entity = dotNetCraftMapper.Map<TModel, TEntity>(model);
-                entity = OnInsert<TEntity>(entity);
+                entity = OnInsert(entity);
                 TModel result = dotNetCraftMapper.Map<TEntity, TModel>(entity);
                 return result;                
             }
