@@ -35,14 +35,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseEntities\BaseEntity.cs" />
+    <Compile Include="BaseEntities\BaseGuidEntity.cs" />
+    <Compile Include="BaseEntities\BaseIntEntity.cs" />
+    <Compile Include="BaseEntities\BaseStringEntity.cs" />
     <Compile Include="BaseEntities\IEntity.cs" />
     <Compile Include="DataAccessLayer\IContextSettings.cs" />
     <Compile Include="DataAccessLayer\IDataContext.cs" />
     <Compile Include="DataAccessLayer\IDataContextFactory.cs" />
     <Compile Include="DataAccessLayer\IEntityModelMapper.cs" />
     <Compile Include="DataAccessLayer\IObjectIdentity.cs" />
+    <Compile Include="DataAccessLayer\Repositories\IGuidRepository.cs" />
+    <Compile Include="DataAccessLayer\Repositories\IIntRepository.cs" />
     <Compile Include="DataAccessLayer\Repositories\IRepository.cs" />
     <Compile Include="DataAccessLayer\Repositories\ISmartRepository.cs" />
+    <Compile Include="DataAccessLayer\Repositories\IStringRepository.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\ISmartUnitOfWork.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\ISmartUnitOfWorkFactory.cs" />
     <Compile Include="DataAccessLayer\Specofications\ISpecification.cs" />
@@ -52,6 +58,12 @@
     <Compile Include="DataAccessLayer\Specofications\SimpleSpecificationRequest.cs" />
     <Compile Include="IDataContextPoolItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DotNetCraft.Common.Core.Utils\DotNetCraft.Common.Core.Utils.csproj">
+      <Project>{CB52AB07-D66A-4953-A4E4-47BB608B09FE}</Project>
+      <Name>DotNetCraft.Common.Core.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

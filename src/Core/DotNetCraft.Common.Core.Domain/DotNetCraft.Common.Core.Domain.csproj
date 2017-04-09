@@ -36,7 +36,18 @@
   <ItemGroup>
     <Compile Include="BaseModels\BaseModel.cs" />
     <Compile Include="BaseModels\IModel.cs" />
+    <Compile Include="Management\IBackgroundManager.cs" />
+    <Compile Include="Management\IBackgroundManagerConfiguration.cs" />
+    <Compile Include="Management\IManager.cs" />
+    <Compile Include="Management\IManagerConfiguration.cs" />
+    <Compile Include="Management\StopwatchManager\IStopwatchManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DotNetCraft.Common.Core.Utils\DotNetCraft.Common.Core.Utils.csproj">
+      <Project>{CB52AB07-D66A-4953-A4E4-47BB608B09FE}</Project>
+      <Name>DotNetCraft.Common.Core.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,12 +1,13 @@
 ﻿using System;
 using DotNetCraft.Common.Core.BaseEntities;
+using DotNetCraft.Common.Core.Utils.Disposal;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks
 {
     /// <summary>
     /// Pattern Unit of Work.
     /// </summary>
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork : IDisposableObject
     {
         /// <summary>
         /// Flag shows that transaction opened.

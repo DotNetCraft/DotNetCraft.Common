@@ -35,12 +35,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Disposal\IDisposableObject.cs" />
+    <Compile Include="IStartStoppable.cs" />
     <Compile Include="IDotNetCraftMapper.cs" />
     <Compile Include="Disposal\INotifyWhenDisposed.cs" />
     <Compile Include="Logging\ICommonLogger.cs" />
     <Compile Include="Logging\ICommonLoggerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StopwatchManager\IStopwatchManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

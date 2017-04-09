@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 using DotNetCraft.Common.Core.BaseEntities;
+using DotNetCraft.Common.Core.Utils.Disposal;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer
 {
     /// <summary>
     /// Interface shows that object is a data context.
     /// </summary>
-    public interface IDataContext : IDisposable
+    public interface IDataContext : IDisposableObject
     {
         /// <summary>
         /// Get a set with entities.

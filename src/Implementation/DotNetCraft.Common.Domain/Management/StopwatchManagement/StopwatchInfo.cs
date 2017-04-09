@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 
-namespace DotNetCraft.Common.Utils.StopwatchExtention
+namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
 {
     /// <summary>
     /// Contains information about timer that has been executed.

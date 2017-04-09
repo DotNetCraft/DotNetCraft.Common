@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using DotNetCraft.Common.Core.Domain.Management.StopwatchManager;
 using DotNetCraft.Common.Core.Utils.Logging;
-using DotNetCraft.Common.Core.Utils.StopwatchManager;
-using DotNetCraft.Common.Utils.Logging;
 
-namespace DotNetCraft.Common.Utils.StopwatchExtention
+namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
 {
     /// <summary>
     /// This is a simple Stopwatch manager. 
     /// It can be used for calculation how many times methods have been executed and how many times do these execution take.
     /// </summary>
-    public class StopwatchManager : BaseLoggerObject, IStopwatchManager
+    public class StopwatchManager : BaseBackgroundManager<StopwatchManagerConfig>, IStopwatchManager
     {
         #region Fields...
 
@@ -27,21 +24,6 @@ namespace DotNetCraft.Common.Utils.StopwatchExtention
         /// </summary>
         private readonly object syncObject = new object();
 
-        /// <summary>
-        /// The <see cref="CancellationTokenSource"/> instance.
-        /// </summary>
-        private readonly CancellationTokenSource cancellationTokenSource;
-
-        /// <summary>
-        /// <see cref="Task"/> where background work will be doing.
-        /// </summary>
-        private readonly Task worker;
-
-        /// <summary>
-        /// The stopwatch manager configuration.
-        /// </summary>
-        private readonly StopwatchManagerConfig config;
-
         #endregion
 
         #region Constructors...
@@ -49,45 +31,14 @@ namespace DotNetCraft.Common.Utils.StopwatchExtention
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <exception cref="ArgumentNullException"><paramref name="config"/> is <see langword="null" />.</exception>
-        public StopwatchManager(StopwatchManagerConfig config, ICommonLogger logger)
-            : base(logger)
+        public StopwatchManager(StopwatchManagerConfig config, ICommonLoggerFactory loggerFactory)
+            : base(config, loggerFactory)
         {
-            if (config == null)
-                throw new ArgumentNullException("config");
-
             stopwatchDictionary = new Dictionary<string, StopwatchInfo>();
-            cancellationTokenSource = new CancellationTokenSource();
-
-            this.config = config;
-
-            if (config.UseBackgroundWorker)
-            {
-                CancellationToken cancellationToken = cancellationTokenSource.Token;
-                worker = new Task(OnWorking, cancellationToken);
-                worker.Start();
-            }
         }
 
         #endregion
 
-        /// <summary>
-        /// This is a background thread.
-        /// </summary>
-        /// <param name="obj">The object. In deed, it is the <see cref="CancellationToken"/> instance.</param>
-        private void OnWorking(object obj)
-        {
-            CancellationToken cancellationToken = (CancellationToken)obj;
-
-            TimeSpan sleepTime = config.SleepTime;
-            while (cancellationToken.IsCancellationRequested == false)
-            {
-                DisplayAllStatistic();
-                cancellationToken.WaitHandle.WaitOne(sleepTime);
-            }
-
-            DisplayAllStatistic();
-        }
 
         #region Implementation of IStopwatchManager
 
@@ -189,17 +140,31 @@ namespace DotNetCraft.Common.Utils.StopwatchExtention
 
         #endregion
 
-        #region Implementation of IDisposable
+        #region Overrides of BaseBackgroundManager
 
-        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
-        public void Dispose()
+        /// <summary>
+        /// Occurs when manager should do background work.
+        /// </summary>
+        protected override void OnBackroundExecution()
         {
-            if (worker == null || worker.IsCanceled)
+            if (stopwatchDictionary == null)
                 return;
 
-            cancellationTokenSource.Cancel();
+            DisplayAllStatistic();
         }
 
-        #endregion
+        /// <summary>
+        /// Occurs when background work has been completed.
+        /// </summary>
+        protected override void OnBackgorundWorkCompleted()
+        {
+            if (stopwatchDictionary == null)
+                return;
+
+            DisplayAllStatistic();
+            base.OnBackgorundWorkCompleted();
+        }
+
+        #endregion        
     }
 }

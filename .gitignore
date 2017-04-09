@@ -29,3 +29,4 @@ src/Implementation/DotNetCraft.Common.Domain/bin/
 Tests/DataAccessLayer.Tests/bin/
 src/Utils/DotNetCraft.Common.Utils/bin/
 Net45/
+*.nupkg

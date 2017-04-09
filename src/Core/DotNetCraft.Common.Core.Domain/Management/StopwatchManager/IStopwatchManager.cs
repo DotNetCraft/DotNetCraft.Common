@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace DotNetCraft.Common.Core.Utils.StopwatchManager
+﻿namespace DotNetCraft.Common.Core.Domain.Management.StopwatchManager
 {
     /// <summary>
     /// Interface shows that <c>object</c> is a stopwatch manager.
     /// </summary>
-    public interface IStopwatchManager : IDisposable
+    public interface IStopwatchManager : IManager
     {
         #region Start timer / Stop timer...
 

@@ -34,7 +34,27 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Management\BaseBackgroundManager.cs" />
+    <Compile Include="Management\BaseManager.cs" />
+    <Compile Include="Management\Exceptions\ManagerException.cs" />
+    <Compile Include="Management\StopwatchManagement\StopwatchInfo.cs" />
+    <Compile Include="Management\StopwatchManagement\StopwatchManager.cs" />
+    <Compile Include="Management\StopwatchManagement\StopwatchManagerConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\DotNetCraft.Common.Core.Domain\DotNetCraft.Common.Core.Domain.csproj">
+      <Project>{8ED0D131-647C-47C6-8DFD-5C7F40AC1397}</Project>
+      <Name>DotNetCraft.Common.Core.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\DotNetCraft.Common.Core.Utils\DotNetCraft.Common.Core.Utils.csproj">
+      <Project>{CB52AB07-D66A-4953-A4E4-47BB608B09FE}</Project>
+      <Name>DotNetCraft.Common.Core.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Utils\DotNetCraft.Common.Utils\DotNetCraft.Common.Utils.csproj">
+      <Project>{502D5E08-5557-4D1F-BD1D-29A7B0CCB683}</Project>
+      <Name>DotNetCraft.Common.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
