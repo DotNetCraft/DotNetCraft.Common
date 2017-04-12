@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.Utils.Logging;
@@ -7,16 +8,16 @@ using DotNetCraft.Common.Utils.Logging;
 
 namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 {
-    public class UnitOfWorkFactory : BaseLoggerObject, IUnitOfWorkFactory
+    public class UnitOfWorkFactory : IUnitOfWorkFactory
     {
+        private readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
+
         protected readonly IDataContextFactory dataContextFactory;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory">The <see cref="ICommonLoggerFactory"/> instance.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="loggerFactory"/> is <see langword="null" />.</exception>
-        public UnitOfWorkFactory(IDataContextFactory dataContextFactory, ICommonLoggerFactory loggerFactory) : base(loggerFactory)
+        public UnitOfWorkFactory(IDataContextFactory dataContextFactory)
         {
             if (dataContextFactory == null)
                 throw new ArgumentNullException(nameof(dataContextFactory));
@@ -31,12 +32,12 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             try
             {
                 IDataContext context = dataContextFactory.CreateDataContext(contextSettings);
-                IUnitOfWork unitOfWork = new UnitOfWork(context, logger);
+                IUnitOfWork unitOfWork = new UnitOfWork(context);
                 return unitOfWork;
             }
             catch (Exception ex)
             {
-                logger.WriteError(ex, "There was an exception during creating a data context.");
+                logger.Error(ex, "There was an exception during creating a data context.");
                 throw new UnitOfWorkException("There was an exception during creating a data context.", ex);
             }
         }

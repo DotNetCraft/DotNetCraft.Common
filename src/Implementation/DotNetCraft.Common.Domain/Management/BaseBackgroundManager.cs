@@ -4,12 +4,14 @@ using System.Threading.Tasks;
 using DotNetCraft.Common.Core.Domain.Management;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.Domain.Management.Exceptions;
+using DotNetCraft.Common.Utils.Logging;
 
 namespace DotNetCraft.Common.Domain.Management
 {
     public abstract class BaseBackgroundManager<TManagerConfiguration> : BaseManager<TManagerConfiguration>, IBackgroundManager
         where TManagerConfiguration : IBackgroundManagerConfiguration
     {
+        private readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
         private CancellationTokenSource cancellationTokenSource;
         private Task worker;
 
@@ -22,15 +24,13 @@ namespace DotNetCraft.Common.Domain.Management
         /// Constructor.
         /// </summary>
         /// <param name="managerConfiguration">The TManagerConfiguration instance.</param>
-        /// <param name="loggerFactory">The <see cref="ICommonLoggerFactory"/> instance.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="loggerFactory"/> is <see langword="null" />.</exception>
-        protected BaseBackgroundManager(TManagerConfiguration managerConfiguration, ICommonLoggerFactory loggerFactory) : base(managerConfiguration, loggerFactory)
+        protected BaseBackgroundManager(TManagerConfiguration managerConfiguration) : base(managerConfiguration)
         {
             if (managerConfiguration.StartImmediately)
             {
-                logger.WriteInfo("{0} is starting immediately...", Name);
+                logger.Info("{0} is starting immediately...", Name);
                 Start();
-                logger.WriteInfo("The {0} has been started.", Name);
+                logger.Info("The {0} has been started.", Name);
             }
         }
 
@@ -40,7 +40,7 @@ namespace DotNetCraft.Common.Domain.Management
         /// <param name="exception">The exception</param>
         protected virtual void OnBackroundException(Exception exception)
         {
-            logger.WriteError(exception, "There was an exception during background job execution.");
+            logger.Error(exception, "There was an exception during background job execution.");
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace DotNetCraft.Common.Domain.Management
         /// </summary>
         protected virtual void OnBackgorundWorkCompleted()
         {
-            logger.WriteTrace("The {0}'s background work has been completed.", Name);
+            logger.Trace("The {0}'s background work has been completed.", Name);
         }
 
         private void ManagerBackgorundProcess(object state)
@@ -83,7 +83,7 @@ namespace DotNetCraft.Common.Domain.Management
         /// </summary>
         public void Start()
         {
-            logger.WriteDebug("{0} is starting...", Name);
+            logger.Debug("{0} is starting...", Name);
             if (IsRunning)
                 throw new ManagerException("The manager has been already run.");
 
@@ -92,7 +92,7 @@ namespace DotNetCraft.Common.Domain.Management
             worker = new Task(ManagerBackgorundProcess, cancellationToken);
             worker.Start();
             IsRunning = true;
-            logger.WriteTrace("The {0] has been started.", Name);
+            logger.Trace("The {0] has been started.", Name);
         }
 
         /// <summary>

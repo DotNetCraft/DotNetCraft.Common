@@ -49,15 +49,15 @@ namespace DotNetCraft.Common.NLogger
         /// <example>
         /// <c>ICommonLogger</c> logger = factory.Create(GetType());
         /// </example>
-        /// <param name="loggerName">The logger's name.</param>
+        /// <param name="typeName">The logger's name.</param>
         /// <returns>The <see cref="ICommonLogger"/> instance.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="loggerName"/> is <see langword="null" />.</exception>
-        public ICommonLogger Create(string loggerName)
+        /// <exception cref="ArgumentNullException"><paramref name="typeName"/> is <see langword="null" />.</exception>
+        public ICommonLogger Create(string typeName)
         {
-            if (string.IsNullOrWhiteSpace(loggerName)) 
-                throw new ArgumentNullException("loggerName");
+            if (string.IsNullOrWhiteSpace(typeName)) 
+                throw new ArgumentNullException("typeName");
 
-            CommonNLogLogger result = new CommonNLogLogger(loggerName);
+            CommonNLogLogger result = new CommonNLogLogger(typeName);
             return result;
         }
     }

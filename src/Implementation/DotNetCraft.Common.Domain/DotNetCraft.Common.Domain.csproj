@@ -51,8 +51,8 @@
       <Project>{CB52AB07-D66A-4953-A4E4-47BB608B09FE}</Project>
       <Name>DotNetCraft.Common.Core.Utils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Utils\DotNetCraft.Common.Utils\DotNetCraft.Common.Utils.csproj">
-      <Project>{502D5E08-5557-4D1F-BD1D-29A7B0CCB683}</Project>
+    <ProjectReference Include="..\DotNetCraft.Common.Utils\DotNetCraft.Common.Utils.csproj">
+      <Project>{626E50A3-37C3-41CC-B08C-38410615E45C}</Project>
       <Name>DotNetCraft.Common.Utils</Name>
     </ProjectReference>
   </ItemGroup>

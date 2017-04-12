@@ -12,14 +12,14 @@ namespace DotNetCraft.Common.Core.Utils.Logging
         /// Write trace information into the log.
         /// </summary>
         /// <param name="msg">A message.</param>
-        void WriteTrace(string msg);
+        void Trace(string msg);
 
         /// <summary>
         /// Write trace information into the log.
         /// </summary>
         /// <param name="msg">A message.</param>
         /// <param name="args">Arguments</param>
-        void WriteTrace(string msg, params object[] args);
+        void Trace(string msg, params object[] args);
         #endregion
 
         #region Debug...
@@ -27,14 +27,14 @@ namespace DotNetCraft.Common.Core.Utils.Logging
         /// Write debug information into the log.
         /// </summary>
         /// <param name="msg">A message.</param>
-        void WriteDebug(string msg);
+        void Debug(string msg);
 
         /// <summary>
         /// Write debug information into the log.
         /// </summary>
         /// <param name="msg">A message.</param>
         /// <param name="args">Arguments</param>
-        void WriteDebug(string msg, params object[] args);
+        void Debug(string msg, params object[] args);
         #endregion
 
         #region Info...
@@ -42,14 +42,14 @@ namespace DotNetCraft.Common.Core.Utils.Logging
         /// Write information into the log.
         /// </summary>
         /// <param name="msg">A message.</param>
-        void WriteInfo(string msg);
+        void Info(string msg);
 
         /// <summary>
         /// Write information into the log.
         /// </summary>
         /// <param name="msg">A message.</param>
         /// <param name="args">Arguments</param>
-        void WriteInfo(string msg, params object[] args);
+        void Info(string msg, params object[] args);
         #endregion
 
         #region Warnings...
@@ -57,21 +57,21 @@ namespace DotNetCraft.Common.Core.Utils.Logging
         /// Write warning message into the log.
         /// </summary>
         /// <param name="msg">A message.</param>
-        void WriteWarning(string msg);
+        void Warning(string msg);
 
         /// <summary>
         /// Write warning message into the log.
         /// </summary>
         /// <param name="msg">A message.</param>
         /// <param name="args">Arguments</param>
-        void WriteWarning(string msg, params object[] args);
+        void Warning(string msg, params object[] args);
 
         /// <summary>
         /// Write warning message into the log.
         /// </summary>
         /// <param name="msg">A message.</param>
         /// <param name="exception"><see cref="Exception"/> that will be added into the message.</param>
-        void WriteWarning(Exception exception, string msg);
+        void Warning(Exception exception, string msg);
 
         /// <summary>
         /// Write warning message into the log.
@@ -79,7 +79,7 @@ namespace DotNetCraft.Common.Core.Utils.Logging
         /// <param name="msg">A message.</param>
         /// <param name="args">Arguments</param>
         /// <param name="exception"><see cref="Exception"/> that will be added into the message.</param>
-        void WriteWarning(Exception exception, string msg, params object[] args);
+        void Warning(Exception exception, string msg, params object[] args);
         #endregion
 
         #region Error...
@@ -87,21 +87,21 @@ namespace DotNetCraft.Common.Core.Utils.Logging
         /// Write error message into the log.
         /// </summary>
         /// <param name="msg">A message.</param>
-        void WriteError(string msg);
+        void Error(string msg);
 
         /// <summary>
         /// Write error message into the log.
         /// </summary>
         /// <param name="msg">A message.</param>
         /// <param name="args">Arguments</param>
-        void WriteError(string msg, params object[] args);
+        void Error(string msg, params object[] args);
 
         /// <summary>
         /// Write error message into the log.
         /// </summary>
         /// <param name="msg">A message.</param>
         /// <param name="exception"><see cref="Exception"/> that will be added into the message.</param>
-        void WriteError(Exception exception, string msg);
+        void Error(Exception exception, string msg);
 
         /// <summary>
         /// Write error message into the log.
@@ -109,7 +109,7 @@ namespace DotNetCraft.Common.Core.Utils.Logging
         /// <param name="msg">A message.</param>
         /// <param name="args">Arguments</param>
         /// <param name="exception"><see cref="Exception"/> that will be added into the message.</param>
-        void WriteError(Exception exception, string msg, params object[] args);
+        void Error(Exception exception, string msg, params object[] args);
         #endregion        
     }
 }

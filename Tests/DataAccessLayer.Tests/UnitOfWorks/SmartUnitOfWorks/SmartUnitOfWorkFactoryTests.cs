@@ -19,27 +19,21 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         public void ConstructorTest()
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
-            ICommonLoggerFactory loggerFactory = Substitute.For<ICommonLoggerFactory>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, dotNetCraftMapper, loggerFactory);
+            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, dotNetCraftMapper);
             Assert.IsNotNull(unitOfWorkFactory);
         }
 
         [Test]
-        [TestCase(false, true, true)]
-        [TestCase(true, false, true)]
-        [TestCase(true, true, false)]
-        [TestCase(false, false, true)]
-        [TestCase(false, true, false)]
-        [TestCase(true, false, false)]
-        [TestCase(false, false, false)]        
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(false, false)]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ConstructorNullParameterTest(bool correctContext, bool correctDotNetCraft, bool correctLogger)
+        public void ConstructorNullParameterTest(bool correctContext, bool correctDotNetCraft)
         {
             IDataContextFactory dataContextFactoryt = correctContext ? Substitute.For<IDataContextFactory>() : null;
-            ICommonLoggerFactory loggerFactory = correctLogger ? Substitute.For<ICommonLoggerFactory>() : null;
             IDotNetCraftMapper dotNetCraftMapper = correctDotNetCraft ? Substitute.For<IDotNetCraftMapper>(): null;
-            new SmartUnitOfWorkFactory(dataContextFactoryt, dotNetCraftMapper, loggerFactory);
+            new SmartUnitOfWorkFactory(dataContextFactoryt, dotNetCraftMapper);
 
             Assert.Fail("ArgumentNullException expected");
         }
@@ -52,11 +46,10 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         public void CreateDataContextTest()
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
-            ICommonLoggerFactory loggerFactory = Substitute.For<ICommonLoggerFactory>();
             IContextSettings contextSettings = Substitute.For<IContextSettings>();
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, dotNetCraftMapper, loggerFactory);
+            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, dotNetCraftMapper);
 
             dataContextFactory.CreateDataContext(contextSettings).Returns(dataContext);
 
@@ -69,10 +62,9 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         public void CreateDataContextExceptionTest()
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
-            ICommonLoggerFactory loggerFactory = Substitute.For<ICommonLoggerFactory>();
             IContextSettings contextSettings = Substitute.For<IContextSettings>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, dotNetCraftMapper, loggerFactory);
+            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, dotNetCraftMapper);
 
             dataContextFactory.When(x => x.CreateDataContext(contextSettings)).Do(x =>
             {
@@ -99,10 +91,9 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         public void CreateDataContextBadContextTest()
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
-            ICommonLoggerFactory loggerFactory = Substitute.For<ICommonLoggerFactory>();
             IContextSettings contextSettings = Substitute.For<IContextSettings>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, dotNetCraftMapper, loggerFactory);
+            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, dotNetCraftMapper);
 
             IDataContext dataContext = null;
             dataContextFactory.CreateDataContext(contextSettings).Returns(dataContext);

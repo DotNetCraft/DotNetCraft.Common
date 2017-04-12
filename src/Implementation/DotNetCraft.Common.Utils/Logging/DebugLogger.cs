@@ -1,44 +1,31 @@
 ﻿using System;
+using System.Text;
 using DotNetCraft.Common.Core.Utils.Logging;
-using NLog;
 
-namespace DotNetCraft.Common.NLogger
+namespace DotNetCraft.Common.Utils.Logging
 {
-    /// <summary>
-    /// <c>Logger</c> that use <see cref="NLog"/> libraries.
-    /// </summary>
-    public sealed class CommonNLogLogger : ICommonLogger
+    public class DebugLogger: ICommonLogger
     {
-        #region Fields...
-        /// <summary>
-        /// The <see cref="Logger"/> instance.
-        /// </summary>
-        private readonly Logger logger;
-        #endregion
+        private readonly string typeName;
 
-        #region Constructors...
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public CommonNLogLogger()
+        public DebugLogger(Type type)
         {
-            logger = LogManager.GetCurrentClassLogger();
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+
+            if (string.IsNullOrWhiteSpace(type.FullName))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(typeName));
+
+            typeName = type.FullName;
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="name">The logger's <c>name</c>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null" />.</exception>
-        public CommonNLogLogger(string name)
+        public DebugLogger(string typeName)
         {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException("name");
+            if (string.IsNullOrWhiteSpace(typeName))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(typeName));
 
-            logger = LogManager.GetLogger(name);
+            this.typeName = typeName;
         }
-        #endregion
-
         #region Implementation of ICommonLogger
 
         /// <summary>
@@ -47,7 +34,7 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="msg">A message.</param>
         public void Trace(string msg)
         {
-            logger.Trace(msg);
+            System.Diagnostics.Debug.WriteLine(msg);
         }
 
         /// <summary>
@@ -57,7 +44,7 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="args">Arguments</param>
         public void Trace(string msg, params object[] args)
         {
-            logger.Trace(msg, args);
+            System.Diagnostics.Debug.WriteLine(msg, args);
         }
 
         /// <summary>
@@ -66,7 +53,7 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="msg">A message.</param>
         public void Debug(string msg)
         {
-            logger.Debug(msg);
+            System.Diagnostics.Debug.WriteLine(msg);
         }
 
         /// <summary>
@@ -76,7 +63,7 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="args">Arguments</param>
         public void Debug(string msg, params object[] args)
         {
-            logger.Debug(msg, args);
+            System.Diagnostics.Debug.WriteLine(msg, args);
         }
 
         /// <summary>
@@ -85,7 +72,7 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="msg">A message.</param>
         public void Info(string msg)
         {
-            logger.Info(msg);
+            System.Diagnostics.Debug.WriteLine(msg);
         }
 
         /// <summary>
@@ -95,7 +82,7 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="args">Arguments</param>
         public void Info(string msg, params object[] args)
         {
-            logger.Info(msg, args);
+            System.Diagnostics.Debug.WriteLine(msg, args);
         }
 
         /// <summary>
@@ -104,7 +91,7 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="msg">A message.</param>
         public void Warning(string msg)
         {
-            logger.Warn(msg);
+            System.Diagnostics.Debug.WriteLine(msg);
         }
 
         /// <summary>
@@ -114,7 +101,7 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="args">Arguments</param>
         public void Warning(string msg, params object[] args)
         {
-            logger.Warn(msg, args);
+            System.Diagnostics.Debug.WriteLine(msg, args);
         }
 
         /// <summary>
@@ -124,7 +111,11 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="exception"><see cref="Exception"/> that will be added into the message.</param>
         public void Warning(Exception exception, string msg)
         {
-            logger.Warn(exception, msg);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(msg);
+            stringBuilder.AppendLine(exception.Message);
+            stringBuilder.AppendLine(exception.StackTrace);
+            System.Diagnostics.Debug.WriteLine(stringBuilder.ToString());
         }
 
         /// <summary>
@@ -135,7 +126,11 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="exception"><see cref="Exception"/> that will be added into the message.</param>
         public void Warning(Exception exception, string msg, params object[] args)
         {
-            logger.Warn(exception, msg, args);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(string.Format(msg, args));
+            stringBuilder.AppendLine(exception.Message);
+            stringBuilder.AppendLine(exception.StackTrace);
+            System.Diagnostics.Debug.WriteLine(stringBuilder.ToString());
         }
 
         /// <summary>
@@ -144,7 +139,7 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="msg">A message.</param>
         public void Error(string msg)
         {
-            logger.Error(msg);
+            System.Diagnostics.Debug.WriteLine(msg);
         }
 
         /// <summary>
@@ -154,7 +149,7 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="args">Arguments</param>
         public void Error(string msg, params object[] args)
         {
-            logger.Error(msg, args);
+            System.Diagnostics.Debug.WriteLine(msg, args);
         }
 
         /// <summary>
@@ -164,7 +159,11 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="exception"><see cref="Exception"/> that will be added into the message.</param>
         public void Error(Exception exception, string msg)
         {
-            logger.Error(exception, msg);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(msg);
+            stringBuilder.AppendLine(exception.Message);
+            stringBuilder.AppendLine(exception.StackTrace);
+            System.Diagnostics.Debug.WriteLine(stringBuilder.ToString());
         }
 
         /// <summary>
@@ -175,7 +174,11 @@ namespace DotNetCraft.Common.NLogger
         /// <param name="exception"><see cref="Exception"/> that will be added into the message.</param>
         public void Error(Exception exception, string msg, params object[] args)
         {
-            logger.Error(exception, msg, args);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(string.Format(msg, args));
+            stringBuilder.AppendLine(exception.Message);
+            stringBuilder.AppendLine(exception.StackTrace);
+            System.Diagnostics.Debug.WriteLine(stringBuilder.ToString());
         }
 
         #endregion

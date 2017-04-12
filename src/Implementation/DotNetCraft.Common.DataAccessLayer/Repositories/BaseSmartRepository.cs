@@ -21,7 +21,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories
         /// </summary>
         /// <param name="loggerFactory">The <see cref="ICommonLoggerFactory"/> instance.</param>
         /// <exception cref="ArgumentNullException"><paramref name="loggerFactory"/> is <see langword="null" />.</exception>
-        protected BaseSmartRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory, IDotNetCraftMapper dotNetCraftMapper, ICommonLoggerFactory loggerFactory) : base(contextSettings, dataContextFactory, loggerFactory)
+        protected BaseSmartRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory, IDotNetCraftMapper dotNetCraftMapper) : base(contextSettings, dataContextFactory)
         {
             if (dotNetCraftMapper == null)
                 throw new ArgumentNullException(nameof(dotNetCraftMapper));

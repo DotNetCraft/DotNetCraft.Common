@@ -2,7 +2,6 @@
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
 using NSubstitute;
@@ -19,8 +18,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void ConstructorTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 Assert.IsTrue(unitOfWork.IsTransactionOpened);
             }
@@ -31,15 +29,11 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         }
 
         [Test]
-        [TestCase(false, true)]
-        [TestCase(true, false)]
-        [TestCase(false, false)]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ConstructorNullParameterTest(bool correctContext, bool correctLogger)
+        public void ConstructorNullParameterTest()
         {
-            IDataContext dataContext = correctContext ? Substitute.For<IDataContext>() : null;
-            ICommonLogger logger = correctLogger ? Substitute.For<ICommonLogger>() : null;
-            new UnitOfWork(dataContext, logger);
+            IDataContext dataContext = null;
+            new UnitOfWork(dataContext);
 
             Assert.Fail("ArgumentNullException expected");
         }
@@ -49,15 +43,14 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void ConstructorExceptionTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
-
+            
             dataContext.When(x => x.BeginTransaction()).Do(
                 x =>
                 {
                     throw new Exception();
                 });
 
-            new UnitOfWork(dataContext, logger);
+            new UnitOfWork(dataContext);
 
             Assert.Fail("ArgumentNullException expected");
         }
@@ -70,8 +63,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void CommitTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 unitOfWork.Commit();
             }
@@ -85,7 +77,6 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void CommitExceptionTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
 
             dataContext.When(x => x.Commit()).Do(
                 x =>
@@ -93,7 +84,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
                     throw new Exception();
                 });
 
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 try
                 {
@@ -121,9 +112,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void RollbackTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
 
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 unitOfWork.Rollback();
             }
@@ -137,7 +127,6 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void RollbackExceptionTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
 
             dataContext.When(x => x.RollBack()).Do(
                 x =>
@@ -145,7 +134,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
                     throw new Exception();
                 });
 
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 try
                 {
@@ -173,9 +162,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void InsertCommitTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 unitOfWork.Insert(entity);
                 unitOfWork.Commit();
@@ -193,9 +181,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void InsertRollbackTest(bool useRollbackMethod)
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {                
                 unitOfWork.Insert(entity);
                 if (useRollbackMethod)
@@ -212,7 +199,6 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void InsertExceptionTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
 
             dataContext.When(x => x.Insert(entity)).Do(
@@ -221,7 +207,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
                     throw new Exception();
                 });
 
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {                
                 try
                 {
@@ -251,9 +237,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void UpdateCommitTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 unitOfWork.Update(entity);
                 unitOfWork.Commit();
@@ -271,9 +256,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void UpdateRollbackTest(bool useRollbackMethod)
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 unitOfWork.Update(entity);
                 if (useRollbackMethod)
@@ -290,7 +274,6 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void UpdateExceptionTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
 
             dataContext.When(x => x.Update(entity)).Do(
@@ -299,7 +282,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
                     throw new Exception();
                 });
 
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 try
                 {
@@ -329,9 +312,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void DeleteCommitTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 unitOfWork.Delete(entity);
                 unitOfWork.Commit();
@@ -349,9 +331,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void DeleteRollbackTest(bool useRollbackMethod)
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 unitOfWork.Delete(entity);
                 if (useRollbackMethod)
@@ -368,7 +349,6 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void DeleteExceptionTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
 
             dataContext.When(x => x.Delete(entity)).Do(
@@ -377,7 +357,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
                     throw new Exception();
                 });
 
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, logger))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 try
                 {

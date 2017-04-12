@@ -44,7 +44,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -67,7 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Core\DotNetCraft.Common.Core.Utils\DotNetCraft.Common.Core.Utils.csproj">
-      <Project>{cb52ab07-d66a-4953-a4e4-47bb608b09fe}</Project>
+      <Project>{CB52AB07-D66A-4953-A4E4-47BB608B09FE}</Project>
       <Name>DotNetCraft.Common.Core.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Core\DotNetCraft.Common.Core\DotNetCraft.Common.Core.csproj">
@@ -78,8 +77,8 @@
       <Project>{81476D69-0BF6-4F24-A936-0334B8025B09}</Project>
       <Name>DotNetCraft.Common.DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\Utils\DotNetCraft.Common.Utils\DotNetCraft.Common.Utils.csproj">
-      <Project>{502D5E08-5557-4D1F-BD1D-29A7B0CCB683}</Project>
+    <ProjectReference Include="..\..\src\Implementation\DotNetCraft.Common.Utils\DotNetCraft.Common.Utils.csproj">
+      <Project>{626e50a3-37c3-41cc-b08c-38410615e45c}</Project>
       <Name>DotNetCraft.Common.Utils</Name>
     </ProjectReference>
   </ItemGroup>

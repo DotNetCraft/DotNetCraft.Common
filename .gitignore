@@ -30,3 +30,4 @@ Tests/DataAccessLayer.Tests/bin/
 src/Utils/DotNetCraft.Common.Utils/bin/
 Net45/
 *.nupkg
+src/Implementation/DotNetCraft.Common.Utils/bin/

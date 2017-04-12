@@ -20,9 +20,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         public void ConstructorTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 Assert.IsTrue(unitOfWork.IsTransactionOpened);
             }
@@ -33,20 +32,15 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         }
 
         [Test]
-        [TestCase(false, true, true)]
-        [TestCase(true, false, true)]
-        [TestCase(true, true, false)]
-        [TestCase(false, false, true)]
-        [TestCase(false, true, false)]
-        [TestCase(true, false, false)]
-        [TestCase(false, false, false)]
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(false, false)]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ConstructorNullParameterTest(bool correctContext, bool correctDotNetCraft, bool correctLogger)
+        public void ConstructorNullParameterTest(bool correctContext, bool correctDotNetCraft)
         {
             IDataContext dataContext = correctContext ? Substitute.For<IDataContext>() : null;
-            ICommonLogger logger = correctLogger ? Substitute.For<ICommonLogger>() : null;
             IDotNetCraftMapper dotNetCraftMapper = correctDotNetCraft ? Substitute.For<IDotNetCraftMapper>() : null;
-            new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger);
+            new SmartUnitOfWork(dataContext, dotNetCraftMapper);
 
             Assert.Fail("ArgumentNullException expected");
         }
@@ -56,7 +50,6 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         public void ConstructorExceptionTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
 
             dataContext.When(x => x.BeginTransaction()).Do(
@@ -65,7 +58,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
                     throw new Exception();
                 });
 
-            new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger);
+            new SmartUnitOfWork(dataContext, dotNetCraftMapper);
 
             Assert.Fail("ArgumentNullException expected");
         }
@@ -79,9 +72,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 unitOfWork.Commit();
             }
@@ -96,7 +88,6 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
 
             dataContext.When(x => x.Commit()).Do(
                 x =>
@@ -104,7 +95,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
                     throw new Exception();
                 });
 
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 try
                 {
@@ -133,9 +124,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
 
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 unitOfWork.Rollback();
             }
@@ -150,7 +140,6 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
 
             dataContext.When(x => x.RollBack()).Do(
                 x =>
@@ -158,7 +147,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
                     throw new Exception();
                 });
 
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 try
                 {
@@ -188,9 +177,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 unitOfWork.Insert(entity);
                 unitOfWork.Commit();
@@ -209,9 +197,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 unitOfWork.Insert(entity);
                 if (useRollbackMethod)
@@ -229,7 +216,6 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
 
             dataContext.When(x => x.Insert(entity)).Do(
@@ -238,7 +224,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
                     throw new Exception();
                 });
 
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 try
                 {
@@ -276,9 +262,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 unitOfWork.Update(entity);
                 unitOfWork.Commit();
@@ -297,9 +282,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 unitOfWork.Update(entity);
                 if (useRollbackMethod)
@@ -317,7 +301,6 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
 
             dataContext.When(x => x.Update(entity)).Do(
@@ -326,7 +309,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
                     throw new Exception();
                 });
 
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 try
                 {
@@ -364,9 +347,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 unitOfWork.Delete(entity);
                 unitOfWork.Commit();
@@ -385,9 +367,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 unitOfWork.Delete(entity);
                 if (useRollbackMethod)
@@ -405,7 +386,6 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            ICommonLogger logger = Substitute.For<ICommonLogger>();
             IEntity entity = Substitute.For<IEntity>();
 
             dataContext.When(x => x.Delete(entity)).Do(
@@ -414,7 +394,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
                     throw new Exception();
                 });
 
-            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper, logger))
+            using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
                 try
                 {

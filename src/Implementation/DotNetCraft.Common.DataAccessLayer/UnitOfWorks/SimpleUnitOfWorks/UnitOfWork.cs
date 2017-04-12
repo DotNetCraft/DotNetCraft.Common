@@ -6,12 +6,14 @@ using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.Utils.Disposal;
+using DotNetCraft.Common.Utils.Logging;
 
 namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 {
-    public class UnitOfWork: DisposableLoggerObject, IUnitOfWork
+    public class UnitOfWork: DisposableObject, IUnitOfWork
     {
         protected readonly IDataContext dataContext;
+        private readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Flag shows that transaction opened.
@@ -21,9 +23,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="logger">The <see cref="ICommonLogger"/> instance.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="logger"/> is <see langword="null" />.</exception>
-        public UnitOfWork(IDataContext dataContext, ICommonLogger logger) : base(logger)
+        public UnitOfWork(IDataContext dataContext)
         {
             if (dataContext == null)
                 throw new ArgumentNullException(nameof(dataContext));
@@ -32,14 +32,14 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 
             try
             {
-                logger.WriteDebug("Opening transaction...");
+                logger.Debug("Opening transaction...");
                 dataContext.BeginTransaction();
                 IsTransactionOpened = true;
-                logger.WriteDebug("Transaction has been opened.");
+                logger.Debug("Transaction has been opened.");
             }
             catch (Exception ex)
             {
-                logger.WriteError(ex, "There was an exception during opening a transaction.");
+                logger.Error(ex, "There was an exception during opening a transaction.");
                 throw new UnitOfWorkException("There was an exception during opening a transaction.", ex);
             }
         }
@@ -54,22 +54,22 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         {
             if (disposing)
             {
-                logger.WriteTrace("Disposing UnitOfWork: IsTransactionOpened = {0}...", IsTransactionOpened);
+                logger.Trace("Disposing UnitOfWork: IsTransactionOpened = {0}...", IsTransactionOpened);
                 if (IsTransactionOpened)
                 {
                     try
                     {
-                        logger.WriteTrace("Transaction still opened. Closing...");
+                        logger.Trace("Transaction still opened. Closing...");
                         Rollback();
-                        logger.WriteTrace("Transaction has been closed.");
+                        logger.Trace("Transaction has been closed.");
                     }
                     catch (UnitOfWorkException unitOfWorkException)
                     {
-                        logger.WriteError(unitOfWorkException, "The was an exception during closing transaction. However, disposing will be continue...");
+                        logger.Error(unitOfWorkException, "The was an exception during closing transaction. However, disposing will be continue...");
                     }
                 }
                 dataContext.Dispose();
-                logger.WriteTrace("The object has been disposed.");
+                logger.Trace("The object has been disposed.");
             }
 
             base.Dispose(disposing);
@@ -84,26 +84,26 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         protected virtual TEntity OnInsert<TEntity>(TEntity entity)
            where TEntity : class, IEntity
         {
-            logger.WriteTrace("Inserting {0} into the data context...", entity);
+            logger.Trace("Inserting {0} into the data context...", entity);
             TEntity result = dataContext.Insert(entity);
-            logger.WriteTrace("The entity has been inserted.");
+            logger.Trace("The entity has been inserted.");
             return result;
         }
 
         protected virtual void OnUpdate<TEntity>(TEntity entity)
            where TEntity : class, IEntity
         {
-            logger.WriteTrace("Updating {0} in the data context...", entity);
+            logger.Trace("Updating {0} in the data context...", entity);
             dataContext.Update(entity);
-            logger.WriteTrace("The entity has been updated.");
+            logger.Trace("The entity has been updated.");
         }
 
         protected virtual void OnDelete<TEntity>(TEntity entity)
            where TEntity : class, IEntity
         {
-            logger.WriteTrace("Deliting {0} from the data context...", entity);
+            logger.Trace("Deliting {0} from the data context...", entity);
             dataContext.Delete(entity);
-            logger.WriteTrace("The entity has been deleted.");
+            logger.Trace("The entity has been deleted.");
         }
 
         #endregion        
@@ -119,9 +119,9 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         {
             try
             {
-                logger.WriteDebug("Inserting {0} into the data context...", entity);
+                logger.Debug("Inserting {0} into the data context...", entity);
                 TEntity result = OnInsert(entity);
-                logger.WriteDebug("The entity has been inserted.");
+                logger.Debug("The entity has been inserted.");
                 return result;
             }
             catch (Exception ex)
@@ -132,7 +132,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
                     {"Entity", entity.ToString()}
                 };
                 UnitOfWorkException unitOfWorkException = new UnitOfWorkException("There was a problem during inserting a new entity into the database.", ex, errorParameters);
-                logger.WriteError(unitOfWorkException, unitOfWorkException.ToString());
+                logger.Error(unitOfWorkException, unitOfWorkException.ToString());
                 throw unitOfWorkException;
             }
         }
@@ -146,9 +146,9 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         {
             try
             {
-                logger.WriteDebug("Updating {0} in the data context...", entity);
+                logger.Debug("Updating {0} in the data context...", entity);
                 OnUpdate(entity);
-                logger.WriteDebug("The entity has been updated.");                
+                logger.Debug("The entity has been updated.");                
             }
             catch (Exception ex)
             {
@@ -158,7 +158,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
                     {"Entity", entity.ToString()}
                 };
                 UnitOfWorkException unitOfWorkException = new UnitOfWorkException("There was a problem during updating an existing entity in the database.", ex, errorParameters);
-                logger.WriteError(unitOfWorkException, unitOfWorkException.ToString());
+                logger.Error(unitOfWorkException, unitOfWorkException.ToString());
                 throw unitOfWorkException;
             }
         }
@@ -172,9 +172,9 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         {
             try
             {
-                logger.WriteDebug("Deleting {0} from the data context...", entity);
+                logger.Debug("Deleting {0} from the data context...", entity);
                 OnDelete(entity);
-                logger.WriteDebug("The entity has been deleted.");
+                logger.Debug("The entity has been deleted.");
             }
             catch (Exception ex)
             {
@@ -184,7 +184,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
                     {"Entity", entity.ToString()}
                 };
                 UnitOfWorkException unitOfWorkException = new UnitOfWorkException("There was a problem during deleting an existing entity from the database.", ex, errorParameters);
-                logger.WriteError(unitOfWorkException, unitOfWorkException.ToString());
+                logger.Error(unitOfWorkException, unitOfWorkException.ToString());
                 throw unitOfWorkException;
             }
         }
@@ -204,7 +204,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             }
             catch (Exception ex)
             {
-                logger.WriteError(ex, "There was an exception during committing changes.");
+                logger.Error(ex, "There was an exception during committing changes.");
                 throw new UnitOfWorkException("There was an exception during committing changes.", ex);
             }
         }
@@ -224,7 +224,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             }
             catch (Exception ex)
             {
-                logger.WriteError(ex, "There was an exception during rolling back changes.");
+                logger.Error(ex, "There was an exception during rolling back changes.");
                 throw new UnitOfWorkException("There was an exception during rolling back changes.", ex);
             }
         }

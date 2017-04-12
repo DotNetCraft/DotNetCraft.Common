@@ -1,11 +1,10 @@
 ﻿using System;
 using DotNetCraft.Common.Core.Domain.Management;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.Utils.Disposal;
 
 namespace DotNetCraft.Common.Domain.Management
 {
-    public abstract class BaseManager<TManagerConfiguration>: DisposableLoggerObject, IManager
+    public abstract class BaseManager<TManagerConfiguration>: DisposableObject, IManager
         where TManagerConfiguration: IManagerConfiguration
     {
         /// <summary>
@@ -26,9 +25,7 @@ namespace DotNetCraft.Common.Domain.Management
         /// Constructor.
         /// </summary>
         /// <param name="managerConfiguration">The TManagerConfiguration instance.</param>
-        /// <param name="loggerFactory">The <see cref="ICommonLoggerFactory"/> instance.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="loggerFactory"/> is <see langword="null" />.</exception>
-        protected BaseManager(TManagerConfiguration managerConfiguration, ICommonLoggerFactory loggerFactory) : base(loggerFactory)
+        protected BaseManager(TManagerConfiguration managerConfiguration)
         {
             if (managerConfiguration == null)
                 throw new ArgumentNullException(nameof(managerConfiguration));

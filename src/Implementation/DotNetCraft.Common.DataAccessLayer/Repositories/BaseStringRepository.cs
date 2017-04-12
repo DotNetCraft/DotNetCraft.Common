@@ -7,7 +7,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories
     public abstract class BaseStringRepository<TEntity> : BaseRepository<TEntity, string>
         where TEntity : class, IEntity<string>
     {
-        protected BaseStringRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory, ICommonLoggerFactory loggerFactory) : base(contextSettings, dataContextFactory, loggerFactory)
+        protected BaseStringRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory) : base(contextSettings, dataContextFactory)
         {
         }
     }

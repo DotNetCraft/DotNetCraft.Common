@@ -17,7 +17,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         /// <summary>
         /// Constructor.
         /// </summary>        
-        public SmartUnitOfWork(IDataContext dataContext, IDotNetCraftMapper dotNetCraftMapper, ICommonLogger logger) : base(dataContext, logger)
+        public SmartUnitOfWork(IDataContext dataContext, IDotNetCraftMapper dotNetCraftMapper) : base(dataContext)
         {
             if (dotNetCraftMapper == null)
                 throw new ArgumentNullException(nameof(dotNetCraftMapper));

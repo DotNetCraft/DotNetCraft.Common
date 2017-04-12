@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.Utils.Disposal;
 
 namespace DotNetCraft.Common.DataAccessLayer
 {
-    public abstract class BaseDataContext : DisposableLoggerObject, IDataContext
+    public abstract class BaseDataContext : DisposableObject, IDataContext
     {
         private readonly IDataContextFactory owner;
         private bool isDisposed;
 
-        protected BaseDataContext(IDataContextFactory owner, ICommonLogger logger) : base(logger)
+        protected BaseDataContext(IDataContextFactory owner)
         {
             if (owner == null)
                 throw new ArgumentNullException(nameof(owner));

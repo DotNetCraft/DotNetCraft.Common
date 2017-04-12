@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Threading;
 using DotNetCraft.Common.Core;
 using DotNetCraft.Common.Core.DataAccessLayer;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
-using DotNetCraft.Common.Utils.Logging;
 
 namespace DotNetCraft.Common.DataAccessLayer
 {
-    public abstract class DataContextFactory<TDataContext, TContextSettings> : BaseLoggerObject, IDataContextFactory
+    public abstract class DataContextFactory<TDataContext, TContextSettings> : IDataContextFactory
         where TDataContext: IDataContext
         where TContextSettings : IContextSettings
     {
@@ -21,9 +19,7 @@ namespace DotNetCraft.Common.DataAccessLayer
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory">The <see cref="ICommonLoggerFactory"/> instance.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="loggerFactory"/> is <see langword="null" />.</exception>
-        protected DataContextFactory(ICommonLoggerFactory loggerFactory) : base(loggerFactory)
+        protected DataContextFactory()
         {
             dataContextPool = new Dictionary<int, IDataContextPoolItem>();
         }

@@ -16,7 +16,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         /// </summary>
         /// <param name="loggerFactory">The <see cref="ICommonLoggerFactory"/> instance.</param>
         /// <exception cref="ArgumentNullException"><paramref name="loggerFactory"/> is <see langword="null" />.</exception>
-        public SmartUnitOfWorkFactory(IDataContextFactory dataContextFactory, IDotNetCraftMapper dotNetCraftMapper, ICommonLoggerFactory loggerFactory) : base(dataContextFactory, loggerFactory)
+        public SmartUnitOfWorkFactory(IDataContextFactory dataContextFactory, IDotNetCraftMapper dotNetCraftMapper) : base(dataContextFactory)
         {
             if (dotNetCraftMapper == null)
                 throw new ArgumentNullException(nameof(dotNetCraftMapper));
@@ -29,7 +29,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         public ISmartUnitOfWork CreateSmartUnitOfWork(IContextSettings contextSettings)
         {
             IDataContext context = dataContextFactory.CreateDataContext(contextSettings);
-            ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(context, dotNetCraftMapper, logger);
+            ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(context, dotNetCraftMapper);
             return unitOfWork;
         }
 

@@ -1,12 +1,15 @@
 ﻿using System;
+using DotNetCraft.Common.Core.Utils.Logging;
 
-namespace DotNetCraft.Common.Core.Utils.Logging
+namespace DotNetCraft.Common.Utils.Logging
 {
     /// <summary>
-    /// Interface shows that <c>object</c> is a loggers' factory.
+    /// Creates a Debug Logger, that logs all messages to: System.Diagnostics.Debug
     /// </summary>
-    public interface ICommonLoggerFactory
+    public class DebugLoggerFactory : ICommonLoggerFactory
     {
+        #region Implementation of ICommonLoggerFactory
+
         /// <summary>
         /// Creates a logger for current <c>type</c>.
         /// </summary>
@@ -15,7 +18,10 @@ namespace DotNetCraft.Common.Core.Utils.Logging
         /// <example>
         /// ICommonLogger logger = factory.Create(GetType());
         /// </example>
-        ICommonLogger Create(Type type);
+        public ICommonLogger Create(Type type)
+        {
+            return new DebugLogger(type);
+        }
 
         /// <summary>
         /// Creates a logger for current <c>type</c>.
@@ -25,7 +31,10 @@ namespace DotNetCraft.Common.Core.Utils.Logging
         /// <c>ICommonLogger</c> logger = factory.Create<SomeClass>();
         /// </example>
         /// <returns>The <see cref="ICommonLogger"/> instance.</returns>
-        ICommonLogger Create<TType>();
+        public ICommonLogger Create<TType>()
+        {
+            return new DebugLogger(typeof(TType));
+        }
 
         /// <summary>
         /// Creates a logger with name.
@@ -33,8 +42,13 @@ namespace DotNetCraft.Common.Core.Utils.Logging
         /// <example>
         /// <c>ICommonLogger</c> logger = factory.Create(GetType());
         /// </example>
-        /// <param name="typeName">The type's name.</param>
+        /// <param name="typeName">The logger's name.</param>
         /// <returns>The <see cref="ICommonLogger"/> instance.</returns>
-        ICommonLogger Create(string typeName);
+        public ICommonLogger Create(string typeName)
+        {
+            return new DebugLogger(typeName);
+        }
+
+        #endregion
     }
 }

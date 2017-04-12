@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDataContext.cs" />
+    <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="Exceptions\UnitOfWorkException.cs" />
     <Compile Include="Repositories\BaseGuidRepository.cs" />
     <Compile Include="Repositories\BaseIntRepository.cs" />
@@ -59,8 +60,8 @@
       <Project>{784430D4-9160-4CE8-9AED-04C07A8878E1}</Project>
       <Name>DotNetCraft.Common.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Utils\DotNetCraft.Common.Utils\DotNetCraft.Common.Utils.csproj">
-      <Project>{502D5E08-5557-4D1F-BD1D-29A7B0CCB683}</Project>
+    <ProjectReference Include="..\DotNetCraft.Common.Utils\DotNetCraft.Common.Utils.csproj">
+      <Project>{626E50A3-37C3-41CC-B08C-38410615E45C}</Project>
       <Name>DotNetCraft.Common.Utils</Name>
     </ProjectReference>
   </ItemGroup>

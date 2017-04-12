@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DotNetCraft.Common.Core.Domain.Management.StopwatchManager;
 using DotNetCraft.Common.Core.Utils.Logging;
+using DotNetCraft.Common.Utils.Logging;
 
 namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
 {
@@ -12,6 +13,8 @@ namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
     /// </summary>
     public class StopwatchManager : BaseBackgroundManager<StopwatchManagerConfig>, IStopwatchManager
     {
+        private readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
+
         #region Fields...
 
         /// <summary>
@@ -31,8 +34,8 @@ namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
         /// <summary>
         /// Constructor.
         /// </summary>
-        public StopwatchManager(StopwatchManagerConfig config, ICommonLoggerFactory loggerFactory)
-            : base(config, loggerFactory)
+        public StopwatchManager(StopwatchManagerConfig config)
+            : base(config)
         {
             stopwatchDictionary = new Dictionary<string, StopwatchInfo>();
         }
@@ -107,7 +110,7 @@ namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
             }
             stringBuilder.AppendLine("-==== End statistic ====-");
 
-            logger.WriteDebug(stringBuilder.ToString());
+            logger.Debug(stringBuilder.ToString());
         }
 
         /// <summary>
@@ -134,7 +137,7 @@ namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
                 }
             }
 
-            logger.WriteDebug(stringBuilder.ToString());
+            logger.Debug(stringBuilder.ToString());
         }
         #endregion
 

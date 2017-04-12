@@ -5,20 +5,18 @@ using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories;
 using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
-using DotNetCraft.Common.Utils.Logging;
 
 namespace DotNetCraft.Common.DataAccessLayer.Repositories
 {
-    public abstract class BaseRepository<TEntity, TEntityId> : BaseLoggerObject, IRepository<TEntity, TEntityId>
+    public abstract class BaseRepository<TEntity, TEntityId> : IRepository<TEntity, TEntityId>
         where TEntity : class, IEntity<TEntityId>
     {
         protected readonly IContextSettings contextSettings;
 
         protected readonly IDataContextFactory dataContextFactory;
 
-        protected BaseRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory, ICommonLoggerFactory loggerFactory): base(loggerFactory)
+        protected BaseRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory)
         {
             if (contextSettings == null)
                 throw new ArgumentNullException(nameof(contextSettings));
@@ -40,7 +38,11 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories
         protected virtual TEntity OnGet(TEntityId entityId, IDataContext dataContext)
         {
             IQueryable<TEntity> collection = dataContext.GetCollectionSet<TEntity>();
-            var result = collection.Single(x => x.Id.Equals(entityId));
+            TEntity result = collection.SingleOrDefault(x => x.Id.Equals(entityId));
+
+            if (result == null)
+                throw new EntityNotFoundException("There is no element by " + entityId);
+
             return result;
         }
 
