@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
+using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart;
 using DotNetCraft.Common.Core.Utils;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
@@ -32,15 +33,13 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         /// </summary>
         /// <param name="model">The model.</param>
         /// <return>The model that has been inserted.</return>
-        public TModel Insert<TModel, TEntity>(TModel model)
+        public void Insert<TModel, TEntity>(TModel model)
             where TEntity : class, IEntity
         {
             try
             {
                 TEntity entity = dotNetCraftMapper.Map<TModel, TEntity>(model);
-                entity = OnInsert(entity);
-                TModel result = dotNetCraftMapper.Map<TEntity, TModel>(entity);
-                return result;                
+                OnInsert(entity);                
             }
             catch (Exception ex)
             {
@@ -59,7 +58,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         /// </summary>
         /// <param name="model">The model.</param>
         public void Update<TModel, TEntity>(TModel model)
-            where TEntity : IEntity
+            where TEntity : class, IEntity
         {
             throw new NotImplementedException();
         }
@@ -67,9 +66,9 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         /// <summary>
         /// Delete an model.
         /// </summary>
-        /// <param name="model">The model.</param>
-        public void Delete<TModel, TEntity>(TModel model)
-            where TEntity : IEntity
+        /// <param name="modelId">The model's identifier.</param>
+        public void Delete<TModel, TEntity>(object modelId)
+            where TEntity : class, IEntity
         {
             throw new NotImplementedException();
         }

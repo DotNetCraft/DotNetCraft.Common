@@ -2,6 +2,7 @@
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
+using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart;
 using DotNetCraft.Common.Core.Utils;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
@@ -347,14 +348,14 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            IEntity entity = Substitute.For<IEntity>();
+            object entityId = 5;
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
-                unitOfWork.Delete(entity);
+                unitOfWork.Delete<IEntity>(entityId);
                 unitOfWork.Commit();
             }
             dataContext.Received(1).BeginTransaction();
-            dataContext.Received(1).Delete(entity);
+            dataContext.Received(1).Delete<IEntity>(entityId);
             dataContext.Received(1).Commit();
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().RollBack();
@@ -367,15 +368,15 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            IEntity entity = Substitute.For<IEntity>();
+            object entityId = 5;
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, dotNetCraftMapper))
             {
-                unitOfWork.Delete(entity);
+                unitOfWork.Delete<IEntity>(entityId);
                 if (useRollbackMethod)
                     unitOfWork.Rollback();
             }
             dataContext.Received(1).BeginTransaction();
-            dataContext.Received(1).Delete(entity);
+            dataContext.Received(1).Delete<IEntity>(entityId);
             dataContext.Received(1).RollBack();
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().Commit();
@@ -386,9 +387,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            IEntity entity = Substitute.For<IEntity>();
-
-            dataContext.When(x => x.Delete(entity)).Do(
+            int entityId = 5;
+            dataContext.When(x => x.Delete<BaseIntEntity>(entityId)).Do(
                 x =>
                 {
                     throw new Exception();
@@ -398,7 +398,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
             {
                 try
                 {
-                    unitOfWork.Delete(entity);
+                    unitOfWork.Delete<BaseIntEntity>(entityId);
                     unitOfWork.Commit();
                 }
                 catch (UnitOfWorkException)
@@ -410,7 +410,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
                 }
             }
             dataContext.Received(1).BeginTransaction();
-            dataContext.Received(1).Delete(entity);
+            dataContext.Received(1).Delete<BaseIntEntity>(entityId);
             dataContext.Received(1).RollBack();
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().Commit();

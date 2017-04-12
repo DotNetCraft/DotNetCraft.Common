@@ -39,6 +39,32 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\DotNetCraft.Common.Core.Domain\DotNetCraft.Common.Core.Domain.csproj">
+      <Project>{8ed0d131-647c-47c6-8dfd-5c7f40ac1397}</Project>
+      <Name>DotNetCraft.Common.Core.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\DotNetCraft.Common.Core.Utils\DotNetCraft.Common.Core.Utils.csproj">
+      <Project>{cb52ab07-d66a-4953-a4e4-47bb608b09fe}</Project>
+      <Name>DotNetCraft.Common.Core.Utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\DotNetCraft.Common.Core\DotNetCraft.Common.Core.csproj">
+      <Project>{784430d4-9160-4ce8-9aed-04c07a8878e1}</Project>
+      <Name>DotNetCraft.Common.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Implementation\DotNetCraft.Common.DataAccessLayer\DotNetCraft.Common.DataAccessLayer.csproj">
+      <Project>{81476d69-0bf6-4f24-a936-0334b8025b09}</Project>
+      <Name>DotNetCraft.Common.DataAccessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Implementation\DotNetCraft.Common.Domain\DotNetCraft.Common.Domain.csproj">
+      <Project>{866d3623-f34a-49f4-998b-d420589c08b2}</Project>
+      <Name>DotNetCraft.Common.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Implementation\DotNetCraft.Common.Utils\DotNetCraft.Common.Utils.csproj">
+      <Project>{626e50a3-37c3-41cc-b08c-38410615e45c}</Project>
+      <Name>DotNetCraft.Common.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

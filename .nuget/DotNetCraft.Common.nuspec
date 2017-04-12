@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
-    <id>DotNetCraft.Common</id>
+    <id>DotNetCraft.Common.Utils.NLog</id>
     <version>1.0.4</version>
-    <title>DotNetCraft.Common For .NET</title>
-    <summary>DotNetCraft.Common For .NET</summary>
-    <description>Common base library for DotNetCraft projects.</description>
+    <title>DotNetCraft.Common.Utils.NLog For .NET</title>
+    <summary>NLog logging integration for DotNetCraft.Common</summary>
+    <description>Provides NLog logging integration for other DotNetCraft projects.</description>
     <releaseNotes />
     <language>en-US</language>
     <iconUrl>https://raw.githubusercontent.com/DotNetCraft/ConfigurationParser/master/Avatar.png</iconUrl>
@@ -15,9 +15,13 @@
     <owners>DotNetCraft</owners>
     <copyright>DotNetCraft 2017</copyright>
     <tags>DAL UnitOfWork Repository Data Access Layer</tags>
+    <dependencies>
+      <dependency id="NLog" version="4.4.4" />
+      <dependency id="DotNetCraft.Common" version="1.0.4" />
+    </dependencies>
   </metadata>
   <files>
-    <file src="..\net45\*.dll" target="lib\net45" />    
-	<file src="..\net45\*.pdb" target="lib\net45" />    
+    <file src="..\net45\DotNetCraft.Common.NLogger.dll" target="lib\net45" />    
+	  <file src="..\net45\DotNetCraft.Common.NLogger.pdb" target="lib\net45" />    
   </files>
 </package>

@@ -57,7 +57,7 @@ namespace DotNetCraft.Common.DataAccessLayer
         protected abstract IQueryable<TEntity> OnGetCollectionSet<TEntity>()
             where TEntity : class, IEntity;
 
-        protected abstract TEntity OnInsert<TEntity>(TEntity entity)
+        protected abstract void OnInsert<TEntity>(TEntity entity)
             where TEntity : class, IEntity;
 
         /// <summary>
@@ -83,13 +83,12 @@ namespace DotNetCraft.Common.DataAccessLayer
             }
         }        
 
-        public TEntity Insert<TEntity>(TEntity entity)
+        public void Insert<TEntity>(TEntity entity)
             where TEntity : class, IEntity
         {
             try
             {
-                TEntity result = OnInsert(entity);
-                return result;
+                OnInsert(entity);
             }
             catch (Exception ex)
             {
@@ -108,7 +107,7 @@ namespace DotNetCraft.Common.DataAccessLayer
             throw new NotImplementedException();
         }
 
-        public void Delete<TEntity>(TEntity entity) 
+        public void Delete<TEntity>(object entityId) 
             where TEntity : class, IEntity
         {
             throw new NotImplementedException();

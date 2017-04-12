@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
+using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.Utils.Disposal;
@@ -12,8 +13,9 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 {
     public class UnitOfWork: DisposableObject, IUnitOfWork
     {
-        protected readonly IDataContext dataContext;
         private readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
+
+        protected readonly IDataContext dataContext;        
 
         /// <summary>
         /// Flag shows that transaction opened.
@@ -81,13 +83,12 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 
         #region Virtual methods: OnInsert, OnUpdate and OnDelete
 
-        protected virtual TEntity OnInsert<TEntity>(TEntity entity)
+        protected virtual void OnInsert<TEntity>(TEntity entity)
            where TEntity : class, IEntity
         {
             logger.Trace("Inserting {0} into the data context...", entity);
-            TEntity result = dataContext.Insert(entity);
+            dataContext.Insert(entity);
             logger.Trace("The entity has been inserted.");
-            return result;
         }
 
         protected virtual void OnUpdate<TEntity>(TEntity entity)
@@ -98,11 +99,11 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             logger.Trace("The entity has been updated.");
         }
 
-        protected virtual void OnDelete<TEntity>(TEntity entity)
+        protected virtual void OnDelete<TEntity>(object entityId)
            where TEntity : class, IEntity
         {
-            logger.Trace("Deliting {0} from the data context...", entity);
-            dataContext.Delete(entity);
+            logger.Trace("Deliting {0} from the data context...", entityId);
+            dataContext.Delete<TEntity>(entityId);
             logger.Trace("The entity has been deleted.");
         }
 
@@ -114,15 +115,14 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         /// <param name="entity">The entity.</param>
         /// <return>The entity that has been inserted.</return>
         /// <exception cref="UnitOfWorkException">There was a problem during inserting a new entity into the database..</exception>
-        public TEntity Insert<TEntity>(TEntity entity)
+        public void Insert<TEntity>(TEntity entity)
             where TEntity : class, IEntity
         {
             try
             {
                 logger.Debug("Inserting {0} into the data context...", entity);
-                TEntity result = OnInsert(entity);
+                OnInsert(entity);
                 logger.Debug("The entity has been inserted.");
-                return result;
             }
             catch (Exception ex)
             {
@@ -166,14 +166,14 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         /// <summary>
         /// Delete an entity.
         /// </summary>
-        /// <param name="entity">The entity.</param>
-        public void Delete<TEntity>(TEntity entity)
+        /// <param name="entityId">The entity's identifier.</param>
+        public void Delete<TEntity>(object entityId)
             where TEntity : class, IEntity
         {
             try
             {
-                logger.Debug("Deleting {0} from the data context...", entity);
-                OnDelete(entity);
+                logger.Debug("Deleting {0} from the data context...", entityId);
+                OnDelete<TEntity>(entityId);
                 logger.Debug("The entity has been deleted.");
             }
             catch (Exception ex)
@@ -181,7 +181,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
                 Dictionary<string, string> errorParameters = new Dictionary<string, string>
                 {
                     {"EntityType", typeof(TEntity).ToString()},
-                    {"Entity", entity.ToString()}
+                    {"EntityId", entityId.ToString()}
                 };
                 UnitOfWorkException unitOfWorkException = new UnitOfWorkException("There was a problem during deleting an existing entity from the database.", ex, errorParameters);
                 logger.Error(unitOfWorkException, unitOfWorkException.ToString());

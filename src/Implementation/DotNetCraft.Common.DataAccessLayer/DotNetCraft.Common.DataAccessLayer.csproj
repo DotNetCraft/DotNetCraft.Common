@@ -37,11 +37,11 @@
     <Compile Include="BaseDataContext.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="Exceptions\UnitOfWorkException.cs" />
-    <Compile Include="Repositories\BaseGuidRepository.cs" />
-    <Compile Include="Repositories\BaseIntRepository.cs" />
-    <Compile Include="Repositories\BaseRepository.cs" />
-    <Compile Include="Repositories\BaseSmartRepository.cs" />
-    <Compile Include="Repositories\BaseStringRepository.cs" />
+    <Compile Include="Repositories\Simple\BaseGuidRepository.cs" />
+    <Compile Include="Repositories\Simple\BaseIntRepository.cs" />
+    <Compile Include="Repositories\Simple\BaseRepository.cs" />
+    <Compile Include="Repositories\Smart\BaseSmartRepository.cs" />
+    <Compile Include="Repositories\Simple\BaseStringRepository.cs" />
     <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWork.cs" />
     <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWorks\SimpleUnitOfWorks\UnitOfWork.cs" />

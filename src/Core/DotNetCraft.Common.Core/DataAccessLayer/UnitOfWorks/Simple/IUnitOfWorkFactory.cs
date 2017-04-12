@@ -1,4 +1,4 @@
-﻿namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks
+﻿namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple
 {
     public interface IUnitOfWorkFactory
     {

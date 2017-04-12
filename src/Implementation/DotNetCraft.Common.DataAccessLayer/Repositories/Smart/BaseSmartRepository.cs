@@ -8,8 +8,9 @@ using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
 using DotNetCraft.Common.Core.Utils;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
+using DotNetCraft.Common.DataAccessLayer.Repositories.Simple;
 
-namespace DotNetCraft.Common.DataAccessLayer.Repositories
+namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
 {
     public abstract class BaseSmartRepository<TEntity, TEntityId> : BaseRepository<TEntity, TEntityId>, ISmartRepository<TEntity, TEntityId> 
         where TEntity : class, IEntity<TEntityId>

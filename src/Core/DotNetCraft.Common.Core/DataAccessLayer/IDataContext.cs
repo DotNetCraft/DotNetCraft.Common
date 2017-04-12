@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.Utils.Disposal;
 
@@ -18,13 +17,13 @@ namespace DotNetCraft.Common.Core.DataAccessLayer
         IQueryable<TEntity> GetCollectionSet<TEntity>()
             where TEntity : class, IEntity;
 
-        TEntity Insert<TEntity>(TEntity entity)
+        void Insert<TEntity>(TEntity entity)
             where TEntity : class, IEntity;
 
         void Update<TEntity>(TEntity entity)
             where TEntity : class, IEntity;
 
-        void Delete<TEntity>(TEntity entity)
+        void Delete<TEntity>(object entityId)
             where TEntity : class, IEntity;
 
         void BeginTransaction();

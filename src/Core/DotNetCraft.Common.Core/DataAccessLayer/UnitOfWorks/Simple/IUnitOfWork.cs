@@ -1,8 +1,7 @@
-﻿using System;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.Utils.Disposal;
 
-namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks
+namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple
 {
     /// <summary>
     /// Pattern Unit of Work.
@@ -18,9 +17,9 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks
         /// Insert an entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        /// <return>The entity that has been inserted.</return>
-        TEntity Insert<TEntity>(TEntity entity)
-            where TEntity : class, IEntity; //TODO: Return ID
+        /// <return>The entity's identifier that has been inserted.</return>
+        void Insert<TEntity>(TEntity entity)
+            where TEntity : class, IEntity;
 
         /// <summary>
         /// Update an entity.
@@ -32,8 +31,8 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks
         /// <summary>
         /// Delete an entity.
         /// </summary>
-        /// <param name="entity">The entity.</param>
-        void Delete<TEntity>(TEntity entity)
+        /// <param name="entityId">The entity's identifier.</param>
+        void Delete<TEntity>(object entityId)
             where TEntity : class, IEntity;
 
         /// <summary>

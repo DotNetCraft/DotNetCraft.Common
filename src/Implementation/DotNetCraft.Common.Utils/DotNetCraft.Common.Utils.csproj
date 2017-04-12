@@ -34,7 +34,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Disposal\BaseDisposable.cs" />
+    <Compile Include="Disposal\DisposableObject.cs" />
     <Compile Include="Logging\DebugLogger.cs" />
     <Compile Include="Logging\DebugLoggerFactory.cs" />
     <Compile Include="Logging\LogManager.cs" />

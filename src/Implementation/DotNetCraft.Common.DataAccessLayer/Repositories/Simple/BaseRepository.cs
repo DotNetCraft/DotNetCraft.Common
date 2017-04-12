@@ -7,7 +7,7 @@ using DotNetCraft.Common.Core.DataAccessLayer.Repositories;
 using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 
-namespace DotNetCraft.Common.DataAccessLayer.Repositories
+namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
 {
     public abstract class BaseRepository<TEntity, TEntityId> : IRepository<TEntity, TEntityId>
         where TEntity : class, IEntity<TEntityId>
