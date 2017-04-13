@@ -12,7 +12,7 @@ namespace DotNetCraft.Common.Domain.Management
         where TManagerConfiguration : IBackgroundManagerConfiguration
     {
         private readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
-        private CancellationTokenSource cancellationTokenSource;
+        protected CancellationTokenSource cancellationTokenSource;
         private Task worker;
 
         /// <summary>
@@ -34,47 +34,82 @@ namespace DotNetCraft.Common.Domain.Management
             }
         }
 
+        protected virtual void BeforeStarting()
+        {            
+        }
+
+        protected virtual void AfterStarting()
+        {            
+        }
+
+        protected virtual void BeforeStopping()
+        {
+        }
+
+        protected virtual void AfterStopping()
+        {
+        }
+
+        protected virtual void OnStartWorking()
+        {            
+        }
+
         /// <summary>
         /// Occurs when exception has been raised in the background work.
         /// </summary>
         /// <param name="exception">The exception</param>
         protected virtual void OnBackroundException(Exception exception)
         {
-            logger.Error(exception, "There was an exception during background job execution.");
+            
         }
 
         /// <summary>
         /// Occurs when manager should do background work.
         /// </summary>
-        protected abstract void OnBackroundExecution();
+        protected virtual void OnBackroundExecution()
+        {
+            
+        }
 
         /// <summary>
         /// Occurs when background work has been completed.
         /// </summary>
         protected virtual void OnBackgorundWorkCompleted()
-        {
-            logger.Trace("The {0}'s background work has been completed.", Name);
+        {            
         }
+
+        protected virtual void OnBackgorundWorkFailed() { }
 
         private void ManagerBackgorundProcess(object state)
         {
-            CancellationToken cancellationToken = (CancellationToken) state;
-            TimeSpan sleepTime = managerConfiguration.SleepTime;
-            while (cancellationToken.IsCancellationRequested == false)
+            try
             {
-                try
+                CancellationToken cancellationToken = (CancellationToken) state;
+                TimeSpan sleepTime = managerConfiguration.SleepTime;
+                while (cancellationToken.IsCancellationRequested == false)
                 {
-                    OnBackroundExecution();
-                    cancellationToken.WaitHandle.WaitOne(sleepTime);
-                }
-                catch (Exception ex)
-                {
-                    OnBackroundException(ex);                    
+                    try
+                    {
+                        OnBackroundExecution();
+                        cancellationToken.WaitHandle.WaitOne(sleepTime);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.Error(ex, "There was an exception during background job execution.");
+                        OnBackroundException(ex);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                logger.Error(ex, "Manager working thread has been crashed");
+                OnBackgorundWorkFailed();
+                return;
+            }
 
+            logger.Trace("The {0}'s background work has been completed.", Name);
             OnBackgorundWorkCompleted();
-        }
+        }        
 
         #region Implementation of IStartStoppable        
 
