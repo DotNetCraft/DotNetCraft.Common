@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Reflection;
+using DotNetCraft.Common.Core.Attributes;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories;
 using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
 using DotNetCraft.Common.Core.Utils;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.Repositories.Simple;
 
 namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
 {
-    public abstract class BaseSmartRepository<TEntity, TEntityId> : BaseRepository<TEntity, TEntityId>, ISmartRepository<TEntity, TEntityId> 
-        where TEntity : class, IEntity<TEntityId>
+    public abstract class BaseSmartRepository<TEntity> : BaseRepository<TEntity>, ISmartRepository<TEntity> 
+        where TEntity : class, IEntity
     {
         private readonly IDotNetCraftMapper dotNetCraftMapper;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory">The <see cref="ICommonLoggerFactory"/> instance.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="loggerFactory"/> is <see langword="null" />.</exception>
         protected BaseSmartRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory, IDotNetCraftMapper dotNetCraftMapper) : base(contextSettings, dataContextFactory)
         {
             if (dotNetCraftMapper == null)
@@ -37,14 +36,30 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
         /// </summary>
         /// <param name="modelId">The model's identifier.</param>
         /// <returns>The model, if it exists.</returns>
-        public TModel Get<TModel>(int modelId)
+        public TModel Get<TModel>(object modelId)
         {
             try
             {
+                Type entityType = typeof(TEntity);
+                PropertyInfo[] propertyInfos = entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+                PropertyInfo propertyId = null;
+                foreach (PropertyInfo propertyInfo in propertyInfos)
+                {
+                    var attributes = Attribute.GetCustomAttributes(propertyInfo, typeof(IdentifierAttribute));
+                    if (attributes.Length > 0)
+                    {
+                        propertyId = propertyInfo;
+                        break;
+                    }
+                }
+
+                if (propertyId == null)
+                    throw new DataAccessLayerException("There is no identifier for " + entityType);
+
                 using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
-                    TypeConverter converter = TypeDescriptor.GetConverter(typeof(TEntityId));
-                    TEntityId entityId = (TEntityId) converter.ConvertFrom(modelId);
+                    TypeConverter converter = TypeDescriptor.GetConverter(propertyId.PropertyType);
+                    object entityId = converter.ConvertFrom(modelId);
                     TEntity entity = OnGet(entityId, dataContext);
                     TModel model = dotNetCraftMapper.Map<TEntity, TModel>(entity);
                     return model;

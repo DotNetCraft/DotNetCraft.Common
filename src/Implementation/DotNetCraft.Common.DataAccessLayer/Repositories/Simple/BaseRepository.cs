@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using DotNetCraft.Common.Core.Attributes;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories;
@@ -9,8 +11,8 @@ using DotNetCraft.Common.DataAccessLayer.Exceptions;
 
 namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
 {
-    public abstract class BaseRepository<TEntity, TEntityId> : IRepository<TEntity, TEntityId>
-        where TEntity : class, IEntity<TEntityId>
+    public abstract class BaseRepository<TEntity> : IRepository<TEntity>
+        where TEntity : class, IEntity
     {
         protected readonly IContextSettings contextSettings;
 
@@ -35,10 +37,26 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// <param name="entityId">The model's identifier.</param>
         /// <param name="dataContext">The IDataContext instance</param>
         /// <returns>The model, if it exists.</returns>
-        protected virtual TEntity OnGet(TEntityId entityId, IDataContext dataContext)
+        protected virtual TEntity OnGet(object entityId, IDataContext dataContext)
         {
+            Type entityType = typeof(TEntity);
+            PropertyInfo[] propertyInfos = entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            PropertyInfo propertyId = null;
+            foreach (PropertyInfo propertyInfo in propertyInfos)
+            {
+                var attributes = Attribute.GetCustomAttributes(propertyInfo, typeof(IdentifierAttribute));
+                if (attributes.Length > 0)
+                {
+                    propertyId = propertyInfo;
+                    break;
+                }
+            }
+
+            if (propertyId == null)
+                throw new DataAccessLayerException("There is no identifier for "+entityType);
+
             IQueryable<TEntity> collection = dataContext.GetCollectionSet<TEntity>();
-            TEntity result = collection.SingleOrDefault(x => x.Id.Equals(entityId));
+            TEntity result = collection.SingleOrDefault(x => propertyId.GetValue(x) ==  entityId);
 
             if (result == null)
                 throw new EntityNotFoundException("There is no element by " + entityId);
@@ -79,7 +97,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// </summary>
         /// <param name="entityId">The entity's identifier.</param>
         /// <returns>The entity, if it exists.</returns>
-        public TEntity Get(TEntityId entityId)
+        public TEntity Get(object entityId)
         {
             try
             {

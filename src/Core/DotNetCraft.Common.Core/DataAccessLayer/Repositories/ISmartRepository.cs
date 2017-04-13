@@ -4,15 +4,15 @@ using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories
 {
-    public interface ISmartRepository<TEntity, TEntityId>
-        where TEntity : IEntity<TEntityId>
+    public interface ISmartRepository<TEntity>
+        where TEntity : IEntity
     {
         /// <summary>
         /// Get model by identifier.
         /// </summary>
         /// <param name="modelId">The model's identifier.</param>
         /// <returns>The model, if it exists.</returns>
-        TModel Get<TModel>(int modelId);
+        TModel Get<TModel>(object modelId);
 
         /// <summary>
         /// Get all models.

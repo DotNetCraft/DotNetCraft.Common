@@ -3,7 +3,7 @@
     /// <summary>
     /// Base entity where identifier's type is integer.
     /// </summary>
-    public class BaseIntEntity: BaseEntity<int>
+    public abstract class BaseIntEntity: BaseEntity<int>
     {
     }
 }

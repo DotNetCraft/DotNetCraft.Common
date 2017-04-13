@@ -8,7 +8,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories
     /// Interface shows, that the object is a repository for entities.
     /// </summary>
     /// <typeparam name="TEntity">Entity's type.</typeparam>
-    public interface IRepository<TEntity, TEntityId>
+    public interface IRepository<TEntity>
         where TEntity : IEntity
     {
         /// <summary>
@@ -16,7 +16,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories
         /// </summary>
         /// <param name="entityId">The entity's identifier.</param>
         /// <returns>The entity, if it exists.</returns>
-        TEntity Get(TEntityId entityId);
+        TEntity Get(object entityId);
 
         /// <summary>
         /// Get all entities.

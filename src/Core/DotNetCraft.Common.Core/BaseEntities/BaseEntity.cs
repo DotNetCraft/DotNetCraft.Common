@@ -1,18 +1,17 @@
-﻿namespace DotNetCraft.Common.Core.BaseEntities
+﻿using DotNetCraft.Common.Core.Attributes;
+
+namespace DotNetCraft.Common.Core.BaseEntities
 {
     /// <summary>
     /// Base class for all entities.
     /// </summary>
-    public abstract class BaseEntity<TEntityId> : IEntity<TEntityId>
-    {
+    public abstract class BaseEntity<TEntityId> : IEntity
+    { 
         /// <summary>
         /// The identifier.
         /// </summary>
-        public TEntityId Id { get; set; }
-        object IEntity.EntityId
-        {
-            get { return this.Id; }
-        }
+        [Identifier]
+        public TEntityId Id { get; set; }       
 
         #region Overrides of Object
 

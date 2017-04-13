@@ -4,8 +4,8 @@ using DotNetCraft.Common.Core.DataAccessLayer;
 
 namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
 {
-    public abstract class BaseGuidRepository<TEntity>: BaseRepository<TEntity, Guid> 
-        where TEntity : class, IEntity<Guid>
+    public abstract class BaseGuidRepository<TEntity>: BaseRepository<TEntity> 
+        where TEntity : class, IEntity
     {
         protected BaseGuidRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory) : base(contextSettings, dataContextFactory)
         {
