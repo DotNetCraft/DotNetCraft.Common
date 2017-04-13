@@ -16,16 +16,20 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
     public abstract class BaseSmartRepository<TEntity> : BaseRepository<TEntity>, ISmartRepository<TEntity> 
         where TEntity : class, IEntity
     {
+        private readonly IPropertyManager propertyManager;
         private readonly IDotNetCraftMapper dotNetCraftMapper;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected BaseSmartRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory, IDotNetCraftMapper dotNetCraftMapper) : base(contextSettings, dataContextFactory)
+        protected BaseSmartRepository(IPropertyManager propertyManager, IContextSettings contextSettings, IDataContextFactory dataContextFactory, IDotNetCraftMapper dotNetCraftMapper) : base(contextSettings, dataContextFactory)
         {
+            if (propertyManager == null)
+                throw new ArgumentNullException(nameof(propertyManager));
             if (dotNetCraftMapper == null)
                 throw new ArgumentNullException(nameof(dotNetCraftMapper));
 
+            this.propertyManager = propertyManager;
             this.dotNetCraftMapper = dotNetCraftMapper;            
         }
 
@@ -41,20 +45,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
             try
             {
                 Type entityType = typeof(TEntity);
-                PropertyInfo[] propertyInfos = entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-                PropertyInfo propertyId = null;
-                foreach (PropertyInfo propertyInfo in propertyInfos)
-                {
-                    var attributes = Attribute.GetCustomAttributes(propertyInfo, typeof(IdentifierAttribute));
-                    if (attributes.Length > 0)
-                    {
-                        propertyId = propertyInfo;
-                        break;
-                    }
-                }
-
-                if (propertyId == null)
-                    throw new DataAccessLayerException("There is no identifier for " + entityType);
+                PropertyInfo propertyId = propertyManager.Single(entityType, typeof(IdentifierAttribute));
 
                 using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
