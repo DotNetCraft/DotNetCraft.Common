@@ -37,6 +37,7 @@
     <Compile Include="BaseDataContext.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="Exceptions\UnitOfWorkException.cs" />
+    <Compile Include="Extentions\DotNetCraftQueryableExtentions.cs" />
     <Compile Include="Repositories\Simple\BaseGuidRepository.cs" />
     <Compile Include="Repositories\Simple\BaseIntRepository.cs" />
     <Compile Include="Repositories\Simple\BaseRepository.cs" />

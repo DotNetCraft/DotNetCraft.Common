@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace DotNetCraft.Common.DataAccessLayer.Exceptions
+namespace DotNetCraft.Common.Domain.ServiceMessenger.Exceptions
 {
-    [Serializable]
-    public class DataAccessLayerException : Exception
+    public class ServiceMessageException : Exception
     {
-        public IDictionary<string, string> ErrorParameters { get; private set; }
+        public Dictionary<string, string> ErrorParameters { get; private set; }
 
-        public DataAccessLayerException(string message, Dictionary<string, string> errorParameters = null) : base(message)
+        public ServiceMessageException(string message, Dictionary<string, string> errorParameters = null) : base(message)
         {
             ErrorParameters = errorParameters ?? new Dictionary<string, string>();
         }
 
-        public DataAccessLayerException(string message, Exception innerException, Dictionary<string, string> errorParameters = null) : base(message, innerException)
+        public ServiceMessageException(string message, Exception innerException, Dictionary<string, string> errorParameters = null) : base(message, innerException)
         {
             ErrorParameters = errorParameters ?? new Dictionary<string, string>();
         }
 
         /// <exception cref="SerializationException">The class name is null or <see cref="P:System.Exception.HResult" /> is zero (0). </exception>
-        protected DataAccessLayerException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected ServiceMessageException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 

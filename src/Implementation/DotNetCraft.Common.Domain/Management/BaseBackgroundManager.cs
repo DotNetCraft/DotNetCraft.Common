@@ -34,49 +34,31 @@ namespace DotNetCraft.Common.Domain.Management
             }
         }
 
-        protected virtual void BeforeStarting()
-        {            
-        }
+        protected virtual void BeforeStarting() { }
 
-        protected virtual void AfterStarting()
-        {            
-        }
+        protected virtual void AfterStarting() { }
 
-        protected virtual void BeforeStopping()
-        {
-        }
+        protected virtual void BeforeStopping() { }
 
-        protected virtual void AfterStopping()
-        {
-        }
+        protected virtual void AfterStopping() { }
 
-        protected virtual void OnStartWorking()
-        {            
-        }
+        protected virtual void OnStartWorking() { }
 
         /// <summary>
         /// Occurs when exception has been raised in the background work.
         /// </summary>
         /// <param name="exception">The exception</param>
-        protected virtual void OnBackroundException(Exception exception)
-        {
-            
-        }
+        protected virtual void OnBackroundException(Exception exception) { }
 
         /// <summary>
         /// Occurs when manager should do background work.
         /// </summary>
-        protected virtual void OnBackroundExecution()
-        {
-            
-        }
+        protected virtual void OnBackroundExecution() { }
 
         /// <summary>
         /// Occurs when background work has been completed.
         /// </summary>
-        protected virtual void OnBackgorundWorkCompleted()
-        {            
-        }
+        protected virtual void OnBackgorundWorkCompleted() { }
 
         protected virtual void OnBackgorundWorkFailed() { }
 
@@ -91,13 +73,13 @@ namespace DotNetCraft.Common.Domain.Management
                     try
                     {
                         OnBackroundExecution();
-                        cancellationToken.WaitHandle.WaitOne(sleepTime);
                     }
                     catch (Exception ex)
                     {
                         logger.Error(ex, "There was an exception during background job execution.");
-                        OnBackroundException(ex);
+                        OnBackroundException(ex); //TODO: Make a decision to terminate, sleep or something else
                     }
+                    cancellationToken.WaitHandle.WaitOne(sleepTime); //TODO: Change to decision maker
                 }
             }
             catch (Exception ex)
@@ -127,7 +109,7 @@ namespace DotNetCraft.Common.Domain.Management
             worker = new Task(ManagerBackgorundProcess, cancellationToken);
             worker.Start();
             IsRunning = true;
-            logger.Trace("The {0] has been started.", Name);
+            logger.Trace("The {0} has been started.", Name);
         }
 
         /// <summary>

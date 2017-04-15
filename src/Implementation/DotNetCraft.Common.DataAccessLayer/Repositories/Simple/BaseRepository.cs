@@ -7,7 +7,10 @@ using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories;
 using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
+using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
+using DotNetCraft.Common.DataAccessLayer.Extentions;
+using DotNetCraft.Common.Utils.Logging;
 
 namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
 {
@@ -17,6 +20,8 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         protected readonly IContextSettings contextSettings;
 
         protected readonly IDataContextFactory dataContextFactory;
+
+        protected ICommonLogger logger = LogManager.GetCurrentClassLogger();
 
         protected BaseRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory)
         {
@@ -56,7 +61,8 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
                 throw new DataAccessLayerException("There is no identifier for "+entityType);
 
             IQueryable<TEntity> collection = dataContext.GetCollectionSet<TEntity>();
-            TEntity result = collection.SingleOrDefault(x => propertyId.GetValue(x) ==  entityId);
+            collection = collection.Simplified(propertyId, entityId);
+            TEntity result = collection.SingleOrDefault();
 
             if (result == null)
                 throw new EntityNotFoundException("There is no element by " + entityId);
@@ -85,7 +91,16 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         protected virtual ICollection<TEntity> OnGetBySpecification(ISpecificationRequest<TEntity> specificationRequest, IDataContext dataContext)
         {
             IQueryable<TEntity> collection = dataContext.GetCollectionSet<TEntity>();
-            ICollection<TEntity> result = collection.Where(specificationRequest.Specification.IsSatisfiedBy()).ToList();
+            var specification = specificationRequest.Specification;
+             collection = collection.Where(specification.IsSatisfiedBy());
+
+            if (specificationRequest.Skip.HasValue)
+                collection = collection.Skip(specificationRequest.Skip.Value);
+
+            if (specificationRequest.Take.HasValue)
+                collection = collection.Skip(specificationRequest.Take.Value);
+
+            ICollection<TEntity> result = collection.ToList();
             return result;
         }
         #endregion
@@ -105,6 +120,11 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
                 {
                     return OnGet(entityId, dataContext);
                 }
+            }
+            catch (EntityNotFoundException entityNotFoundException)
+            {
+                logger.Error(entityNotFoundException, "Entity not found");
+                throw;
             }
             catch (Exception ex)
             {

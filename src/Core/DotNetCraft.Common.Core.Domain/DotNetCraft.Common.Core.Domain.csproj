@@ -43,6 +43,9 @@
     <Compile Include="Management\IManagerDeccisionMaker.cs" />
     <Compile Include="Management\StopwatchManager\IStopwatchManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceMessenger\IServiceMessage.cs" />
+    <Compile Include="ServiceMessenger\IServiceMessageHandler.cs" />
+    <Compile Include="ServiceMessenger\IServiceMessageProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DotNetCraft.Common.Core.Utils\DotNetCraft.Common.Core.Utils.csproj">

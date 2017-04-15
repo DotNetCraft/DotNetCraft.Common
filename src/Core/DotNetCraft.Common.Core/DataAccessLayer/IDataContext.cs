@@ -17,7 +17,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer
         IQueryable<TEntity> GetCollectionSet<TEntity>()
             where TEntity : class, IEntity;
 
-        void Insert<TEntity>(TEntity entity)
+        void Insert<TEntity>(TEntity entity, bool assignIdentifier = true)
             where TEntity : class, IEntity;
 
         void Update<TEntity>(TEntity entity)
@@ -25,6 +25,9 @@ namespace DotNetCraft.Common.Core.DataAccessLayer
 
         void Delete<TEntity>(object entityId)
             where TEntity : class, IEntity;
+
+        void Delete<TEntity>(TEntity entity)
+           where TEntity : class, IEntity;
 
         void BeginTransaction();
         void Commit();

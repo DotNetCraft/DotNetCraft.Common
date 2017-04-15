@@ -9,8 +9,18 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Specofications
         where TEntity: IEntity
     {
         /// <summary>
+        /// Amount of elements that will be skipped.
+        /// </summary>
+        int? Skip { get; set; }
+
+        /// <summary>
+        /// Amount of elements that will be taken.
+        /// </summary>
+        int? Take { get; set; }
+
+        /// <summary>
         /// The specification.
         /// </summary>
-        ISpecification<TEntity> Specification { get; }
+        ISpecification<TEntity> Specification { get; set; }
     }
 }

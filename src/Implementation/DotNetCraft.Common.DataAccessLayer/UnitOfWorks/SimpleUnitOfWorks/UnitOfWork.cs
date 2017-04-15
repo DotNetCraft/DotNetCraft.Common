@@ -83,11 +83,11 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 
         #region Virtual methods: OnInsert, OnUpdate and OnDelete
 
-        protected virtual void OnInsert<TEntity>(TEntity entity)
+        protected virtual void OnInsert<TEntity>(TEntity entity, bool assignIdentifier = true)
            where TEntity : class, IEntity
         {
             logger.Trace("Inserting {0} into the data context...", entity);
-            dataContext.Insert(entity);
+            dataContext.Insert(entity, assignIdentifier);
             logger.Trace("The entity has been inserted.");
         }
 
@@ -107,6 +107,14 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             logger.Trace("The entity has been deleted.");
         }
 
+        protected virtual void OnDelete<TEntity>(TEntity entity)
+           where TEntity : class, IEntity
+        {
+            logger.Trace("Deliting {0} from the data context...", entity);
+            dataContext.Delete(entity);
+            logger.Trace("The entity has been deleted.");
+        }
+
         #endregion        
 
         /// <summary>
@@ -115,13 +123,13 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         /// <param name="entity">The entity.</param>
         /// <return>The entity that has been inserted.</return>
         /// <exception cref="UnitOfWorkException">There was a problem during inserting a new entity into the database..</exception>
-        public void Insert<TEntity>(TEntity entity)
+        public void Insert<TEntity>(TEntity entity, bool assignIdentifier = true)
             where TEntity : class, IEntity
         {
             try
             {
                 logger.Debug("Inserting {0} into the data context...", entity);
-                OnInsert(entity);
+                OnInsert(entity, assignIdentifier);
                 logger.Debug("The entity has been inserted.");
             }
             catch (Exception ex)
@@ -182,6 +190,31 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
                 {
                     {"EntityType", typeof(TEntity).ToString()},
                     {"EntityId", entityId.ToString()}
+                };
+                UnitOfWorkException unitOfWorkException = new UnitOfWorkException("There was a problem during deleting an existing entity from the database.", ex, errorParameters);
+                logger.Error(unitOfWorkException, unitOfWorkException.ToString());
+                throw unitOfWorkException;
+            }
+        }
+
+        /// <summary>
+        /// Delete an entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        public void Delete<TEntity>(TEntity entity) where TEntity : class, IEntity
+        {
+            try
+            {
+                logger.Debug("Deleting {0} from the data context...", entity);
+                OnDelete(entity);
+                logger.Debug("The entity has been deleted.");
+            }
+            catch (Exception ex)
+            {
+                Dictionary<string, string> errorParameters = new Dictionary<string, string>
+                {
+                    {"EntityType", typeof(TEntity).ToString()},
+                    {"Entity", entity.ToString()}
                 };
                 UnitOfWorkException unitOfWorkException = new UnitOfWorkException("There was a problem during deleting an existing entity from the database.", ex, errorParameters);
                 logger.Error(unitOfWorkException, unitOfWorkException.ToString());

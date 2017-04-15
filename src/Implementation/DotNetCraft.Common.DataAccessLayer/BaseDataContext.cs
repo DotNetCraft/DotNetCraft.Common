@@ -57,7 +57,16 @@ namespace DotNetCraft.Common.DataAccessLayer
         protected abstract IQueryable<TEntity> OnGetCollectionSet<TEntity>()
             where TEntity : class, IEntity;
 
-        protected abstract void OnInsert<TEntity>(TEntity entity)
+        protected abstract void OnInsert<TEntity>(TEntity entity, bool assignIdentifier = true)
+            where TEntity : class, IEntity;
+
+        protected abstract void OnUpdate<TEntity>(TEntity entity)
+            where TEntity : class, IEntity;
+
+        protected abstract void OnDelete<TEntity>(object entityId)
+            where TEntity : class, IEntity;
+
+        protected abstract void OnDelete<TEntity>(TEntity entity)
             where TEntity : class, IEntity;
 
         /// <summary>
@@ -83,12 +92,12 @@ namespace DotNetCraft.Common.DataAccessLayer
             }
         }        
 
-        public void Insert<TEntity>(TEntity entity)
+        public void Insert<TEntity>(TEntity entity, bool assignIdentifier = true)
             where TEntity : class, IEntity
         {
             try
             {
-                OnInsert(entity);
+                OnInsert(entity, assignIdentifier);
             }
             catch (Exception ex)
             {
@@ -104,13 +113,55 @@ namespace DotNetCraft.Common.DataAccessLayer
         public void Update<TEntity>(TEntity entity) 
             where TEntity : class, IEntity
         {
-            throw new NotImplementedException();
+            try
+            {
+                OnUpdate(entity);
+            }
+            catch (Exception ex)
+            {
+                Dictionary<string, string> errorParameters = new Dictionary<string, string>
+                {
+                    {"EntityType", typeof(TEntity).ToString()},
+                    {"entity", entity.ToString()}
+                };
+                throw new DataAccessLayerException("There was a problem during updating an existing entity in the database", ex, errorParameters);
+            }
         }
 
         public void Delete<TEntity>(object entityId) 
             where TEntity : class, IEntity
         {
-            throw new NotImplementedException();
+            try
+            {
+                OnDelete<TEntity>(entityId);
+            }
+            catch (Exception ex)
+            {
+                Dictionary<string, string> errorParameters = new Dictionary<string, string>
+                {
+                    {"EntityType", typeof(TEntity).ToString()},
+                    {"entityId", entityId.ToString()}
+                };
+                throw new DataAccessLayerException("There was a problem during deleting an existing entity from the database", ex, errorParameters);
+            }
+        }
+
+        public void Delete<TEntity>(TEntity entity) 
+            where TEntity : class, IEntity
+        {
+            try
+            {
+                OnDelete(entity);
+            }
+            catch (Exception ex)
+            {
+                Dictionary<string, string> errorParameters = new Dictionary<string, string>
+                {
+                    {"EntityType", typeof(TEntity).ToString()},
+                    {"entity", entity.ToString()}
+                };
+                throw new DataAccessLayerException("There was a problem during deleting an existing entity from the database", ex, errorParameters);
+            }
         }
 
 

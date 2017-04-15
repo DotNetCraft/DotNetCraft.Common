@@ -41,6 +41,9 @@
     <Compile Include="Management\StopwatchManagement\StopwatchManager.cs" />
     <Compile Include="Management\StopwatchManagement\StopwatchManagerConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceMessenger\BaseServiceMessage.cs" />
+    <Compile Include="ServiceMessenger\Exceptions\ServiceMessageException.cs" />
+    <Compile Include="ServiceMessenger\ServiceMessageProcessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\DotNetCraft.Common.Core.Domain\DotNetCraft.Common.Core.Domain.csproj">
@@ -56,6 +59,7 @@
       <Name>DotNetCraft.Common.Utils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

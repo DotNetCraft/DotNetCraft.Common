@@ -17,8 +17,9 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple
         /// Insert an entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
+        /// <param name="assignIdentifier">Flag shows that identifier should be assigned</param>
         /// <return>The entity's identifier that has been inserted.</return>
-        void Insert<TEntity>(TEntity entity)
+        void Insert<TEntity>(TEntity entity, bool assignIdentifier = true)
             where TEntity : class, IEntity;
 
         /// <summary>
@@ -29,10 +30,17 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple
             where TEntity : class, IEntity;
 
         /// <summary>
-        /// Delete an entity.
+        /// Delete an entity by it's identifier.
         /// </summary>
         /// <param name="entityId">The entity's identifier.</param>
         void Delete<TEntity>(object entityId)
+            where TEntity : class, IEntity;
+
+        /// <summary>
+        /// Delete an entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        void Delete<TEntity>(TEntity entity)
             where TEntity : class, IEntity;
 
         /// <summary>

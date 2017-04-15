@@ -34,6 +34,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\FieldToStringAttribute.cs" />
     <Compile Include="Attributes\IdentifierAttribute.cs" />
     <Compile Include="BaseEntities\BaseEntity.cs" />
     <Compile Include="BaseEntities\BaseGuidEntity.cs" />
