@@ -1,4 +1,6 @@
-﻿using DotNetCraft.Common.Core.BaseEntities;
+﻿using System;
+using System.Linq.Expressions;
+using DotNetCraft.Common.Core.BaseEntities;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.Specofications
 {

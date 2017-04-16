@@ -66,6 +66,7 @@ namespace DotNetCraft.Common.Domain.Management
         {
             try
             {
+                Thread.CurrentThread.Name = string.Format("Thread_{0}", Name);
                 CancellationToken cancellationToken = (CancellationToken) state;
                 TimeSpan sleepTime = managerConfiguration.SleepTime;
                 while (cancellationToken.IsCancellationRequested == false)

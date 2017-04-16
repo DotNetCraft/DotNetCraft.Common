@@ -8,6 +8,6 @@
         /// <summary>
         /// Manager's name
         /// </summary>
-        string Name { get; }
+        string Name { get; set; }
     }
 }

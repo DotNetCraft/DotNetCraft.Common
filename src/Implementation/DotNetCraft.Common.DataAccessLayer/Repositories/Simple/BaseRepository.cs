@@ -44,6 +44,20 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// <returns>The model, if it exists.</returns>
         protected virtual TEntity OnGet(object entityId, IDataContext dataContext)
         {
+            PropertyInfo propertyId = GeIdentifiertPropertyInfo();
+
+            IQueryable<TEntity> collection = dataContext.GetCollectionSet<TEntity>();
+            collection = collection.Simplified(propertyId, entityId);
+            TEntity result = collection.SingleOrDefault();
+
+            if (result == null)
+                throw new EntityNotFoundException("There is no element by " + entityId);
+
+            return result;
+        }
+
+        private static PropertyInfo GeIdentifiertPropertyInfo()
+        {
             Type entityType = typeof(TEntity);
             PropertyInfo[] propertyInfos = entityType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             PropertyInfo propertyId = null;
@@ -58,16 +72,8 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
             }
 
             if (propertyId == null)
-                throw new DataAccessLayerException("There is no identifier for "+entityType);
-
-            IQueryable<TEntity> collection = dataContext.GetCollectionSet<TEntity>();
-            collection = collection.Simplified(propertyId, entityId);
-            TEntity result = collection.SingleOrDefault();
-
-            if (result == null)
-                throw new EntityNotFoundException("There is no element by " + entityId);
-
-            return result;
+                throw new DataAccessLayerException("There is no identifier for " + entityType);
+            return propertyId;
         }
 
         /// <summary>
@@ -92,13 +98,19 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         {
             IQueryable<TEntity> collection = dataContext.GetCollectionSet<TEntity>();
             var specification = specificationRequest.Specification;
-             collection = collection.Where(specification.IsSatisfiedBy());
+            collection = collection.Where(specification.IsSatisfiedBy());
+
+            if (specificationRequest.Skip.HasValue || specificationRequest.Take.HasValue)
+            {
+                PropertyInfo propertyId = GeIdentifiertPropertyInfo();
+                collection = collection.OrderByProperty(propertyId.Name);
+            }
 
             if (specificationRequest.Skip.HasValue)
                 collection = collection.Skip(specificationRequest.Skip.Value);
 
             if (specificationRequest.Take.HasValue)
-                collection = collection.Skip(specificationRequest.Take.Value);
+                collection = collection.Take(specificationRequest.Take.Value);
 
             ICollection<TEntity> result = collection.ToList();
             return result;
