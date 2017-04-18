@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>DotNetCraft.Common</id>
-    <version>1.0.15</version>
+    <version>1.0.16</version>
     <title>DotNetCraft.Common For .NET</title>
     <summary>DotNetCraft.Common For .NET</summary>
     <description>Common base library for DotNetCraft projects.</description>

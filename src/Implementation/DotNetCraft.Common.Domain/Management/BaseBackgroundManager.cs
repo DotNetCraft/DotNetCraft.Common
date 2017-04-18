@@ -14,6 +14,7 @@ namespace DotNetCraft.Common.Domain.Management
         private readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
         protected CancellationTokenSource cancellationTokenSource;
         private Task worker;
+        private readonly ManualResetEvent resetEvent;
 
         /// <summary>
         /// Flag shows that object is running
@@ -26,6 +27,7 @@ namespace DotNetCraft.Common.Domain.Management
         /// <param name="managerConfiguration">The TManagerConfiguration instance.</param>
         protected BaseBackgroundManager(TManagerConfiguration managerConfiguration) : base(managerConfiguration)
         {
+            resetEvent = new ManualResetEvent(false);
             if (managerConfiguration.StartImmediately)
             {
                 logger.Info("{0} is starting immediately...", Name);
@@ -67,8 +69,12 @@ namespace DotNetCraft.Common.Domain.Management
             try
             {
                 Thread.CurrentThread.Name = string.Format("Thread_{0}", Name);
-                CancellationToken cancellationToken = (CancellationToken) state;
+                CancellationToken cancellationToken = cancellationTokenSource.Token;
+                //CancellationToken cancellationToken = (CancellationToken) state;
                 TimeSpan sleepTime = managerConfiguration.SleepTime;
+
+                WaitHandle[] waitHandlers = new WaitHandle[] {resetEvent, cancellationToken.WaitHandle};
+
                 while (cancellationToken.IsCancellationRequested == false)
                 {
                     try
@@ -80,7 +86,10 @@ namespace DotNetCraft.Common.Domain.Management
                         logger.Error(ex, "There was an exception during background job execution.");
                         OnBackroundException(ex); //TODO: Make a decision to terminate, sleep or something else
                     }
-                    cancellationToken.WaitHandle.WaitOne(sleepTime); //TODO: Change to decision maker
+
+                    int signal = WaitHandle.WaitAny(waitHandlers, sleepTime);//TODO: Change to decision maker
+                    if (signal == 0)
+                        resetEvent.Reset();
                 }
             }
             catch (Exception ex)
@@ -107,7 +116,7 @@ namespace DotNetCraft.Common.Domain.Management
 
             cancellationTokenSource = new CancellationTokenSource();
             CancellationToken cancellationToken = cancellationTokenSource.Token;
-            worker = new Task(ManagerBackgorundProcess, cancellationToken);
+            worker = new Task(ManagerBackgorundProcess, new object[] {resetEvent, cancellationToken});
             worker.Start();
             IsRunning = true;
             logger.Trace("The {0} has been started.", Name);
@@ -125,6 +134,16 @@ namespace DotNetCraft.Common.Domain.Management
                 worker = null;
                 IsRunning = false;
             }
+        }
+
+        /// <summary>
+        /// Background thread will be wake up immediately.
+        /// </summary>
+        /// <param name="reason">The reason</param>
+        public void ForceRun(string reason)
+        {
+            logger.Debug("{0} will be wake up immediately: {1}", Name, reason);
+            resetEvent.Set();
         }
 
         #endregion
