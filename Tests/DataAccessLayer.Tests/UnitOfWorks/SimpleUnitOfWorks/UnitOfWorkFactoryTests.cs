@@ -1,8 +1,6 @@
 ﻿using System;
 using DotNetCraft.Common.Core.DataAccessLayer;
-using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
 using NSubstitute;

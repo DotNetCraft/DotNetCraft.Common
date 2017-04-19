@@ -32,7 +32,7 @@ namespace DotNetCraft.Common.Core.BaseEntities
                     var attributes = Attribute.GetCustomAttributes(propertyInfo, typeof(FieldToStringAttribute));
                     if (attributes.Length > 0)
                     {
-                        var propValue = propertyInfo.GetValue(this);
+                        var propValue = propertyInfo.GetValue(this, null);
                         stringBuilder.AppendFormat("{0}: {1}", propertyInfo.Name, propValue);
                     }
                 }
