@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
+using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.Utils.Disposal;
 
@@ -67,6 +68,9 @@ namespace DotNetCraft.Common.DataAccessLayer
             where TEntity : class, IEntity;
 
         protected abstract void OnDelete<TEntity>(TEntity entity)
+            where TEntity : class, IEntity;
+
+        protected abstract ICollection<TEntity> OnExecuteQuery<TEntity>(string query, DataBaseParameter[] args)
             where TEntity : class, IEntity;
 
         /// <summary>
@@ -203,7 +207,21 @@ namespace DotNetCraft.Common.DataAccessLayer
             {
                 throw new DataAccessLayerException("There was a problem during rolling back changes", ex);
             }
-        }        
+        }
+
+        public ICollection<TEntity> ExecuteQuery<TEntity>(string query, DataBaseParameter[] args) 
+            where TEntity : class, IEntity
+        {
+            try
+            {
+                var result = OnExecuteQuery<TEntity>(query, args);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new DataAccessLayerException("There was a problem during rolling back changes", ex);
+            }
+        }
 
         #endregion
     }

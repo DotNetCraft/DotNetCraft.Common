@@ -51,6 +51,7 @@
     <Compile Include="DataAccessLayer\Repositories\IRepository.cs" />
     <Compile Include="DataAccessLayer\Repositories\ISmartRepository.cs" />
     <Compile Include="DataAccessLayer\Repositories\IStringRepository.cs" />
+    <Compile Include="DataAccessLayer\UnitOfWorks\DataBaseParameter.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\Smart\ISmartUnitOfWork.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\Smart\ISmartUnitOfWorkFactory.cs" />
     <Compile Include="DataAccessLayer\Specofications\ISpecification.cs" />

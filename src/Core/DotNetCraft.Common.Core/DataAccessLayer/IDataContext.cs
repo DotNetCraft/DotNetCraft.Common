@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using DotNetCraft.Common.Core.BaseEntities;
+using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.Utils.Disposal;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer
@@ -32,5 +34,8 @@ namespace DotNetCraft.Common.Core.DataAccessLayer
         void BeginTransaction();
         void Commit();
         void RollBack();
+
+        ICollection<TEntity> ExecuteQuery<TEntity>(string query, DataBaseParameter[] args) 
+            where TEntity : class, IEntity;
     }
 }

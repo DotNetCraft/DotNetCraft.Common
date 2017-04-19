@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.Utils.Disposal;
 
@@ -41,6 +42,16 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple
         /// </summary>
         /// <param name="entity">The entity.</param>
         void Delete<TEntity>(TEntity entity)
+            where TEntity : class, IEntity;
+
+        /// <summary>
+        /// Execute query.
+        /// </summary>
+        /// <typeparam name="TEntity">Type of entity</typeparam>
+        /// <param name="query">The query</param>
+        /// <param name="args">Qeury's arguments (parameters)</param>
+        /// <returns>List of entities.</returns>
+        ICollection<TEntity> ExecuteQuery<TEntity>(string query, params DataBaseParameter[] args)
             where TEntity : class, IEntity;
 
         /// <summary>

@@ -11,11 +11,11 @@ using DotNetCraft.Common.Utils.Logging;
 
 namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 {
-    public class UnitOfWork: DisposableObject, IUnitOfWork
+    public class UnitOfWork : DisposableObject, IUnitOfWork
     {
         private readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
 
-        protected readonly IDataContext dataContext;        
+        protected readonly IDataContext dataContext;
 
         /// <summary>
         /// Flag shows that transaction opened.
@@ -84,7 +84,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         #region Virtual methods: OnInsert, OnUpdate and OnDelete
 
         protected virtual void OnInsert<TEntity>(TEntity entity, bool assignIdentifier = true)
-           where TEntity : class, IEntity
+            where TEntity : class, IEntity
         {
             logger.Trace("Inserting {0} into the data context...", entity);
             dataContext.Insert(entity, assignIdentifier);
@@ -92,7 +92,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         }
 
         protected virtual void OnUpdate<TEntity>(TEntity entity)
-           where TEntity : class, IEntity
+            where TEntity : class, IEntity
         {
             logger.Trace("Updating {0} in the data context...", entity);
             dataContext.Update(entity);
@@ -100,7 +100,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         }
 
         protected virtual void OnDelete<TEntity>(object entityId)
-           where TEntity : class, IEntity
+            where TEntity : class, IEntity
         {
             logger.Trace("Deliting {0} from the data context...", entityId);
             dataContext.Delete<TEntity>(entityId);
@@ -108,14 +108,23 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         }
 
         protected virtual void OnDelete<TEntity>(TEntity entity)
-           where TEntity : class, IEntity
+            where TEntity : class, IEntity
         {
             logger.Trace("Deliting {0} from the data context...", entity);
             dataContext.Delete(entity);
             logger.Trace("The entity has been deleted.");
         }
 
-        #endregion        
+        private ICollection<TEntity> OnExecuteQuery<TEntity>(string query, DataBaseParameter[] args)
+            where TEntity : class, IEntity
+        {
+            logger.Trace("Executing query {0}...", query);
+            ICollection<TEntity> result = dataContext.ExecuteQuery<TEntity>(query, args);
+            logger.Trace("The query has been executed.");
+            return result;
+        }
+
+        #endregion
 
         /// <summary>
         /// Insert an entity.
@@ -156,7 +165,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             {
                 logger.Debug("Updating {0} in the data context...", entity);
                 OnUpdate(entity);
-                logger.Debug("The entity has been updated.");                
+                logger.Debug("The entity has been updated.");
             }
             catch (Exception ex)
             {
@@ -221,6 +230,36 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
                 throw unitOfWorkException;
             }
         }
+
+        /// <summary>
+        /// Execute query.
+        /// </summary>
+        /// <typeparam name="TEntity">Type of entity</typeparam>
+        /// <param name="query">The query</param>
+        /// <param name="args">Qeury's arguments (parameters)</param>
+        /// <returns>List of entities.</returns>
+        public ICollection<TEntity> ExecuteQuery<TEntity>(string query, params DataBaseParameter[] args)
+            where TEntity : class, IEntity
+        {
+            try
+            {
+                logger.Debug("Executing query {0}...", query);
+                ICollection<TEntity> result = OnExecuteQuery<TEntity>(query, args);
+                logger.Debug("The query has been executed.");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Dictionary<string, string> errorParameters = new Dictionary<string, string>
+                {
+                    {"EntityType", typeof(TEntity).ToString()},
+                    {"Query", query}
+                };
+                UnitOfWorkException unitOfWorkException = new UnitOfWorkException("There was a problem during executing query in the database.", ex, errorParameters);
+                logger.Error(unitOfWorkException, unitOfWorkException.ToString());
+                throw unitOfWorkException;
+            }
+        }        
 
         /// <summary>
         /// Commit transaction.
