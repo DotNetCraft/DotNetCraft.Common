@@ -6,10 +6,15 @@
     public interface IServiceMessageProcessor
     {
         /// <summary>
+        /// Amount of service message handlers.
+        /// </summary>
+        int Count { get; }
+
+        /// <summary>
         /// Register a new message handler.
         /// </summary>
         /// <param name="serviceMessageHandler">The IServiceMessageHandler instance.</param>
-        void RegisteredWaitHandle(IServiceMessageHandler serviceMessageHandler);
+        void RegisteredServiceMessageHandler(IServiceMessageHandler serviceMessageHandler);
 
         /// <summary>
         /// Send a message.

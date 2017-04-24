@@ -25,6 +25,7 @@ script:
  - xbuild /p:Configuration=Release DotNetCraft.Common.sln
  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Tests/DataAccessLayer.Tests/bin/Release/DataAccessLayer.Tests.dll
  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Tests/Utils.Tests/bin/Release/Utils.Tests.dll
+ - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./Tests/Domain.Tests/bin/Release/Domain.Tests.dll
 
 # Only watch the master branch.
 branches:

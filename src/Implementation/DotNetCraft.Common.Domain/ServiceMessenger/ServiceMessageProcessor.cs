@@ -8,6 +8,14 @@ namespace DotNetCraft.Common.Domain.ServiceMessenger
     {
         private readonly List<IServiceMessageHandler> handlers;
 
+        /// <summary>
+        /// Amount of service message handlers.
+        /// </summary>
+        public int Count
+        {
+            get { return handlers.Count; }
+        }
+
         public ServiceMessageProcessor()
         {
             handlers = new List<IServiceMessageHandler>();
@@ -17,7 +25,7 @@ namespace DotNetCraft.Common.Domain.ServiceMessenger
 
         #region Implementation of IServiceMessageProcessor
 
-        public void RegisteredWaitHandle(IServiceMessageHandler serviceMessageHandler)
+        public void RegisteredServiceMessageHandler(IServiceMessageHandler serviceMessageHandler)
         {
             if (handlers.Exists(x => x.ServiceMessageHandlerId == serviceMessageHandler.ServiceMessageHandlerId))
                 throw new ServiceMessageException("This service message handler has been already registered");
@@ -27,13 +35,14 @@ namespace DotNetCraft.Common.Domain.ServiceMessenger
 
         public bool SendMessage(IServiceMessage message)
         {
-            bool messageWasHandled = false;
             foreach (IServiceMessageHandler messageHandler in handlers)
             {
-                messageWasHandled = messageWasHandled || messageHandler.HandleMessage(message);
+                bool messageWasHandled = messageHandler.HandleMessage(message);
+                if (messageWasHandled)
+                    return true;
             }
 
-            return messageWasHandled;
+            return false;
         }
 
         #endregion

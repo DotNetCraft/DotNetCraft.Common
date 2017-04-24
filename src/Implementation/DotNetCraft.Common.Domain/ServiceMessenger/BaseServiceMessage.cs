@@ -3,7 +3,7 @@ using DotNetCraft.Common.Core.Domain.ServiceMessenger;
 
 namespace DotNetCraft.Common.Domain.ServiceMessenger
 {
-    public abstract  class BaseServiceMessage: IServiceMessage
+    public abstract class BaseServiceMessage: IServiceMessage
     {
         #region Implementation of IServiceMessage
 

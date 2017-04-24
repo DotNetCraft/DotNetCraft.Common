@@ -32,3 +32,4 @@ Net45/
 *.nupkg
 src/Implementation/DotNetCraft.Common.Utils/bin/
 Tests/Utils.Tests/bin/
+Tests/Domain.Tests/bin/
