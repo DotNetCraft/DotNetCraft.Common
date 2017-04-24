@@ -1,13 +1,11 @@
-﻿using System;
-using System.Linq.Expressions;
-using DotNetCraft.Common.Core.BaseEntities;
+﻿using DotNetCraft.Common.Core.BaseEntities;
 
-namespace DotNetCraft.Common.Core.DataAccessLayer.Specofications
+namespace DotNetCraft.Common.Core.DataAccessLayer.Specifications
 {
     /// <summary>
     /// Interface shows that object contains all data for retrieving entities
     /// </summary>
-    public interface ISpecificationRequest<TEntity>
+    public interface IDataRequest<TEntity>
         where TEntity: IEntity
     {
         /// <summary>
@@ -23,6 +21,6 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Specofications
         /// <summary>
         /// The specification.
         /// </summary>
-        ISpecification<TEntity> Specification { get; set; }
+        ISpecification<TEntity> Specification { get; }
     }
 }

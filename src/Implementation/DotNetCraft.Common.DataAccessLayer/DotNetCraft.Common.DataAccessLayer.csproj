@@ -32,10 +32,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDataContext.cs" />
+    <Compile Include="BaseEntities\BaseEntity.cs" />
+    <Compile Include="BaseEntities\BaseGuidEntity.cs" />
+    <Compile Include="BaseEntities\BaseIntEntity.cs" />
+    <Compile Include="BaseEntities\BaseStringEntity.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="Exceptions\UnitOfWorkException.cs" />
     <Compile Include="Extentions\DotNetCraftQueryableExtentions.cs" />
@@ -44,6 +49,8 @@
     <Compile Include="Repositories\Simple\BaseRepository.cs" />
     <Compile Include="Repositories\Smart\BaseSmartRepository.cs" />
     <Compile Include="Repositories\Simple\BaseStringRepository.cs" />
+    <Compile Include="Specifications\DataRequest.cs" />
+    <Compile Include="UnitOfWorks\DataBaseParameter.cs" />
     <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWork.cs" />
     <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWorks\SimpleUnitOfWorks\UnitOfWork.cs" />

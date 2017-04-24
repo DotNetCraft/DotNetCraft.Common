@@ -2,6 +2,7 @@
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories;
+using DotNetCraft.Common.DataAccessLayer.BaseEntities;
 
 namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using DotNetCraft.Common.Core.BaseEntities;
-using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
+using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories
 {
@@ -25,6 +25,6 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories
         /// </summary>
         /// <param name="specification">Some specification.</param>
         /// <returns>Collection of models.</returns>
-        ICollection<TModel> GetBySpecification<TModel>(ISpecificationRequest<TEntity> specification);
+        ICollection<TModel> GetBySpecification<TModel>(IDataRequest<TEntity> specification);
     }
 }

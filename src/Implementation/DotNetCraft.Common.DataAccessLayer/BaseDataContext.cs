@@ -70,7 +70,7 @@ namespace DotNetCraft.Common.DataAccessLayer
         protected abstract void OnDelete<TEntity>(TEntity entity)
             where TEntity : class, IEntity;
 
-        protected abstract ICollection<TEntity> OnExecuteQuery<TEntity>(string query, DataBaseParameter[] args)
+        protected abstract ICollection<TEntity> OnExecuteQuery<TEntity>(string query, IDataBaseParameter[] args)
             where TEntity : class, IEntity;
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace DotNetCraft.Common.DataAccessLayer
             }
         }
 
-        public ICollection<TEntity> ExecuteQuery<TEntity>(string query, DataBaseParameter[] args) 
+        public ICollection<TEntity> ExecuteQuery<TEntity>(string query, IDataBaseParameter[] args) 
             where TEntity : class, IEntity
         {
             try

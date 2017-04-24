@@ -1,4 +1,4 @@
-﻿namespace DotNetCraft.Common.Core.BaseEntities
+﻿namespace DotNetCraft.Common.DataAccessLayer.BaseEntities
 {
     /// <summary>
     /// Base entity where identifier's type is string.

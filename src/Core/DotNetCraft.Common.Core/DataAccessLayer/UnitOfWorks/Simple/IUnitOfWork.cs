@@ -51,7 +51,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple
         /// <param name="query">The query</param>
         /// <param name="args">Qeury's arguments (parameters)</param>
         /// <returns>List of entities.</returns>
-        ICollection<TEntity> ExecuteQuery<TEntity>(string query, params DataBaseParameter[] args)
+        ICollection<TEntity> ExecuteQuery<TEntity>(string query, params IDataBaseParameter[] args)
             where TEntity : class, IEntity;
 
         /// <summary>

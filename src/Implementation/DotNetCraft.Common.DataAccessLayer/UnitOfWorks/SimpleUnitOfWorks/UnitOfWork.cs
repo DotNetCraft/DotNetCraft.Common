@@ -115,7 +115,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             logger.Trace("The entity has been deleted.");
         }
 
-        private ICollection<TEntity> OnExecuteQuery<TEntity>(string query, DataBaseParameter[] args)
+        private ICollection<TEntity> OnExecuteQuery<TEntity>(string query, IDataBaseParameter[] args)
             where TEntity : class, IEntity
         {
             logger.Trace("Executing query {0}...", query);
@@ -238,7 +238,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         /// <param name="query">The query</param>
         /// <param name="args">Qeury's arguments (parameters)</param>
         /// <returns>List of entities.</returns>
-        public ICollection<TEntity> ExecuteQuery<TEntity>(string query, params DataBaseParameter[] args)
+        public ICollection<TEntity> ExecuteQuery<TEntity>(string query, params IDataBaseParameter[] args)
             where TEntity : class, IEntity
         {
             try

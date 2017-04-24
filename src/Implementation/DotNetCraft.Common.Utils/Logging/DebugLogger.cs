@@ -26,6 +26,7 @@ namespace DotNetCraft.Common.Utils.Logging
 
             this.typeName = typeName;
         }
+
         #region Implementation of ICommonLogger
 
         /// <summary>

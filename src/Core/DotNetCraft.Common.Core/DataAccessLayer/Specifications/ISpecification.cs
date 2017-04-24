@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace DotNetCraft.Common.Core.DataAccessLayer.Specofications
+namespace DotNetCraft.Common.Core.DataAccessLayer.Specifications
 {
     /// <summary>
     /// Interface shows that object is specification.

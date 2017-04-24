@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using DotNetCraft.Common.Core.BaseEntities;
-using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
+using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories
 {
@@ -29,6 +29,6 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories
         /// </summary>
         /// <param name="specification">Some specification.</param>
         /// <returns>Collection of entities.</returns>
-        ICollection<TEntity> GetBySpecification(ISpecificationRequest<TEntity> specification);        
+        ICollection<TEntity> GetBySpecification(IDataRequest<TEntity> specification);        
     }
 }

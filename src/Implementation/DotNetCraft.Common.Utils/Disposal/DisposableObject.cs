@@ -45,7 +45,10 @@ namespace DotNetCraft.Common.Utils.Disposal
                 if (disposing && !IsDisposed)
                 {
                     IsDisposed = true;
-                    Disposed?.Invoke(this, EventArgs.Empty);
+
+                    if (Disposed != null)
+                        Disposed.Invoke(this, EventArgs.Empty);
+
                     Disposed = null;
                     GC.SuppressFinalize(this);
                 }

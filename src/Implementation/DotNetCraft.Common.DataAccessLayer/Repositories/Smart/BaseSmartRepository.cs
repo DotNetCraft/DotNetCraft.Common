@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using DotNetCraft.Common.Core.Attributes;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories;
-using DotNetCraft.Common.Core.DataAccessLayer.Specofications;
+using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
 using DotNetCraft.Common.Core.Utils;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.Repositories.Simple;
@@ -45,7 +45,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
             try
             {
                 Type entityType = typeof(TEntity);
-                PropertyInfo propertyId = propertyManager.Single(entityType, typeof(IdentifierAttribute));
+                PropertyInfo propertyId = propertyManager.Single(entityType, typeof(KeyAttribute));
 
                 using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
@@ -99,7 +99,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
         /// </summary>
         /// <param name="specification">Some specification.</param>
         /// <returns>Collection of models.</returns>
-        public ICollection<TModel> GetBySpecification<TModel>(ISpecificationRequest<TEntity> specification)
+        public ICollection<TModel> GetBySpecification<TModel>(IDataRequest<TEntity> specification)
         {
             try
             {

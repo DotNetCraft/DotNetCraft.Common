@@ -8,7 +8,12 @@ namespace DotNetCraft.Common.Core.Utils
     /// </summary>
     public interface IPropertyManager
     {
+        PropertyInfo SingleOrDefault<TObjectType>(Type attributeType);
+
         PropertyInfo SingleOrDefault(Type objectType, Type attributeType);
+
+        PropertyInfo Single<TObjectType>(Type attributeType);
+
         PropertyInfo Single(Type objectType, Type attributeType);
     }
 }

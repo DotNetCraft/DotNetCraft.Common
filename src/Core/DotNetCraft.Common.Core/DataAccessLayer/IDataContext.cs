@@ -35,7 +35,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer
         void Commit();
         void RollBack();
 
-        ICollection<TEntity> ExecuteQuery<TEntity>(string query, DataBaseParameter[] args) 
+        ICollection<TEntity> ExecuteQuery<TEntity>(string query, IDataBaseParameter[] args) 
             where TEntity : class, IEntity;
     }
 }
