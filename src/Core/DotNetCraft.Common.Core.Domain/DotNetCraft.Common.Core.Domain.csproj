@@ -47,6 +47,7 @@
     <Compile Include="ServiceMessenger\IServiceMessage.cs" />
     <Compile Include="ServiceMessenger\IServiceMessageHandler.cs" />
     <Compile Include="ServiceMessenger\IServiceMessageProcessor.cs" />
+    <Compile Include="ServiceMessenger\ServiceMessageHandlerAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DotNetCraft.Common.Core.Utils\DotNetCraft.Common.Core.Utils.csproj">

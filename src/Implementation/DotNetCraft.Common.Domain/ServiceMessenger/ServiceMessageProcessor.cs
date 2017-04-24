@@ -11,6 +11,8 @@ namespace DotNetCraft.Common.Domain.ServiceMessenger
         public ServiceMessageProcessor()
         {
             handlers = new List<IServiceMessageHandler>();
+
+            //TODO: Load service message handlers by attribute
         }
 
         #region Implementation of IServiceMessageProcessor
