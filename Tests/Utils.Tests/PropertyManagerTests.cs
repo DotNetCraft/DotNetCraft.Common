@@ -81,7 +81,7 @@ namespace Utils.Tests
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void SingleOrDefaultGenericNullParametersTest(Type objectType, Type attributeType)
+        public void SingleOrDefaultGenericNullParametersTest()
         {
             IPropertyManager propertyManager = PropertyManager.Manager;
             propertyManager.SingleOrDefault<Sample>(typeof(KeyAttribute));
