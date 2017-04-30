@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCraft.Common.BuildAll", "src\DotNetCraft.Common.BuildAll\DotNetCraft.Common.BuildAll.csproj", "{2ABA4234-5911-4A41-BCFB-F60C70B70A15}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{992E4A18-CCEB-4D23-9329-F0C2B5B38D05}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementation", "Implementation", "{9B74ABAB-0FE6-45E7-B843-F872B1BCDF00}"
@@ -46,10 +44,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2ABA4234-5911-4A41-BCFB-F60C70B70A15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2ABA4234-5911-4A41-BCFB-F60C70B70A15}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2ABA4234-5911-4A41-BCFB-F60C70B70A15}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2ABA4234-5911-4A41-BCFB-F60C70B70A15}.Release|Any CPU.Build.0 = Release|Any CPU
 		{784430D4-9160-4CE8-9AED-04C07A8878E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{784430D4-9160-4CE8-9AED-04C07A8878E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{784430D4-9160-4CE8-9AED-04C07A8878E1}.Release|Any CPU.ActiveCfg = Release|Any CPU

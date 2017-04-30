@@ -20,7 +20,8 @@
         /// Send a message.
         /// </summary>
         /// <param name="message">The message.</param>
+        /// <param name="ignoreExceptions">Flag shows that if there is any exception in a handler then it will be ignored.</param>
         /// <returns>True if message has been handled.</returns>
-        bool SendMessage(IServiceMessage message);
+        bool SendMessage(IServiceMessage message, bool ignoreExceptions = true);
     }
 }

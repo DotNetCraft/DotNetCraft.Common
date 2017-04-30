@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
-using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart;
-using DotNetCraft.Common.Core.Utils;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
 
@@ -13,17 +10,17 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
 {
     public class SmartUnitOfWork : UnitOfWork, ISmartUnitOfWork
     {
-        private readonly IDotNetCraftMapper dotNetCraftMapper;
+        private readonly IEntityModelMapper entityModelMapper;
 
         /// <summary>
         /// Constructor.
         /// </summary>        
-        public SmartUnitOfWork(IDataContext dataContext, IDotNetCraftMapper dotNetCraftMapper) : base(dataContext)
+        public SmartUnitOfWork(IDataContext dataContext, IEntityModelMapper entityModelMapper) : base(dataContext)
         {
-            if (dotNetCraftMapper == null)
-                throw new ArgumentNullException(nameof(dotNetCraftMapper));
+            if (entityModelMapper == null)
+                throw new ArgumentNullException(nameof(entityModelMapper));
 
-            this.dotNetCraftMapper = dotNetCraftMapper;
+            this.entityModelMapper = entityModelMapper;
         }
 
         #region Implementation of ISmartUnitOfWork       
@@ -38,7 +35,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         {
             try
             {
-                TEntity entity = dotNetCraftMapper.Map<TModel, TEntity>(model);
+                TEntity entity = entityModelMapper.Map<TEntity, TModel>(model);
                 OnInsert(entity);                
             }
             catch (Exception ex)

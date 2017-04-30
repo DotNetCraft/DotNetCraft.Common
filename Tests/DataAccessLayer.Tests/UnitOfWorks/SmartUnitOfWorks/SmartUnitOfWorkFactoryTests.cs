@@ -20,8 +20,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         public void ConstructorTest()
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
-            IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, dotNetCraftMapper);
+            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, entityModelMapper);
             Assert.IsNotNull(unitOfWorkFactory);
         }
 
@@ -33,8 +33,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         public void ConstructorNullParameterTest(bool correctContext, bool correctDotNetCraft)
         {
             IDataContextFactory dataContextFactoryt = correctContext ? Substitute.For<IDataContextFactory>() : null;
-            IDotNetCraftMapper dotNetCraftMapper = correctDotNetCraft ? Substitute.For<IDotNetCraftMapper>(): null;
-            new SmartUnitOfWorkFactory(dataContextFactoryt, dotNetCraftMapper);
+            IEntityModelMapper entityModelMapper = correctDotNetCraft ? Substitute.For<IEntityModelMapper>(): null;
+            new SmartUnitOfWorkFactory(dataContextFactoryt, entityModelMapper);
 
             Assert.Fail("ArgumentNullException expected");
         }
@@ -49,8 +49,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
             IContextSettings contextSettings = Substitute.For<IContextSettings>();
             IDataContext dataContext = Substitute.For<IDataContext>();
-            IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, dotNetCraftMapper);
+            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, entityModelMapper);
 
             dataContextFactory.CreateDataContext(contextSettings).Returns(dataContext);
 
@@ -64,8 +64,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
             IContextSettings contextSettings = Substitute.For<IContextSettings>();
-            IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, dotNetCraftMapper);
+            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, entityModelMapper);
 
             dataContextFactory.When(x => x.CreateDataContext(contextSettings)).Do(x =>
             {
@@ -93,8 +93,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
             IContextSettings contextSettings = Substitute.For<IContextSettings>();
-            IDotNetCraftMapper dotNetCraftMapper = Substitute.For<IDotNetCraftMapper>();
-            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, dotNetCraftMapper);
+            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, entityModelMapper);
 
             IDataContext dataContext = null;
             dataContextFactory.CreateDataContext(contextSettings).Returns(dataContext);

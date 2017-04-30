@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\Build\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -25,7 +25,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\..\lib\net40\core\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -37,14 +37,14 @@
   <ItemGroup>
     <Compile Include="BaseEntities\IEntity.cs" />
     <Compile Include="DataAccessLayer\IContextSettings.cs" />
-    <Compile Include="DataAccessLayer\IDataContext.cs" />
-    <Compile Include="DataAccessLayer\IDataContextFactory.cs" />
+    <Compile Include="DataAccessLayer\DataContexts\IDataContext.cs" />
+    <Compile Include="DataAccessLayer\DataContexts\IDataContextFactory.cs" />
     <Compile Include="DataAccessLayer\IEntityModelMapper.cs" />
-    <Compile Include="DataAccessLayer\Repositories\IGuidRepository.cs" />
-    <Compile Include="DataAccessLayer\Repositories\IIntRepository.cs" />
-    <Compile Include="DataAccessLayer\Repositories\IRepository.cs" />
-    <Compile Include="DataAccessLayer\Repositories\ISmartRepository.cs" />
-    <Compile Include="DataAccessLayer\Repositories\IStringRepository.cs" />
+    <Compile Include="DataAccessLayer\Repositories\Simple\Predefined\IGuidRepository.cs" />
+    <Compile Include="DataAccessLayer\Repositories\Simple\Predefined\IIntRepository.cs" />
+    <Compile Include="DataAccessLayer\Repositories\Simple\IRepository.cs" />
+    <Compile Include="DataAccessLayer\Repositories\Smart\ISmartRepository.cs" />
+    <Compile Include="DataAccessLayer\Repositories\Simple\Predefined\IStringRepository.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\IDataBaseParameter.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\Smart\ISmartUnitOfWork.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\Smart\ISmartUnitOfWorkFactory.cs" />
@@ -52,7 +52,7 @@
     <Compile Include="DataAccessLayer\Specifications\IDataRequest.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\Simple\IUnitOfWork.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\Simple\IUnitOfWorkFactory.cs" />
-    <Compile Include="IDataContextPoolItem.cs" />
+    <Compile Include="DataAccessLayer\DataContexts\IDataContextPoolItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

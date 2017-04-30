@@ -17,20 +17,20 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
         where TEntity : class, IEntity
     {
         private readonly IPropertyManager propertyManager;
-        private readonly IDotNetCraftMapper dotNetCraftMapper;
+        private readonly IEntityModelMapper entityModelMapper;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected BaseSmartRepository(IPropertyManager propertyManager, IContextSettings contextSettings, IDataContextFactory dataContextFactory, IDotNetCraftMapper dotNetCraftMapper) : base(contextSettings, dataContextFactory)
+        protected BaseSmartRepository(IPropertyManager propertyManager, IContextSettings contextSettings, IDataContextFactory dataContextFactory, IEntityModelMapper entityModelMapper) : base(contextSettings, dataContextFactory)
         {
             if (propertyManager == null)
                 throw new ArgumentNullException(nameof(propertyManager));
-            if (dotNetCraftMapper == null)
-                throw new ArgumentNullException(nameof(dotNetCraftMapper));
+            if (entityModelMapper == null)
+                throw new ArgumentNullException(nameof(entityModelMapper));
 
             this.propertyManager = propertyManager;
-            this.dotNetCraftMapper = dotNetCraftMapper;            
+            this.entityModelMapper = entityModelMapper;            
         }
 
         #region Implementation of ISmartRepository<TEntity,TModel>        
@@ -52,7 +52,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
                     TypeConverter converter = TypeDescriptor.GetConverter(propertyId.PropertyType);
                     object entityId = converter.ConvertFrom(modelId);
                     TEntity entity = OnGet(entityId, dataContext);
-                    TModel model = dotNetCraftMapper.Map<TEntity, TModel>(entity);
+                    TModel model = entityModelMapper.Map<TEntity, TModel>(entity);
                     return model;
                 }
             }
@@ -79,7 +79,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
                 using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
                     ICollection<TEntity> entities = OnGetAll(dataContext);
-                    ICollection<TModel> models = dotNetCraftMapper.Map<TEntity, TModel>(entities);
+                    ICollection<TModel> models = entityModelMapper.Map<TEntity, TModel>(entities);
                     return models;
                 }
             }
@@ -106,7 +106,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
                 using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
                     ICollection<TEntity> entities = OnGetBySpecification(specification, dataContext);
-                    ICollection<TModel> models = dotNetCraftMapper.Map<TEntity, TModel>(entities);
+                    ICollection<TModel> models = entityModelMapper.Map<TEntity, TModel>(entities);
                     return models;
                 }
             }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DotNetCraft.Common.Core.Domain.ServiceMessenger;
 using DotNetCraft.Common.Domain.ServiceMessenger.Exceptions;
 
@@ -33,13 +34,27 @@ namespace DotNetCraft.Common.Domain.ServiceMessenger
             handlers.Add(serviceMessageHandler);
         }
 
-        public bool SendMessage(IServiceMessage message)
+        public bool SendMessage(IServiceMessage message, bool ignoreExceptions = true)
         {
             foreach (IServiceMessageHandler messageHandler in handlers)
             {
-                bool messageWasHandled = messageHandler.HandleMessage(message);
-                if (messageWasHandled)
-                    return true;
+                try
+                {
+                    bool messageWasHandled = messageHandler.HandleMessage(message);
+                    if (messageWasHandled)
+                        return true;
+                }
+                catch (Exception ex)
+                {
+                    if (ignoreExceptions)
+                        continue;
+
+                    throw new ServiceMessageException("There was an exception in the message handler", ex, new Dictionary<string, string>
+                    {
+                        {"Type of MessageHandler", messageHandler.GetType().ToString() },
+                        {"ServiceMessageHandlerId", messageHandler.ServiceMessageHandlerId.ToString() }
+                    });
+                }
             }
 
             return false;

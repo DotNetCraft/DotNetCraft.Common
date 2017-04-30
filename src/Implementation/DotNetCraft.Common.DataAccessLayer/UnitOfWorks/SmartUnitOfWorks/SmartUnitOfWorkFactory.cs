@@ -1,8 +1,6 @@
 ﻿using System;
 using DotNetCraft.Common.Core.DataAccessLayer;
-using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart;
-using DotNetCraft.Common.Core.Utils;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
 
@@ -10,19 +8,19 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
 {
     public class SmartUnitOfWorkFactory: UnitOfWorkFactory, ISmartUnitOfWorkFactory
     {
-        private readonly IDotNetCraftMapper dotNetCraftMapper;
+        private readonly IEntityModelMapper entityModelMapper;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="loggerFactory">The <see cref="ICommonLoggerFactory"/> instance.</param>
         /// <exception cref="ArgumentNullException"><paramref name="loggerFactory"/> is <see langword="null" />.</exception>
-        public SmartUnitOfWorkFactory(IDataContextFactory dataContextFactory, IDotNetCraftMapper dotNetCraftMapper) : base(dataContextFactory)
+        public SmartUnitOfWorkFactory(IDataContextFactory dataContextFactory, IEntityModelMapper entityModelMapper) : base(dataContextFactory)
         {
-            if (dotNetCraftMapper == null)
-                throw new ArgumentNullException(nameof(dotNetCraftMapper));
+            if (entityModelMapper == null)
+                throw new ArgumentNullException(nameof(entityModelMapper));
 
-            this.dotNetCraftMapper = dotNetCraftMapper;
+            this.entityModelMapper = entityModelMapper;
         }
 
         #region Implementation of IUnitOfWorkFactory
@@ -30,7 +28,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         public ISmartUnitOfWork CreateSmartUnitOfWork(IContextSettings contextSettings)
         {
             IDataContext context = dataContextFactory.CreateDataContext(contextSettings);
-            ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(context, dotNetCraftMapper);
+            ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(context, entityModelMapper);
             return unitOfWork;
         }
 
