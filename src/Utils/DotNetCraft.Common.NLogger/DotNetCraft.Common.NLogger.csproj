@@ -32,27 +32,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotNetCraft.Common.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Packages\DotNetCraft.Common.1.0.0\lib\net40\Core\DotNetCraft.Common.Core.dll</HintPath>
+      <HintPath>..\..\..\Packages\DotNetCraft.Common.1.0.4\lib\net40\DotNetCraft.Common.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Core.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Packages\DotNetCraft.Common.1.0.0\lib\net40\Core\DotNetCraft.Common.Core.Domain.dll</HintPath>
+      <HintPath>..\..\..\Packages\DotNetCraft.Common.1.0.4\lib\net40\DotNetCraft.Common.Core.Domain.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Core.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Packages\DotNetCraft.Common.1.0.0\lib\net40\Core\DotNetCraft.Common.Core.Utils.dll</HintPath>
+      <HintPath>..\..\..\Packages\DotNetCraft.Common.1.0.4\lib\net40\DotNetCraft.Common.Core.Utils.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.DataAccessLayer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Packages\DotNetCraft.Common.1.0.0\lib\net40\Core\DotNetCraft.Common.DataAccessLayer.dll</HintPath>
+      <HintPath>..\..\..\Packages\DotNetCraft.Common.1.0.4\lib\net40\DotNetCraft.Common.DataAccessLayer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Packages\DotNetCraft.Common.1.0.0\lib\net40\Core\DotNetCraft.Common.Domain.dll</HintPath>
+      <HintPath>..\..\..\Packages\DotNetCraft.Common.1.0.4\lib\net40\DotNetCraft.Common.Domain.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DotNetCraft.Common.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Packages\DotNetCraft.Common.1.0.0\lib\net40\Core\DotNetCraft.Common.Utils.dll</HintPath>
+      <HintPath>..\..\..\Packages\DotNetCraft.Common.1.0.4\lib\net40\DotNetCraft.Common.Utils.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
