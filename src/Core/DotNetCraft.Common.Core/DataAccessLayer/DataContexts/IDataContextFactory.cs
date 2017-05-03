@@ -1,4 +1,4 @@
-﻿namespace DotNetCraft.Common.Core.DataAccessLayer
+﻿namespace DotNetCraft.Common.Core.DataAccessLayer.DataContexts
 {
     /// <summary>
     /// Interface shows that object is a data context factory.

@@ -1,4 +1,4 @@
-﻿namespace DotNetCraft.Common.DataAccessLayer.BaseEntities
+﻿namespace DotNetCraft.Common.DataAccessLayer.BaseEntities.Predefined
 {
     /// <summary>
     /// Base entity where identifier's type is integer.

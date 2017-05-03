@@ -36,6 +36,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Disposal\DisposableObject.cs" />
+    <Compile Include="DependencyInjection\BaseDependencyResolver.cs" />
+    <Compile Include="DependencyInjection\DependencyResolver.cs" />
+    <Compile Include="Exceptions\DotNetCraftExtendedException.cs" />
+    <Compile Include="DependencyInjection\Exceptions\ResolveException.cs" />
     <Compile Include="Logging\DebugLogger.cs" />
     <Compile Include="Logging\DebugLoggerFactory.cs" />
     <Compile Include="Logging\LogManager.cs" />
@@ -49,6 +53,7 @@
       <Name>DotNetCraft.Common.Core.Utils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

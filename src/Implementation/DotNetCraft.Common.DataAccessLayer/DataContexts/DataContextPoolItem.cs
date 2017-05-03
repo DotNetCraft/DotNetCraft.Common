@@ -1,8 +1,7 @@
 ﻿using System;
-using DotNetCraft.Common.Core;
-using DotNetCraft.Common.Core.DataAccessLayer;
+using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 
-namespace DotNetCraft.Common.DataAccessLayer
+namespace DotNetCraft.Common.DataAccessLayer.DataContexts
 {
     /// <summary>
     /// Simple implementation of the pool item that contains information about data context.

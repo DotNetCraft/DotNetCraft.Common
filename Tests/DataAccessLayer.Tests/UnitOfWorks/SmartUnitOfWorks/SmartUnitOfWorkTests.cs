@@ -1,11 +1,13 @@
 ﻿using System;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
+using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart;
 using DotNetCraft.Common.Core.Utils;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.BaseEntities;
+using DotNetCraft.Common.DataAccessLayer.BaseEntities.Predefined;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks;
 using NSubstitute;

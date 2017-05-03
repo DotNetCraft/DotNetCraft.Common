@@ -1,7 +1,7 @@
 ﻿using System;
 using DotNetCraft.Common.Core.BaseEntities;
 
-namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories
+namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple.Predefined
 {
     public interface IGuidRepository<TEntity> : IRepository<TEntity>
        where TEntity : IEntity

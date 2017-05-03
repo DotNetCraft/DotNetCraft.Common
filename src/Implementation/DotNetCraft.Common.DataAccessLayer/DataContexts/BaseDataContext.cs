@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using DotNetCraft.Common.Core.BaseEntities;
-using DotNetCraft.Common.Core.DataAccessLayer;
+using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.Utils.Disposal;
 
-namespace DotNetCraft.Common.DataAccessLayer
+namespace DotNetCraft.Common.DataAccessLayer.DataContexts
 {
     public abstract class BaseDataContext : DisposableObject, IDataContext
     {

@@ -1,6 +1,4 @@
-﻿using DotNetCraft.Common.Core.DataAccessLayer;
-
-namespace DotNetCraft.Common.Core
+﻿namespace DotNetCraft.Common.Core.DataAccessLayer.DataContexts
 {
     public interface IDataContextPoolItem
     {

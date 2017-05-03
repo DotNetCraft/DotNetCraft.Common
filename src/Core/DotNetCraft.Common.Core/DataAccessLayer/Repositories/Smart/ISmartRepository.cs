@@ -2,7 +2,7 @@
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
 
-namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories
+namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Smart
 {
     public interface ISmartRepository<TEntity>
         where TEntity : IEntity

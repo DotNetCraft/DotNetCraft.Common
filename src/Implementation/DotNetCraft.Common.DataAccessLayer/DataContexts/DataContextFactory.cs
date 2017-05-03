@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using DotNetCraft.Common.Core;
 using DotNetCraft.Common.Core.DataAccessLayer;
+using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 
-namespace DotNetCraft.Common.DataAccessLayer
+namespace DotNetCraft.Common.DataAccessLayer.DataContexts
 {
     public abstract class DataContextFactory<TDataContext, TContextSettings> : IDataContextFactory
         where TDataContext: IDataContext

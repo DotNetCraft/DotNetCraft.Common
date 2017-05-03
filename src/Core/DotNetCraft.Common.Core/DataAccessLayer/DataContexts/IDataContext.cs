@@ -4,7 +4,7 @@ using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.Utils.Disposal;
 
-namespace DotNetCraft.Common.Core.DataAccessLayer
+namespace DotNetCraft.Common.Core.DataAccessLayer.DataContexts
 {
     /// <summary>
     /// Interface shows that object is a data context.

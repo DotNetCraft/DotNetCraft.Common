@@ -1,7 +1,9 @@
 ﻿using System;
 using DotNetCraft.Common.Core;
 using DotNetCraft.Common.Core.DataAccessLayer;
+using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.DataAccessLayer;
+using DotNetCraft.Common.DataAccessLayer.DataContexts;
 using NSubstitute;
 using NUnit.Framework;
 

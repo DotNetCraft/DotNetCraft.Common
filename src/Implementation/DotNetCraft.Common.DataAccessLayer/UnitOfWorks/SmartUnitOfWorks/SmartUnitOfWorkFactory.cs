@@ -1,5 +1,6 @@
 ﻿using System;
 using DotNetCraft.Common.Core.DataAccessLayer;
+using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;

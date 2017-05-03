@@ -1,10 +1,10 @@
 ﻿using System;
-using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
-using DotNetCraft.Common.Core.DataAccessLayer.Repositories;
+using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
+using DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple.Predefined;
 using DotNetCraft.Common.DataAccessLayer.BaseEntities;
 
-namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
+namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple.Predefined
 {
     public abstract class BaseGuidRepository<TEntity>: BaseRepository<TEntity>, IGuidRepository<TEntity>
         where TEntity : BaseEntity<Guid>

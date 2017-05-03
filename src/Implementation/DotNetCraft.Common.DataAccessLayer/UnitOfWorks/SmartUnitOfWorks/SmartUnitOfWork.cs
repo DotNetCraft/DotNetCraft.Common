@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
+using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
