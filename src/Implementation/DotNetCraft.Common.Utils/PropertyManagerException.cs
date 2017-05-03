@@ -1,44 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
+using DotNetCraft.Common.Utils.Exceptions;
 
 namespace DotNetCraft.Common.Utils
 {
-    public class PropertyManagerException : Exception
+    public class PropertyManagerException : DotNetCraftExtendedException
     {
-        public IDictionary<string, string> ErrorParameters { get; private set; }
-
-        public PropertyManagerException(string message, Dictionary<string, string> errorParameters = null) : base(message)
+        public PropertyManagerException(string message, Dictionary<string, string> errorParameters = null) : base(message, errorParameters)
         {
-            ErrorParameters = errorParameters ?? new Dictionary<string, string>();
         }
 
-        public PropertyManagerException(string message, Exception innerException, Dictionary<string, string> errorParameters = null) : base(message, innerException)
+        public PropertyManagerException(string message, Exception innerException, Dictionary<string, string> errorParameters = null) : base(message, innerException, errorParameters)
         {
-            ErrorParameters = errorParameters ?? new Dictionary<string, string>();
         }
 
         /// <exception cref="SerializationException">The class name is null or <see cref="P:System.Exception.HResult" /> is zero (0). </exception>
-        protected PropertyManagerException(SerializationInfo info, StreamingContext context) : base(info, context)
+        public PropertyManagerException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
-
-        #region Overrides of Exception
-
-        /// <summary>Creates and returns a string representation of the current exception.</summary>
-        /// <returns>A string representation of the current exception.</returns>
-        public override string ToString()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            foreach (KeyValuePair<string, string> errorParameter in ErrorParameters)
-            {
-                stringBuilder.AppendLine(string.Format("{0}:{1}", errorParameter.Key, errorParameter.Value));
-            }
-            stringBuilder.AppendLine(base.ToString());
-            return stringBuilder.ToString();
-        }
-
-        #endregion
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace DotNetCraft.Common.Utils.Exceptions
 {
+    [Serializable]
     public class DotNetCraftExtendedException : Exception
     {
         public IDictionary<string, string> ErrorParameters { get; private set; }
