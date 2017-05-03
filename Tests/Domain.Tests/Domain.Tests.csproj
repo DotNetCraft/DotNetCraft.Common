@@ -58,6 +58,10 @@
       <Project>{866D3623-F34A-49F4-998B-D420589C08B2}</Project>
       <Name>DotNetCraft.Common.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Implementation\DotNetCraft.Common.Utils\DotNetCraft.Common.Utils.csproj">
+      <Project>{626e50a3-37c3-41cc-b08c-38410615e45c}</Project>
+      <Name>DotNetCraft.Common.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
