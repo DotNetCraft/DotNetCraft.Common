@@ -31,12 +31,12 @@ namespace DotNetCraft.Common.Utils
 
         #region Implementation of IPropertyManager
 
-        public PropertyInfo SingleOrDefault<TObjectType>(Type attributeType)
+        public PropertyInfo SingleOrDefault<TObjectType>(Type attributeType, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
         {
-            return SingleOrDefault(typeof(TObjectType), attributeType);
+            return SingleOrDefault(typeof(TObjectType), attributeType, bindingFlags);
         }
 
-        public PropertyInfo SingleOrDefault(Type objectType, Type attributeType)
+        public PropertyInfo SingleOrDefault(Type objectType, Type attributeType, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
         {
             if (objectType == null)
                 throw new ArgumentNullException(nameof(objectType));
@@ -44,7 +44,7 @@ namespace DotNetCraft.Common.Utils
                 throw new ArgumentNullException(nameof(attributeType));
 
             PropertyInfo result = null;
-            PropertyInfo[] propertyInfos = objectType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            PropertyInfo[] propertyInfos = objectType.GetProperties(bindingFlags);
             foreach (PropertyInfo propertyInfo in propertyInfos)
             {
                 var attributes = Attribute.GetCustomAttributes(propertyInfo, attributeType);
@@ -58,12 +58,12 @@ namespace DotNetCraft.Common.Utils
             return result;
         }
 
-        public PropertyInfo Single<TObjectType>(Type attributeType)
+        public PropertyInfo Single<TObjectType>(Type attributeType, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
         {
-            return Single(typeof(TObjectType), attributeType);
+            return Single(typeof(TObjectType), attributeType, bindingFlags);
         }
 
-        public PropertyInfo Single(Type objectType, Type attributeType)
+        public PropertyInfo Single(Type objectType, Type attributeType, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
         {
             if (objectType == null)
                 throw new ArgumentNullException(nameof(objectType));
@@ -72,7 +72,7 @@ namespace DotNetCraft.Common.Utils
 
 
             PropertyInfo result = null;
-            PropertyInfo[] propertyInfos = objectType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            PropertyInfo[] propertyInfos = objectType.GetProperties(bindingFlags);
             foreach (PropertyInfo propertyInfo in propertyInfos)
             {
                 var attributes = Attribute.GetCustomAttributes(propertyInfo, attributeType);
@@ -96,6 +96,35 @@ namespace DotNetCraft.Common.Utils
                     { "objectType",objectType.ToString()},
                     { "attributeType",attributeType.ToString()},
                 });
+
+            return result;
+        }
+
+        public ICollection<PropertyInfo> GetList<TObjectType>(Type attributeType, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
+        {
+            Type objectType = typeof(TObjectType);
+            ICollection<PropertyInfo> result = GetList(objectType, attributeType, bindingFlags);
+            return result;
+        }
+
+        public ICollection<PropertyInfo> GetList(Type objectType, Type attributeType, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
+        {
+            if (objectType == null)
+                throw new ArgumentNullException(nameof(objectType));
+            if (attributeType == null)
+                throw new ArgumentNullException(nameof(attributeType));
+
+
+            List<PropertyInfo> result = new List<PropertyInfo>();
+            PropertyInfo[] propertyInfos = objectType.GetProperties(bindingFlags);
+            foreach (PropertyInfo propertyInfo in propertyInfos)
+            {
+                var attributes = Attribute.GetCustomAttributes(propertyInfo, attributeType);
+                if (attributes.Length > 0)
+                {
+                    result.Add(propertyInfo);
+                }
+            }            
 
             return result;
         }

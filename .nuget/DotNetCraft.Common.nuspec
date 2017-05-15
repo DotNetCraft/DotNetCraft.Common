@@ -2,11 +2,16 @@
 <package>
   <metadata>
     <id>DotNetCraft.Common</id>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <title>DotNetCraft.Common For .NET</title>
     <summary>DotNetCraft.Common For .NET</summary>
     <description>Common base library for DotNetCraft projects.</description>
-    <releaseNotes>1.0.5
+    <releaseNotes>1.0.6
+      • Several extensions have been added (Assembly, String).
+      • Added methods for retreiving several properties with attributes into the PropertyManager.
+      • Bug Fixing.
+
+      1.0.5
       • Simple dependency injections resolver has been added.
       • Namespaces that are never been used has been removed.
     </releaseNotes>

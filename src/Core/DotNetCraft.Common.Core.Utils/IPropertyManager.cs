@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace DotNetCraft.Common.Core.Utils
@@ -8,12 +9,16 @@ namespace DotNetCraft.Common.Core.Utils
     /// </summary>
     public interface IPropertyManager
     {
-        PropertyInfo SingleOrDefault<TObjectType>(Type attributeType);
+        PropertyInfo SingleOrDefault<TObjectType>(Type attributeType, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public);
 
-        PropertyInfo SingleOrDefault(Type objectType, Type attributeType);
+        PropertyInfo SingleOrDefault(Type objectType, Type attributeType, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public);
 
-        PropertyInfo Single<TObjectType>(Type attributeType);
+        PropertyInfo Single<TObjectType>(Type attributeType, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public);
 
-        PropertyInfo Single(Type objectType, Type attributeType);
+        PropertyInfo Single(Type objectType, Type attributeType, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public);
+
+        ICollection<PropertyInfo> GetList<TObjectType>(Type attributeType, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public);
+
+        ICollection<PropertyInfo> GetList(Type objectType, Type attributeType, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public);        
     }
 }

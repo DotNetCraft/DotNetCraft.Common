@@ -40,6 +40,8 @@
     <Compile Include="DependencyInjection\DependencyResolver.cs" />
     <Compile Include="Exceptions\DotNetCraftExtendedException.cs" />
     <Compile Include="DependencyInjection\Exceptions\ResolveException.cs" />
+    <Compile Include="Extensions\AssemblyExtentions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Logging\DebugLogger.cs" />
     <Compile Include="Logging\DebugLoggerFactory.cs" />
     <Compile Include="Logging\LogManager.cs" />
