@@ -16,7 +16,7 @@
       • Simple dependency injections resolver has been added.
       • Namespaces that are never been used has been removed.
 
-      1.0.6
+      1.0.7
       • PropertyManager has been replaced by the ReflectionManager. The ReflectionManager provides most efficient way for retrieving properties with special attributes.
     </releaseNotes>
     <language>en-US</language>
