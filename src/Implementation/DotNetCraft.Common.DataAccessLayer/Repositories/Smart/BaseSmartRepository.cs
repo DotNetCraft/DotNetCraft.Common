@@ -2,36 +2,32 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
-using DotNetCraft.Common.Core.DataAccessLayer.Repositories;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories.Smart;
 using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
-using DotNetCraft.Common.Core.Utils;
+using DotNetCraft.Common.Core.Utils.ReflectionExtensions;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.Repositories.Simple;
+using DotNetCraft.Common.Utils.ReflectionExtensions;
 
 namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
 {
     public abstract class BaseSmartRepository<TEntity> : BaseRepository<TEntity>, ISmartRepository<TEntity> 
         where TEntity : class, IEntity
     {
-        private readonly IPropertyManager propertyManager;
+        private readonly IReflectionManager reflectionManager = ReflectionManager.Manager;
         private readonly IEntityModelMapper entityModelMapper;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected BaseSmartRepository(IPropertyManager propertyManager, IContextSettings contextSettings, IDataContextFactory dataContextFactory, IEntityModelMapper entityModelMapper) : base(contextSettings, dataContextFactory)
+        protected BaseSmartRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory, IEntityModelMapper entityModelMapper) : base(contextSettings, dataContextFactory)
         {
-            if (propertyManager == null)
-                throw new ArgumentNullException(nameof(propertyManager));
             if (entityModelMapper == null)
                 throw new ArgumentNullException(nameof(entityModelMapper));
 
-            this.propertyManager = propertyManager;
             this.entityModelMapper = entityModelMapper;            
         }
 
@@ -47,7 +43,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
             try
             {
                 Type entityType = typeof(TEntity);
-                PropertyInfo propertyId = propertyManager.Single(entityType, typeof(KeyAttribute));
+                var propertyId = reflectionManager.Single(entityType, typeof(KeyAttribute));
 
                 using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {

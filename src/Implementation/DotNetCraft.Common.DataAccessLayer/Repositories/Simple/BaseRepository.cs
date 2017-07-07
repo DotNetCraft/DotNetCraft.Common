@@ -11,10 +11,13 @@ using DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple;
 using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
 using DotNetCraft.Common.Core.Utils;
 using DotNetCraft.Common.Core.Utils.Logging;
+using DotNetCraft.Common.Core.Utils.ReflectionExtensions;
+using DotNetCraft.Common.Core.Utils.ReflectionExtensions.Defenitions;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.Extentions;
 using DotNetCraft.Common.Utils;
 using DotNetCraft.Common.Utils.Logging;
+using DotNetCraft.Common.Utils.ReflectionExtensions;
 
 namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
 {
@@ -30,7 +33,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// <summary>
         /// The IPropertyManager instance.
         /// </summary>
-        protected static IPropertyManager propertyManager = PropertyManager.Manager;
+        protected static IReflectionManager reflectionManager = ReflectionManager.Manager;
 
         /// <summary>
         /// Context settings.
@@ -66,10 +69,12 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
 
         private static PropertyInfo GeIdentifiertPropertyInfo()
         {
-            PropertyInfo propertyId = propertyManager.SingleOrDefault<TEntity>(typeof(KeyAttribute));
+            PropertyDefinition propertyId = reflectionManager.SingleOrDefault<TEntity>(typeof(KeyAttribute));
             if (propertyId == null)
                 throw new DataAccessLayerException("There is no identifier for " + typeof(TEntity));
-            return propertyId;
+
+            PropertyInfo result = propertyId.PropertyInfo;
+            return result;
         }
 
         /// <summary>
