@@ -15,6 +15,9 @@
       1.0.5
       • Simple dependency injections resolver has been added.
       • Namespaces that are never been used has been removed.
+
+      1.0.6
+      • PropertyManager has been replaced by the ReflectionManager. The ReflectionManager provides most efficient way for retrieving properties with special attributes.
     </releaseNotes>
     <language>en-US</language>
     <iconUrl>https://raw.githubusercontent.com/DotNetCraft/ConfigurationParser/master/Avatar.png</iconUrl>
