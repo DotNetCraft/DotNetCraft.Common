@@ -49,6 +49,7 @@ namespace Utils.Tests
                     actual = simpleCache.Get("key");
                     Assert.AreEqual(5, actual);
                 });
+                tasks.Add(task);
             }
             Task.WaitAll(tasks.ToArray());
         }
