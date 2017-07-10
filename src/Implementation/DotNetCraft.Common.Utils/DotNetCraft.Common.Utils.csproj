@@ -35,6 +35,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Caching\SimpleCache.cs" />
     <Compile Include="Disposal\DisposableObject.cs" />
     <Compile Include="DependencyInjection\BaseDependencyResolver.cs" />
     <Compile Include="DependencyInjection\DependencyResolver.cs" />
