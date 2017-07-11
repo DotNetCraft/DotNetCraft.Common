@@ -53,5 +53,20 @@ namespace Utils.Tests
             }
             Task.WaitAll(tasks.ToArray());
         }
+
+        [Test]
+        [TestCase(500)]
+        public void TryGetValueTest(int threadCount)
+        {
+            ISimpleCache<string, int> simpleCache = new SimpleCache<string, int>();
+            int actual;
+            bool result = simpleCache.TryGetValue("key", out actual);
+            Assert.IsFalse(result);
+
+            simpleCache.AddOrUpdate("key", 5);
+
+            actual = simpleCache.Get("key");
+            Assert.AreEqual(5, actual);
+        }
     }
 }

@@ -12,6 +12,8 @@
 
         TValue Get(TKey key);
 
-        bool TryGetValue(TKey key, out TValue result);        
+        bool TryGetValue(TKey key, out TValue result);
+
+        void Clear();
     }
 }

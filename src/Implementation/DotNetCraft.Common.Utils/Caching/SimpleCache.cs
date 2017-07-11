@@ -102,5 +102,13 @@ namespace DotNetCraft.Common.Utils.Caching
             result = default(TValue);
             return false;
         }
+
+        public void Clear()
+        {
+            lock (syncObject)
+            {
+                dictionary.Clear();
+            }
+        }
     }
 }
