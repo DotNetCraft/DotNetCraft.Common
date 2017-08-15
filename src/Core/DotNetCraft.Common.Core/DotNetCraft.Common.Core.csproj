@@ -49,7 +49,6 @@
     <Compile Include="DataAccessLayer\UnitOfWorks\Smart\ISmartUnitOfWork.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\Smart\ISmartUnitOfWorkFactory.cs" />
     <Compile Include="DataAccessLayer\Specifications\ISpecification.cs" />
-    <Compile Include="DataAccessLayer\Specifications\IDataRequest.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\Simple\IUnitOfWork.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\Simple\IUnitOfWorkFactory.cs" />
     <Compile Include="DataAccessLayer\DataContexts\IDataContextPoolItem.cs" />

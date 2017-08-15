@@ -6,16 +6,13 @@ using System.Reflection;
 using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
-using DotNetCraft.Common.Core.DataAccessLayer.Repositories;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple;
 using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
-using DotNetCraft.Common.Core.Utils;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.Core.Utils.ReflectionExtensions;
 using DotNetCraft.Common.Core.Utils.ReflectionExtensions.Defenitions;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.Extentions;
-using DotNetCraft.Common.Utils;
 using DotNetCraft.Common.Utils.Logging;
 using DotNetCraft.Common.Utils.ReflectionExtensions;
 
@@ -77,6 +74,24 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
             return result;
         }
 
+        private static List<TEntity> LoadCollection(int? skip, int? take, IQueryable<TEntity> collection)
+        {
+            if (skip.HasValue || take.HasValue)
+            {
+                PropertyInfo propertyId = GeIdentifiertPropertyInfo();
+                collection = collection.OrderByProperty(propertyId.Name);
+            }
+
+            if (skip.HasValue)
+                collection = collection.Skip(skip.Value);
+
+            if (take.HasValue)
+                collection = collection.Take(take.Value);
+
+            List<TEntity> result = collection.ToList();
+            return result;
+        }
+
         /// <summary>
         /// Occurs when model by identifier from the repository is needed.
         /// </summary>
@@ -103,40 +118,28 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// </summary>
         /// <param name="dataContext">The IDataContext instance</param>
         /// <returns>Collection of models.</returns>
-        protected virtual ICollection<TEntity> OnGetAll(IDataContext dataContext)
+        protected virtual List<TEntity> OnGetAll(IDataContext dataContext, int? skip, int? take)
         {
             IQueryable<TEntity> collection = dataContext.GetCollectionSet<TEntity>();
-            ICollection<TEntity> result = collection.ToList();
+            List<TEntity> result = LoadCollection(skip, take, collection);
             return result;
         }
 
         /// <summary>
         /// Occurs when all models according to specification are required.
         /// </summary>
-        /// <param name="dataRequest">Some specification.</param>
+        /// <param name="specification">Some specification.</param>
         /// <param name="dataContext">The IDataContext instance</param>
         /// <returns>Collection of models.</returns>
-        protected virtual ICollection<TEntity> OnGetBySpecification(IDataRequest<TEntity> dataRequest, IDataContext dataContext)
+        protected virtual List<TEntity> OnGetBySpecification(ISpecification<TEntity> specification, IDataContext dataContext, int? skip ,int? take)
         {
             IQueryable<TEntity> collection = dataContext.GetCollectionSet<TEntity>();
-            var specification = dataRequest.Specification;
             collection = collection.Where(specification.IsSatisfiedBy());
 
-            if (dataRequest.Skip.HasValue || dataRequest.Take.HasValue)
-            {
-                PropertyInfo propertyId = GeIdentifiertPropertyInfo();
-                collection = collection.OrderByProperty(propertyId.Name);
-            }
-
-            if (dataRequest.Skip.HasValue)
-                collection = collection.Skip(dataRequest.Skip.Value);
-
-            if (dataRequest.Take.HasValue)
-                collection = collection.Take(dataRequest.Take.Value);
-
-            ICollection<TEntity> result = collection.ToList();
+            List<TEntity> result = LoadCollection(skip, take, collection);
             return result;
-        }
+        }        
+
         #endregion
 
         #region Implementation of IRepository<TEntity>
@@ -175,13 +178,13 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// Get all entities.
         /// </summary>
         /// <returns>Collection of entities.</returns>
-        public ICollection<TEntity> GetAll()
+        public List<TEntity> GetAll(int? skip = null, int? take = null)
         {
             try
             {
                 using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
-                    return OnGetAll(dataContext);
+                    return OnGetAll(dataContext, skip, take);
                 }
             }
             catch (Exception ex)
@@ -199,13 +202,13 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// </summary>
         /// <param name="specification">Some specification.</param>
         /// <returns>Collection of entities.</returns>
-        public ICollection<TEntity> GetBySpecification(IDataRequest<TEntity> specification)
+        public List<TEntity> GetBySpecification(ISpecification<TEntity> specification, int? skip = null, int? take = null)
         {
             try
             {
                 using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
-                    return OnGetBySpecification(specification, dataContext);
+                    return OnGetBySpecification(specification, dataContext, skip, take);
                 }
             }
             catch (Exception ex)

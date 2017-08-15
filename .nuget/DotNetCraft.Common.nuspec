@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>DotNetCraft.Common</id>
-    <version>1.0.7.2</version>
+    <version>1.0.7.3</version>
     <title>DotNetCraft.Common For .NET</title>
     <summary>DotNetCraft.Common For .NET</summary>
     <description>Common library for DotNetCraft projects.</description>
@@ -18,6 +18,7 @@
 
       1.0.7
       • PropertyManager has been replaced by the ReflectionManager. The ReflectionManager provides most efficient way for retrieving properties with special attributes.
+      • Added Skip and Take parameters into the repositories methods GetAll and GetBySpecification.
     </releaseNotes>
     <language>en-US</language>
     <iconUrl>https://raw.githubusercontent.com/DotNetCraft/ConfigurationParser/master/Avatar.png</iconUrl>

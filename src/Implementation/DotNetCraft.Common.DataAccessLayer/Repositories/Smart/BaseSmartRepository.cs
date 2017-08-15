@@ -70,14 +70,14 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
         /// Get all models.
         /// </summary>
         /// <returns>Collection of models.</returns>
-        public ICollection<TModel> GetAll<TModel>()
+        public List<TModel> GetAll<TModel>(int? skip = null, int? take = null)
         {
             try
             {
                 using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
-                    ICollection<TEntity> entities = OnGetAll(dataContext);
-                    ICollection<TModel> models = entityModelMapper.Map<TEntity, TModel>(entities);
+                    List<TEntity> entities = OnGetAll(dataContext, skip, take);
+                    List<TModel> models = entityModelMapper.Map<TEntity, TModel>(entities);
                     return models;
                 }
             }
@@ -97,14 +97,14 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
         /// </summary>
         /// <param name="specification">Some specification.</param>
         /// <returns>Collection of models.</returns>
-        public ICollection<TModel> GetBySpecification<TModel>(IDataRequest<TEntity> specification)
+        public List<TModel> GetBySpecification<TModel>(ISpecification<TEntity> specification, int? skip = null, int? take = null)
         {
             try
             {
                 using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
-                    ICollection<TEntity> entities = OnGetBySpecification(specification, dataContext);
-                    ICollection<TModel> models = entityModelMapper.Map<TEntity, TModel>(entities);
+                    List<TEntity> entities = OnGetBySpecification(specification, dataContext, skip, take);
+                    List<TModel> models = entityModelMapper.Map<TEntity, TModel>(entities);
                     return models;
                 }
             }

@@ -55,7 +55,6 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Specifications\DataRequestTests.cs" />
     <Compile Include="UnitOfWorks\DataBaseParameterTests.cs" />
     <Compile Include="UnitOfWorks\SimpleUnitOfWorks\UnitOfWorkFactoryTests.cs" />
     <Compile Include="UnitOfWorks\SimpleUnitOfWorks\UnitOfWorkTests.cs" />

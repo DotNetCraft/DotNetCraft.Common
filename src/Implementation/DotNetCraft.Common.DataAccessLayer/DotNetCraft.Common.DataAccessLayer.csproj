@@ -49,7 +49,6 @@
     <Compile Include="Repositories\Simple\BaseRepository.cs" />
     <Compile Include="Repositories\Smart\BaseSmartRepository.cs" />
     <Compile Include="Repositories\Simple\Predefined\BaseStringRepository.cs" />
-    <Compile Include="Specifications\DataRequest.cs" />
     <Compile Include="UnitOfWorks\DataBaseParameter.cs" />
     <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWork.cs" />
     <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWorkFactory.cs" />

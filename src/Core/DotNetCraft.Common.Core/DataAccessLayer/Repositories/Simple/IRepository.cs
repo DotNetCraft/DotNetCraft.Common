@@ -22,13 +22,13 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple
         /// Get all entities.
         /// </summary>
         /// <returns>Collection of entities.</returns>
-        ICollection<TEntity> GetAll();
+        List<TEntity> GetAll(int? skip = null, int? take = null);
 
         /// <summary>
         /// Get entities by specification.
         /// </summary>
         /// <param name="specification">Some specification.</param>
         /// <returns>Collection of entities.</returns>
-        ICollection<TEntity> GetBySpecification(IDataRequest<TEntity> specification);        
+        List<TEntity> GetBySpecification(ISpecification<TEntity> specification, int? skip = null, int? take = null);        
     }
 }

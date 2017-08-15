@@ -35,7 +35,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer
         /// <typeparam name="TModel">Type of model</typeparam>
         /// <param name="entities">List of entities.</param>
         /// <returns>Collection of models</returns>
-        ICollection<TModel> Map<TEntity, TModel>(ICollection<TEntity> entities)
+        List<TModel> Map<TEntity, TModel>(ICollection<TEntity> entities)
             where TEntity : IEntity;
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer
         /// <typeparam name="TModel">Type of model</typeparam>        
         /// <param name="models">List of models</param>
         /// <returns>Collection of entities</returns>
-        ICollection<TEntity> Map<TEntity, TModel>(ICollection<TModel> models)
+        List<TEntity> Map<TEntity, TModel>(ICollection<TModel> models)
             where TEntity : IEntity;
     }
 }
