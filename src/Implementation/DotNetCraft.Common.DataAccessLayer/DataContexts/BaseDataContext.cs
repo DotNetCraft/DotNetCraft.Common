@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
@@ -56,22 +55,22 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
         #region Implementation of IDataContext
 
         protected abstract IQueryable<TEntity> OnGetCollectionSet<TEntity>()
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         protected abstract void OnInsert<TEntity>(TEntity entity, bool assignIdentifier = true)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         protected abstract void OnUpdate<TEntity>(TEntity entity)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         protected abstract void OnDelete<TEntity>(object entityId)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         protected abstract void OnDelete<TEntity>(TEntity entity)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         protected abstract ICollection<TEntity> OnExecuteQuery<TEntity>(string query, IDataBaseParameter[] args)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         /// <summary>
         /// Get a set with entities.
@@ -79,7 +78,7 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
         /// <typeparam name="TEntity">Type of entity</typeparam>
         /// <returns>The IQueryable instance.</returns>
         public IQueryable<TEntity> GetCollectionSet<TEntity>() 
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             try
             {
@@ -97,7 +96,7 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
         }        
 
         public void Insert<TEntity>(TEntity entity, bool assignIdentifier = true)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             try
             {
@@ -115,7 +114,7 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
         }        
 
         public void Update<TEntity>(TEntity entity) 
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             try
             {
@@ -133,7 +132,7 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
         }
 
         public void Delete<TEntity>(object entityId) 
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             try
             {
@@ -151,7 +150,7 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
         }
 
         public void Delete<TEntity>(TEntity entity) 
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             try
             {
@@ -210,7 +209,7 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
         }
 
         public ICollection<TEntity> ExecuteQuery<TEntity>(string query, IDataBaseParameter[] args) 
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             try
             {

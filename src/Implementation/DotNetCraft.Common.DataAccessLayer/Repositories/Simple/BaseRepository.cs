@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple;
@@ -19,7 +18,7 @@ using DotNetCraft.Common.Utils.ReflectionExtensions;
 namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
 {
     public abstract class BaseRepository<TEntity> : IRepository<TEntity>
-        where TEntity : class, IEntity
+        where TEntity : class
     {
         #region Fields...
         /// <summary>

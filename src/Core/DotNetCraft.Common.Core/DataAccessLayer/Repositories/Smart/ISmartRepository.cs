@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Smart
 {
     public interface ISmartRepository<TEntity>
-        where TEntity : IEntity
     {
         /// <summary>
         /// Get model by identifier.

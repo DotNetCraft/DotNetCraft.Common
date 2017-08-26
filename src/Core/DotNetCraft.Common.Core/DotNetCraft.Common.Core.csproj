@@ -35,7 +35,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseEntities\IEntity.cs" />
     <Compile Include="DataAccessLayer\IContextSettings.cs" />
     <Compile Include="DataAccessLayer\DataContexts\IDataContext.cs" />
     <Compile Include="DataAccessLayer\DataContexts\IDataContextFactory.cs" />

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple
@@ -9,7 +8,6 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple
     /// </summary>
     /// <typeparam name="TEntity">Entity's type.</typeparam>
     public interface IRepository<TEntity>
-        where TEntity : IEntity
     {
         /// <summary>
         /// Get entity by identifier.

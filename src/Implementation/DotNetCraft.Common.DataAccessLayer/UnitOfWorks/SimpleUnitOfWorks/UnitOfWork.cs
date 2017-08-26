@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DotNetCraft.Common.Core.BaseEntities;
-using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
@@ -85,7 +83,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         #region Virtual methods: OnInsert, OnUpdate and OnDelete
 
         protected virtual void OnInsert<TEntity>(TEntity entity, bool assignIdentifier = true)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             logger.Trace("Inserting {0} into the data context...", entity);
             dataContext.Insert(entity, assignIdentifier);
@@ -93,7 +91,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         }
 
         protected virtual void OnUpdate<TEntity>(TEntity entity)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             logger.Trace("Updating {0} in the data context...", entity);
             dataContext.Update(entity);
@@ -101,7 +99,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         }
 
         protected virtual void OnDelete<TEntity>(object entityId)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             logger.Trace("Deliting {0} from the data context...", entityId);
             dataContext.Delete<TEntity>(entityId);
@@ -109,7 +107,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         }
 
         protected virtual void OnDelete<TEntity>(TEntity entity)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             logger.Trace("Deliting {0} from the data context...", entity);
             dataContext.Delete(entity);
@@ -117,7 +115,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         }
 
         private ICollection<TEntity> OnExecuteQuery<TEntity>(string query, IDataBaseParameter[] args)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             logger.Trace("Executing query {0}...", query);
             ICollection<TEntity> result = dataContext.ExecuteQuery<TEntity>(query, args);
@@ -134,7 +132,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         /// <return>The entity that has been inserted.</return>
         /// <exception cref="UnitOfWorkException">There was a problem during inserting a new entity into the database..</exception>
         public void Insert<TEntity>(TEntity entity, bool assignIdentifier = true)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             try
             {
@@ -160,7 +158,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         /// </summary>
         /// <param name="entity">The entity.</param>        
         public void Update<TEntity>(TEntity entity)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             try
             {
@@ -186,7 +184,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         /// </summary>
         /// <param name="entityId">The entity's identifier.</param>
         public void Delete<TEntity>(object entityId)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             try
             {
@@ -211,7 +209,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         /// Delete an entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
-        public void Delete<TEntity>(TEntity entity) where TEntity : class, IEntity
+        public void Delete<TEntity>(TEntity entity) where TEntity : class
         {
             try
             {
@@ -240,7 +238,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         /// <param name="args">Qeury's arguments (parameters)</param>
         /// <returns>List of entities.</returns>
         public ICollection<TEntity> ExecuteQuery<TEntity>(string query, params IDataBaseParameter[] args)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             try
             {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart;
@@ -32,7 +31,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         /// <param name="model">The model.</param>
         /// <return>The model that has been inserted.</return>
         public void Insert<TModel, TEntity>(TModel model)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             try
             {
@@ -56,7 +55,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         /// </summary>
         /// <param name="model">The model.</param>
         public void Update<TModel, TEntity>(TModel model)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             throw new NotImplementedException();
         }
@@ -66,7 +65,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         /// </summary>
         /// <param name="modelId">The model's identifier.</param>
         public void Delete<TModel, TEntity>(object modelId)
-            where TEntity : class, IEntity
+            where TEntity : class
         {
             throw new NotImplementedException();
         }

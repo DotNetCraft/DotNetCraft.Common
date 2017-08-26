@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.Utils.Disposal;
 
@@ -17,25 +16,25 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.DataContexts
         /// <typeparam name="TEntity">Type of entity</typeparam>
         /// <returns>The IQueryable instance.</returns>
         IQueryable<TEntity> GetCollectionSet<TEntity>()
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         void Insert<TEntity>(TEntity entity, bool assignIdentifier = true)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         void Update<TEntity>(TEntity entity)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         void Delete<TEntity>(object entityId)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         void Delete<TEntity>(TEntity entity)
-           where TEntity : class, IEntity;
+           where TEntity : class;
 
         void BeginTransaction();
         void Commit();
         void RollBack();
 
         ICollection<TEntity> ExecuteQuery<TEntity>(string query, IDataBaseParameter[] args) 
-            where TEntity : class, IEntity;
+            where TEntity : class;
     }
 }

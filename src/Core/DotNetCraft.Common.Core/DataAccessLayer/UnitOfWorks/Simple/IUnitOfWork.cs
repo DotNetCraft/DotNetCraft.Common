@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.Utils.Disposal;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple
@@ -21,28 +20,28 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple
         /// <param name="assignIdentifier">Flag shows that identifier should be assigned</param>
         /// <return>The entity's identifier that has been inserted.</return>
         void Insert<TEntity>(TEntity entity, bool assignIdentifier = true)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         /// <summary>
         /// Update an entity.
         /// </summary>
         /// <param name="entity">The entity.</param>        
         void Update<TEntity>(TEntity entity)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         /// <summary>
         /// Delete an entity by it's identifier.
         /// </summary>
         /// <param name="entityId">The entity's identifier.</param>
         void Delete<TEntity>(object entityId)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         /// <summary>
         /// Delete an entity.
         /// </summary>
         /// <param name="entity">The entity.</param>
         void Delete<TEntity>(TEntity entity)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         /// <summary>
         /// Execute query.
@@ -52,7 +51,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple
         /// <param name="args">Qeury's arguments (parameters)</param>
         /// <returns>List of entities.</returns>
         ICollection<TEntity> ExecuteQuery<TEntity>(string query, params IDataBaseParameter[] args)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         /// <summary>
         /// Commit transaction.

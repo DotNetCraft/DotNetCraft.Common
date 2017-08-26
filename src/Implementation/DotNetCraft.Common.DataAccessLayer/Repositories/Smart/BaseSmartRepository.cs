@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories.Smart;
@@ -15,7 +14,7 @@ using DotNetCraft.Common.Utils.ReflectionExtensions;
 namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
 {
     public abstract class BaseSmartRepository<TEntity> : BaseRepository<TEntity>, ISmartRepository<TEntity> 
-        where TEntity : class, IEntity
+        where TEntity : class
     {
         private readonly IReflectionManager reflectionManager = ReflectionManager.Manager;
         private readonly IEntityModelMapper entityModelMapper;
@@ -77,6 +76,10 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
                 using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
                     List<TEntity> entities = OnGetAll(dataContext, skip, take);
+
+                    if (entities.Count == 0)
+                        return new List<TModel>();
+
                     List<TModel> models = entityModelMapper.Map<TEntity, TModel>(entities);
                     return models;
                 }
@@ -104,6 +107,10 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
                 using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
                 {
                     List<TEntity> entities = OnGetBySpecification(specification, dataContext, skip, take);
+
+                    if (entities.Count == 0 )
+                        return new List<TModel>();
+
                     List<TModel> models = entityModelMapper.Map<TEntity, TModel>(entities);
                     return models;
                 }

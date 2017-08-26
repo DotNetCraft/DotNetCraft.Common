@@ -1,9 +1,6 @@
-﻿using DotNetCraft.Common.Core.BaseEntities;
-
-namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple.Predefined
+﻿namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple.Predefined
 {
     public interface IIntRepository<TEntity> : IRepository<TEntity> 
-        where TEntity : IEntity
     {
         /// <summary>
         /// Get entity by identifier.

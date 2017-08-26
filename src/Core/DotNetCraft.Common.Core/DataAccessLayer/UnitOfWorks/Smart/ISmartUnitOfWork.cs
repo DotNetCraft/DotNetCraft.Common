@@ -1,4 +1,3 @@
-using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart
@@ -14,14 +13,14 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart
         /// <param name="model">The model.</param>
         /// <return>The model's identifier that has been inserted.</return>
         void Insert<TModel, TEntity>(TModel model)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         /// <summary>
         /// Update an model.
         /// </summary>
         /// <param name="model">The model.</param>
         void Update<TModel, TEntity>(TModel model)
-            where TEntity : class, IEntity;
+            where TEntity : class;
 
         /// <summary>
         /// Commit transaction.

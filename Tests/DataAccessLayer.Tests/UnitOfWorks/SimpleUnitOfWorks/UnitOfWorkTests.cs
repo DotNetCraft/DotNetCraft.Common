@@ -1,9 +1,7 @@
 ﻿using System;
-using DotNetCraft.Common.Core.BaseEntities;
-using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
-using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
+using DotNetCraft.Common.DataAccessLayer.BaseEntities;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
 using NSubstitute;
@@ -164,7 +162,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void InsertCommitTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
             using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 unitOfWork.Insert(entity);
@@ -183,7 +181,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void InsertRollbackTest(bool useRollbackMethod)
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
             using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {                
                 unitOfWork.Insert(entity);
@@ -201,7 +199,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void InsertExceptionTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
 
             dataContext.When(x => x.Insert(entity)).Do(
                 x =>
@@ -239,7 +237,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void UpdateCommitTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
             using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 unitOfWork.Update(entity);
@@ -258,7 +256,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void UpdateRollbackTest(bool useRollbackMethod)
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
             using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
                 unitOfWork.Update(entity);
@@ -276,7 +274,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void UpdateExceptionTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
 
             dataContext.When(x => x.Update(entity)).Do(
                 x =>
@@ -317,11 +315,11 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
             int entityId = 5;
             using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
-                unitOfWork.Delete<IEntity>(entityId);
+                unitOfWork.Delete<BaseEntity<int>>(entityId);
                 unitOfWork.Commit();
             }
             dataContext.Received(1).BeginTransaction();
-            dataContext.Received(1).Delete<IEntity>(entityId);
+            dataContext.Received(1).Delete<BaseEntity<int>>(entityId);
             dataContext.Received(1).Commit();
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().RollBack();
@@ -336,12 +334,12 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
             int entityId = 5;
             using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext))
             {
-                unitOfWork.Delete<IEntity>(entityId);
+                unitOfWork.Delete<BaseEntity<int>>(entityId);
                 if (useRollbackMethod)
                     unitOfWork.Rollback();
             }
             dataContext.Received(1).BeginTransaction();
-            dataContext.Received(1).Delete<IEntity>(entityId);
+            dataContext.Received(1).Delete<BaseEntity<int>>(entityId);
             dataContext.Received(1).RollBack();
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().Commit();
@@ -351,9 +349,9 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void DeleteExceptionTest()
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
 
-            dataContext.When(x => x.Delete<IEntity>(5)).Do(
+            dataContext.When(x => x.Delete<BaseEntity<int>>(5)).Do(
                 x =>
                 {
                     throw new Exception();
@@ -363,7 +361,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
             {
                 try
                 {
-                    unitOfWork.Delete<IEntity>(5);
+                    unitOfWork.Delete<BaseEntity<int>>(5);
                     unitOfWork.Commit();
                 }
                 catch (UnitOfWorkException)
@@ -375,7 +373,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
                 }
             }
             dataContext.Received(1).BeginTransaction();
-            dataContext.Received(1).Delete<IEntity>(5);
+            dataContext.Received(1).Delete<BaseEntity<int>>(5);
             dataContext.Received(1).RollBack();
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().Commit();

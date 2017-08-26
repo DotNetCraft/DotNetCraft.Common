@@ -1,11 +1,7 @@
 ﻿using System;
-using DotNetCraft.Common.Core.BaseEntities;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
-using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart;
-using DotNetCraft.Common.Core.Utils;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.BaseEntities;
 using DotNetCraft.Common.DataAccessLayer.BaseEntities.Predefined;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
@@ -181,7 +177,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
                 unitOfWork.Insert(entity);
@@ -201,7 +197,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
                 unitOfWork.Insert(entity);
@@ -220,7 +216,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
 
             dataContext.When(x => x.Insert(entity)).Do(
                 x =>
@@ -266,7 +262,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
                 unitOfWork.Update(entity);
@@ -286,7 +282,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
                 unitOfWork.Update(entity);
@@ -305,7 +301,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContext dataContext = Substitute.For<IDataContext>();
             IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            IEntity entity = Substitute.For<IEntity>();
+            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
 
             dataContext.When(x => x.Update(entity)).Do(
                 x =>
@@ -354,11 +350,11 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
             object entityId = 5;
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
-                unitOfWork.Delete<IEntity>(entityId);
+                unitOfWork.Delete<BaseEntity<int>>(entityId);
                 unitOfWork.Commit();
             }
             dataContext.Received(1).BeginTransaction();
-            dataContext.Received(1).Delete<IEntity>(entityId);
+            dataContext.Received(1).Delete<BaseEntity<int>>(entityId);
             dataContext.Received(1).Commit();
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().RollBack();
@@ -374,12 +370,12 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
             object entityId = 5;
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
-                unitOfWork.Delete<IEntity>(entityId);
+                unitOfWork.Delete<BaseEntity<int>>(entityId);
                 if (useRollbackMethod)
                     unitOfWork.Rollback();
             }
             dataContext.Received(1).BeginTransaction();
-            dataContext.Received(1).Delete<IEntity>(entityId);
+            dataContext.Received(1).Delete<BaseEntity<int>>(entityId);
             dataContext.Received(1).RollBack();
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().Commit();

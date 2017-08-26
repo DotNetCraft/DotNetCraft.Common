@@ -1,15 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
-using System.Text;
-using DotNetCraft.Common.Core.BaseEntities;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DotNetCraft.Common.DataAccessLayer.BaseEntities
 {
     /// <summary>
     /// Base class for all entities.
     /// </summary>
-    public abstract class BaseEntity<TEntityId> : IEntity
+    public abstract class BaseEntity<TEntityId>
     { 
         /// <summary>
         /// The identifier.
