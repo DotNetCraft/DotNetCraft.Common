@@ -5,6 +5,7 @@ using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 using DotNetCraft.Common.Core.Utils;
 using DotNetCraft.Common.Core.Utils.Logging;
+using DotNetCraft.Common.Core.Utils.Mapping;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks;
 using NSubstitute;
@@ -21,7 +22,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         public void ConstructorTest()
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
             IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, entityModelMapper);
             Assert.IsNotNull(unitOfWorkFactory);
         }
@@ -34,7 +35,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         public void ConstructorNullParameterTest(bool correctContext, bool correctDotNetCraft)
         {
             IDataContextFactory dataContextFactoryt = correctContext ? Substitute.For<IDataContextFactory>() : null;
-            IEntityModelMapper entityModelMapper = correctDotNetCraft ? Substitute.For<IEntityModelMapper>(): null;
+            IMapperManager entityModelMapper = correctDotNetCraft ? Substitute.For<IMapperManager>(): null;
             new SmartUnitOfWorkFactory(dataContextFactoryt, entityModelMapper);
 
             Assert.Fail("ArgumentNullException expected");
@@ -49,15 +50,15 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
             IContextSettings contextSettings = Substitute.For<IContextSettings>();
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
             IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, entityModelMapper);
 
-            dataContextFactory.CreateDataContext(contextSettings).Returns(dataContext);
+            dataContextFactory.CreateDataContext().Returns(dataContext);
 
-            IUnitOfWork unitOfWork = unitOfWorkFactory.CreateUnitOfWork(contextSettings);
+            IUnitOfWork unitOfWork = unitOfWorkFactory.CreateUnitOfWork();
             Assert.IsNotNull(unitOfWork);
-            dataContextFactory.Received(1).CreateDataContext(contextSettings);
+            dataContextFactory.Received(1).CreateDataContext();
         }
 
         [Test]
@@ -65,17 +66,17 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
             IContextSettings contextSettings = Substitute.For<IContextSettings>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
             IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, entityModelMapper);
 
-            dataContextFactory.When(x => x.CreateDataContext(contextSettings)).Do(x =>
+            dataContextFactory.When(x => x.CreateDataContext()).Do(x =>
             {
                 throw new Exception();
             });
 
             try
             {
-                unitOfWorkFactory.CreateUnitOfWork(contextSettings);
+                unitOfWorkFactory.CreateUnitOfWork();
                 Assert.Fail("UnitOfWorkException expected");
             }
             catch (UnitOfWorkException)
@@ -86,7 +87,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
                 Assert.Fail("UnitOfWorkException expected");
             }
 
-            dataContextFactory.Received(1).CreateDataContext(contextSettings);
+            dataContextFactory.Received(1).CreateDataContext();
         }
 
         [Test]
@@ -94,15 +95,15 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
             IContextSettings contextSettings = Substitute.For<IContextSettings>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
             IUnitOfWorkFactory unitOfWorkFactory = new SmartUnitOfWorkFactory(dataContextFactory, entityModelMapper);
 
-            IDataContext dataContext = null;
-            dataContextFactory.CreateDataContext(contextSettings).Returns(dataContext);
+            IDataContextWrapper dataContext = null;
+            dataContextFactory.CreateDataContext().Returns(dataContext);
 
             try
             {
-                unitOfWorkFactory.CreateUnitOfWork(contextSettings);
+                unitOfWorkFactory.CreateUnitOfWork();
                 Assert.Fail("UnitOfWorkException expected");
             }
             catch (UnitOfWorkException)
@@ -113,7 +114,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
                 Assert.Fail("UnitOfWorkException expected");
             }
 
-            dataContextFactory.Received(1).CreateDataContext(contextSettings);
+            dataContextFactory.Received(1).CreateDataContext();
         }
 
         #endregion

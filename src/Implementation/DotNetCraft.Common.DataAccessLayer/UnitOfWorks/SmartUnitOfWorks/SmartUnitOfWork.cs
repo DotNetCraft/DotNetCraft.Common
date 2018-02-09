@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart;
+using DotNetCraft.Common.Core.Utils.Mapping;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
 
@@ -10,17 +10,17 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
 {
     public class SmartUnitOfWork : UnitOfWork, ISmartUnitOfWork
     {
-        private readonly IEntityModelMapper entityModelMapper;
+        private readonly IMapperManager mapperManager;
 
         /// <summary>
         /// Constructor.
         /// </summary>        
-        public SmartUnitOfWork(IDataContext dataContext, IEntityModelMapper entityModelMapper) : base(dataContext)
+        public SmartUnitOfWork(IDataContextWrapper dataContextWrapper, IMapperManager mapperManager) : base(dataContextWrapper)
         {
-            if (entityModelMapper == null)
-                throw new ArgumentNullException(nameof(entityModelMapper));
+            if (mapperManager == null)
+                throw new ArgumentNullException(nameof(mapperManager));
 
-            this.entityModelMapper = entityModelMapper;
+            this.mapperManager = mapperManager;
         }
 
         #region Implementation of ISmartUnitOfWork       
@@ -35,7 +35,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         {
             try
             {
-                TEntity entity = entityModelMapper.Map<TEntity, TModel>(model);
+                TEntity entity = mapperManager.Map<TModel, TEntity>(model);
                 OnInsert(entity);                
             }
             catch (Exception ex)
@@ -57,18 +57,45 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
         public void Update<TModel, TEntity>(TModel model)
             where TEntity : class
         {
-            throw new NotImplementedException();
+            try
+            {
+                TEntity entity = mapperManager.Map<TModel, TEntity>(model);
+                OnUpdate(entity);
+            }
+            catch (Exception ex)
+            {
+                Dictionary<string, string> errorParameters = new Dictionary<string, string>
+                {
+                    {"EntityType", typeof(TEntity).ToString()},
+                    {"ModelType", typeof(TModel).ToString()},
+                    {"Model", model.ToString() }
+                };
+                throw new DataAccessLayerException("There was a problem during inserting a new model into the database", ex, errorParameters);
+            }
         }
 
         /// <summary>
-        /// Delete an model.
+        /// Delete a model.
         /// </summary>
-        /// <param name="modelId">The model's identifier.</param>
-        public void Delete<TModel, TEntity>(object modelId)
-            where TEntity : class
+        /// <param name="model">The model.</param>
+        public void Delete<TModel, TEntity>(TModel model) where TEntity : class
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                TEntity entity = mapperManager.Map<TModel, TEntity>(model);
+                OnDelete(entity);
+            }
+            catch (Exception ex)
+            {
+                Dictionary<string, string> errorParameters = new Dictionary<string, string>
+                {
+                    {"EntityType", typeof(TEntity).ToString()},
+                    {"ModelType", typeof(TModel).ToString()},
+                    {"Model", model.ToString() }
+                };
+                throw new DataAccessLayerException("There was a problem during inserting a new model into the database", ex, errorParameters);
+            }
+        }       
 
         #endregion
     }

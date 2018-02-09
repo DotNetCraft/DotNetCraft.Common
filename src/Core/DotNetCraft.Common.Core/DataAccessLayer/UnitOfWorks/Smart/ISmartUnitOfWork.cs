@@ -5,7 +5,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart
     /// <summary>
     /// Pattern Unit of Work.
     /// </summary>
-    public interface ISmartUnitOfWork: IUnitOfWork
+    public interface ISmartUnitOfWork : IUnitOfWork
     {
         /// <summary>
         /// Insert an model.
@@ -23,13 +23,10 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart
             where TEntity : class;
 
         /// <summary>
-        /// Commit transaction.
+        /// Delete a model.
         /// </summary>
-        void Commit();
-
-        /// <summary>
-        /// Rollback transaction.
-        /// </summary>
-        void Rollback();
+        /// <param name="model">The model.</param>
+        void Delete<TModel, TEntity>(TModel model)
+            where TEntity : class;
     }
 }

@@ -56,6 +56,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="UnitOfWorks\DataBaseParameterTests.cs" />
+    <Compile Include="UnitOfWorks\FakeEntity.cs" />
     <Compile Include="UnitOfWorks\SimpleUnitOfWorks\UnitOfWorkFactoryTests.cs" />
     <Compile Include="UnitOfWorks\SimpleUnitOfWorks\UnitOfWorkTests.cs" />
     <Compile Include="DataContextPoolItemTests.cs" />

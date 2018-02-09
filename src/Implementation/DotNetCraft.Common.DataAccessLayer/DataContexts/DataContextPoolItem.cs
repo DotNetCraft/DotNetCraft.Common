@@ -4,19 +4,19 @@ using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 namespace DotNetCraft.Common.DataAccessLayer.DataContexts
 {
     /// <summary>
-    /// Simple implementation of the pool item that contains information about data context.
+    /// Simple implementation of the pool item that contains information about data contextWrapper.
     /// </summary>
-    public class DataContextPoolItem: IDataContextPoolItem
+    public class DataContextPoolItem : IDataContextPoolItem
     {
         #region Properties...
 
         /// <summary>
-        /// The IDataContext instance.
+        /// The IDataContextWrapper instance.
         /// </summary>
-        public IDataContext DataContext { get; }
+        public IDataContextWrapper DataContextWrapper { get; }
 
         /// <summary>
-        /// Count of references to this context.
+        /// Count of references to this contextWrapper.
         /// </summary>
         public int ReferenceCount { get; private set; }
 
@@ -27,14 +27,14 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="dataContext">The IDataContext instance.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="dataContext"/> is <see langword="null"/></exception>
-        public DataContextPoolItem(IDataContext dataContext)
+        /// <param name="dataContextWrapper">The IDataContextWrapper instance.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dataContextWrapper"/> is <see langword="null"/></exception>
+        public DataContextPoolItem(IDataContextWrapper dataContextWrapper)
         {
-            if (dataContext == null)
-                throw new ArgumentNullException(nameof(dataContext));
+            if (dataContextWrapper == null)
+                throw new ArgumentNullException(nameof(dataContextWrapper));
 
-            DataContext = dataContext;
+            DataContextWrapper = dataContextWrapper;
             ReferenceCount = 1;
         }
         #endregion

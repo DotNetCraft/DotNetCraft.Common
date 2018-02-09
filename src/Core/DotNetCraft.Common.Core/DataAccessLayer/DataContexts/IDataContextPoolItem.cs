@@ -3,12 +3,12 @@
     public interface IDataContextPoolItem
     {
         /// <summary>
-        /// The IDataContext instance.
+        /// The IDataContextWrapper instance.
         /// </summary>
-        IDataContext DataContext { get; }
+        IDataContextWrapper DataContextWrapper { get; }
 
         /// <summary>
-        /// Count of references to this context.
+        /// Count of references to this contextWrapper.
         /// </summary>
         int ReferenceCount { get; }
 

@@ -2,15 +2,22 @@
 <package>
   <metadata>
     <id>DotNetCraft.Common</id>
-    <version>1.0.7.8</version>
+    <version>2.0.0</version>
     <title>DotNetCraft.Common For .NET</title>
     <summary>DotNetCraft.Common For .NET</summary>
-    <description>Common library for DotNetCraft projects.</description>
+    <description>Common library for DotNetCraft projects.</description> 
     <releaseNotes>
+      2.0.0
+      • DataAccess layer has been improved.
+      
+      1.0.8
+      • Now you can use predefine data access layer classes for your projects if you have int, guid or string as identifier.
+      • Refactoring has been made - check your references.
+
       1.0.7
       • PropertyManager has been replaced by the ReflectionManager. The ReflectionManager provides most efficient way for retrieving properties with special attributes.
       • Added Skip and Take parameters into the repositories methods GetAll and GetBySpecification.
-      
+
       1.0.6
       • Several extensions have been added (Assembly, String).
       • Added methods for retreiving several properties with attributes into the PropertyManager.
@@ -18,7 +25,7 @@
 
       1.0.5
       • Simple dependency injections resolver has been added.
-      • Namespaces that are never been used has been removed.      
+      • Namespaces that are never been used has been removed.
     </releaseNotes>
     <language>en-US</language>
     <iconUrl>https://raw.githubusercontent.com/DotNetCraft/ConfigurationParser/master/Avatar.png</iconUrl>

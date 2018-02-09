@@ -35,8 +35,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseModels\BaseModel.cs" />
-    <Compile Include="BaseModels\IModel.cs" />
     <Compile Include="Management\IBackgroundManager.cs" />
     <Compile Include="Management\IBackgroundManagerConfiguration.cs" />
     <Compile Include="Management\IManager.cs" />

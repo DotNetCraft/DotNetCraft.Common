@@ -30,13 +30,6 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple
             where TEntity : class;
 
         /// <summary>
-        /// Delete an entity by it's identifier.
-        /// </summary>
-        /// <param name="entityId">The entity's identifier.</param>
-        void Delete<TEntity>(object entityId)
-            where TEntity : class;
-
-        /// <summary>
         /// Delete an entity.
         /// </summary>
         /// <param name="entity">The entity.</param>

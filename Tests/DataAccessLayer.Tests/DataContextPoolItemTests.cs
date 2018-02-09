@@ -15,7 +15,7 @@ namespace DataAccessLayer.Tests
         [Test]
         public void ConstructorTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
             IDataContextPoolItem dataContextPoolItem = new DataContextPoolItem(dataContext);
             Assert.AreEqual(1, dataContextPoolItem.ReferenceCount);
         }
@@ -34,7 +34,7 @@ namespace DataAccessLayer.Tests
         [TestCase(20)]
         public void IncreseRefTest(int referenceCount)
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
             IDataContextPoolItem dataContextPoolItem =new DataContextPoolItem(dataContext);
             Assert.AreEqual(1, dataContextPoolItem.ReferenceCount);
 
@@ -52,7 +52,7 @@ namespace DataAccessLayer.Tests
         [TestCase(20)]
         public void DecreaseRefTest(int referenceCount)
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
             IDataContextPoolItem dataContextPoolItem = new DataContextPoolItem(dataContext);
             
             for (int i = 0; i < referenceCount; i++)
@@ -66,7 +66,7 @@ namespace DataAccessLayer.Tests
         [ExpectedException(typeof(IndexOutOfRangeException))]
         public void DecreaseRefNegativeTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
             IDataContextPoolItem dataContextPoolItem = new DataContextPoolItem(dataContext);
             dataContextPoolItem.DecreaseRef();
 

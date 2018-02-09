@@ -46,6 +46,7 @@
     <Compile Include="DebugLoggerFactoryTests.cs" />
     <Compile Include="DisposableObjectTests.cs" />
     <Compile Include="LogManagerTests.cs" />
+    <Compile Include="MappingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyManagerTests.cs" />
     <Compile Include="SimpleCacheTests.cs" />

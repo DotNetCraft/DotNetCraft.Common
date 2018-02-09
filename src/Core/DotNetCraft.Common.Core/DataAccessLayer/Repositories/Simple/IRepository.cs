@@ -14,7 +14,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple
         /// </summary>
         /// <param name="entityId">The entity's identifier.</param>
         /// <returns>The entity, if it exists.</returns>
-        TEntity Get(object entityId);
+        TEntity Get<TIdentifier>(TIdentifier entityId);
 
         /// <summary>
         /// Get all entities.

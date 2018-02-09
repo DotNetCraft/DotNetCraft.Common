@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories.Smart;
 using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
+using DotNetCraft.Common.Core.Utils.Mapping;
 using DotNetCraft.Common.Core.Utils.ReflectionExtensions;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.Repositories.Simple;
@@ -17,17 +16,17 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
         where TEntity : class
     {
         private readonly IReflectionManager reflectionManager = ReflectionManager.Manager;
-        private readonly IEntityModelMapper entityModelMapper;
+        private readonly IMapperManager mapperManager;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected BaseSmartRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory, IEntityModelMapper entityModelMapper) : base(contextSettings, dataContextFactory)
+        protected BaseSmartRepository(IDataContextFactory dataContextFactory, IMapperManager mapperManager) : base(dataContextFactory)
         {
-            if (entityModelMapper == null)
-                throw new ArgumentNullException(nameof(entityModelMapper));
+            if (mapperManager == null)
+                throw new ArgumentNullException(nameof(mapperManager));
 
-            this.entityModelMapper = entityModelMapper;            
+            this.mapperManager = mapperManager;            
         }
 
         #region Implementation of ISmartRepository<TEntity,TModel>        
@@ -37,19 +36,20 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
         /// </summary>
         /// <param name="modelId">The model's identifier.</param>
         /// <returns>The model, if it exists.</returns>
-        public TModel Get<TModel>(object modelId)
+        public TModel Get<TModel, TIdentifier>(TIdentifier modelId)
         {
             try
             {
                 Type entityType = typeof(TEntity);
                 var propertyId = reflectionManager.Single(entityType, typeof(KeyAttribute));
 
-                using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
                 {
-                    TypeConverter converter = TypeDescriptor.GetConverter(propertyId.PropertyType);
-                    object entityId = converter.ConvertFrom(modelId);
-                    TEntity entity = OnGet(entityId, dataContext);
-                    TModel model = entityModelMapper.Map<TEntity, TModel>(entity);
+                    //TypeConverter converter = TypeDescriptor.GetConverter(propertyId.PropertyType);
+                    //TIdentifier entityId = converter.ConvertFrom(modelId);
+                    TIdentifier entityId = modelId;
+                    TEntity entity = OnGet(entityId, dataContextWrapper);
+                    TModel model = mapperManager.Map<TEntity, TModel>(entity);
                     return model;
                 }
             }
@@ -73,14 +73,14 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
         {
             try
             {
-                using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
                 {
-                    List<TEntity> entities = OnGetAll(dataContext, skip, take);
+                    List<TEntity> entities = OnGetAll(dataContextWrapper, skip, take);
 
                     if (entities.Count == 0)
                         return new List<TModel>();
 
-                    List<TModel> models = entityModelMapper.Map<TEntity, TModel>(entities);
+                    List<TModel> models = mapperManager.Map<List<TEntity>, List<TModel>>(entities);
                     return models;
                 }
             }
@@ -104,14 +104,14 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
         {
             try
             {
-                using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
                 {
-                    List<TEntity> entities = OnGetBySpecification(specification, dataContext, skip, take);
+                    List<TEntity> entities = OnGetBySpecification(specification, dataContextWrapper, skip, take);
 
                     if (entities.Count == 0 )
                         return new List<TModel>();
 
-                    List<TModel> models = entityModelMapper.Map<TEntity, TModel>(entities);
+                    List<TModel> models = mapperManager.Map<List<TEntity>, List<TModel>>(entities);
                     return models;
                 }
             }

@@ -36,26 +36,19 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataContexts\BaseDataContext.cs" />
-    <Compile Include="BaseEntities\BaseEntity.cs" />
-    <Compile Include="BaseEntities\Predefined\BaseGuidEntity.cs" />
-    <Compile Include="BaseEntities\Predefined\BaseIntEntity.cs" />
-    <Compile Include="BaseEntities\Predefined\BaseStringEntity.cs" />
+    <Compile Include="DataContexts\BaseDataContextWrapper.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="Exceptions\UnitOfWorkException.cs" />
     <Compile Include="Extentions\DotNetCraftQueryableExtentions.cs" />
-    <Compile Include="Repositories\Simple\Predefined\BaseGuidRepository.cs" />
-    <Compile Include="Repositories\Simple\Predefined\BaseIntRepository.cs" />
     <Compile Include="Repositories\Simple\BaseRepository.cs" />
     <Compile Include="Repositories\Smart\BaseSmartRepository.cs" />
-    <Compile Include="Repositories\Simple\Predefined\BaseStringRepository.cs" />
     <Compile Include="UnitOfWorks\DataBaseParameter.cs" />
     <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWork.cs" />
     <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWorks\SimpleUnitOfWorks\UnitOfWork.cs" />
     <Compile Include="DataContexts\DataContextPoolItem.cs" />
     <Compile Include="Exceptions\DataAccessLayerException.cs" />
-    <Compile Include="DataContexts\DataContextFactory.cs" />
+    <Compile Include="DataContexts\BaseDataContextFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitOfWorks\SimpleUnitOfWorks\UnitOfWorkFactory.cs" />
   </ItemGroup>

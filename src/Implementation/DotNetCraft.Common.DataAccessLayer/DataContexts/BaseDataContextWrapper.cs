@@ -8,12 +8,11 @@ using DotNetCraft.Common.Utils.Disposal;
 
 namespace DotNetCraft.Common.DataAccessLayer.DataContexts
 {
-    public abstract class BaseDataContext : DisposableObject, IDataContext
+    public abstract class BaseDataContextWrapper : DisposableObject, IDataContextWrapper
     {
         private readonly IDataContextFactory owner;
-        private bool isDisposed;
 
-        protected BaseDataContext(IDataContextFactory owner)
+        protected BaseDataContextWrapper(IDataContextFactory owner)
         {
             if (owner == null)
                 throw new ArgumentNullException(nameof(owner));
@@ -52,18 +51,15 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
 
         #endregion
 
-        #region Implementation of IDataContext
+        #region Implementation of IDataContextWrapper
 
-        protected abstract IQueryable<TEntity> OnGetCollectionSet<TEntity>()
+        protected abstract IQueryable<TEntity> OnSet<TEntity>()
             where TEntity : class;
 
         protected abstract void OnInsert<TEntity>(TEntity entity, bool assignIdentifier = true)
             where TEntity : class;
 
         protected abstract void OnUpdate<TEntity>(TEntity entity)
-            where TEntity : class;
-
-        protected abstract void OnDelete<TEntity>(object entityId)
             where TEntity : class;
 
         protected abstract void OnDelete<TEntity>(TEntity entity)
@@ -77,12 +73,12 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
         /// </summary>
         /// <typeparam name="TEntity">Type of entity</typeparam>
         /// <returns>The IQueryable instance.</returns>
-        public IQueryable<TEntity> GetCollectionSet<TEntity>() 
+        public IQueryable<TEntity> Set<TEntity>() 
             where TEntity : class
         {
             try
             {
-                IQueryable<TEntity> result = OnGetCollectionSet<TEntity>();
+                IQueryable<TEntity> result = OnSet<TEntity>();
                 return result;
             }
             catch (Exception ex)
@@ -93,8 +89,8 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
                 };
                 throw new DataAccessLayerException("There was a problem during retrieving a collection set", ex, errorParameters);
             }
-        }        
-
+        }
+       
         public void Insert<TEntity>(TEntity entity, bool assignIdentifier = true)
             where TEntity : class
         {
@@ -128,24 +124,6 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
                     {"entity", entity.ToString()}
                 };
                 throw new DataAccessLayerException("There was a problem during updating an existing entity in the database", ex, errorParameters);
-            }
-        }
-
-        public void Delete<TEntity>(object entityId) 
-            where TEntity : class
-        {
-            try
-            {
-                OnDelete<TEntity>(entityId);
-            }
-            catch (Exception ex)
-            {
-                Dictionary<string, string> errorParameters = new Dictionary<string, string>
-                {
-                    {"EntityType", typeof(TEntity).ToString()},
-                    {"entityId", entityId.ToString()}
-                };
-                throw new DataAccessLayerException("There was a problem during deleting an existing entity from the database", ex, errorParameters);
             }
         }
 

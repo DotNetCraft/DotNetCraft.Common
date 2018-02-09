@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple;
 using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
@@ -24,20 +23,15 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// <summary>
         /// The logger.
         /// </summary>
-        protected static ICommonLogger logger = LogManager.GetCurrentClassLogger();
+        protected readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// The IPropertyManager instance.
         /// </summary>
-        protected static IReflectionManager reflectionManager = ReflectionManager.Manager;
+        protected readonly IReflectionManager reflectionManager = ReflectionManager.Manager;
 
         /// <summary>
-        /// Context settings.
-        /// </summary>
-        protected readonly IContextSettings contextSettings;
-
-        /// <summary>
-        /// The data context factory.
+        /// The data contextWrapper factory.
         /// </summary>
         protected readonly IDataContextFactory dataContextFactory;
 
@@ -46,24 +40,19 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="contextSettings">Context settings.</param>
-        /// <param name="dataContextFactory">The data context factory.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="contextSettings"/> is <see langword="null"/></exception>
+        /// <param name="dataContextFactory">The data contextWrapper factory.</param>
         /// <exception cref="ArgumentNullException"><paramref name="dataContextFactory"/> is <see langword="null"/></exception>
-        protected BaseRepository(IContextSettings contextSettings, IDataContextFactory dataContextFactory)
+        protected BaseRepository(IDataContextFactory dataContextFactory)
         {
-            if (contextSettings == null)
-                throw new ArgumentNullException(nameof(contextSettings));
             if (dataContextFactory == null)
                 throw new ArgumentNullException(nameof(dataContextFactory));
 
-            this.contextSettings = contextSettings;
             this.dataContextFactory = dataContextFactory;
         }
 
         #region Virtual methods...
 
-        private static PropertyInfo GeIdentifiertPropertyInfo()
+        private PropertyInfo GeIdentifiertPropertyInfo()
         {
             PropertyDefinition propertyId = reflectionManager.SingleOrDefault<TEntity>(typeof(KeyAttribute));
             if (propertyId == null)
@@ -73,7 +62,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
             return result;
         }
 
-        private static List<TEntity> LoadCollection(int? skip, int? take, IQueryable<TEntity> collection)
+        private List<TEntity> LoadCollection(int? skip, int? take, IQueryable<TEntity> collection)
         {
             if (skip.HasValue || take.HasValue)
             {
@@ -95,14 +84,14 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// Occurs when model by identifier from the repository is needed.
         /// </summary>
         /// <param name="entityId">The model's identifier.</param>
-        /// <param name="dataContext">The IDataContext instance</param>
+        /// <param name="dataContextWrapper">The IDataContextWrapper instance</param>
         /// <returns>The model, if it exists.</returns>
         /// <exception cref="EntityNotFoundException">Entity has not been found by the entity identifier.</exception>
-        protected virtual TEntity OnGet(object entityId, IDataContext dataContext)
+        protected virtual TEntity OnGet<TIdentifier>(TIdentifier entityId, IDataContextWrapper dataContextWrapper)
         {
             PropertyInfo propertyId = GeIdentifiertPropertyInfo();
 
-            IQueryable<TEntity> collection = dataContext.GetCollectionSet<TEntity>();
+            IQueryable<TEntity> collection = dataContextWrapper.Set<TEntity>();
             collection = collection.Simplified(propertyId, entityId);
             TEntity result = collection.SingleOrDefault();
 
@@ -115,11 +104,11 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// <summary>
         /// Occurs when all models are required.
         /// </summary>
-        /// <param name="dataContext">The IDataContext instance</param>
+        /// <param name="dataContextWrapper">The IDataContextWrapper instance</param>
         /// <returns>Collection of models.</returns>
-        protected virtual List<TEntity> OnGetAll(IDataContext dataContext, int? skip, int? take)
+        protected virtual List<TEntity> OnGetAll(IDataContextWrapper dataContextWrapper, int? skip, int? take)
         {
-            IQueryable<TEntity> collection = dataContext.GetCollectionSet<TEntity>();
+            IQueryable<TEntity> collection = dataContextWrapper.Set<TEntity>();
             List<TEntity> result = LoadCollection(skip, take, collection);
             return result;
         }
@@ -128,11 +117,11 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// Occurs when all models according to specification are required.
         /// </summary>
         /// <param name="specification">Some specification.</param>
-        /// <param name="dataContext">The IDataContext instance</param>
+        /// <param name="dataContextWrapper">The IDataContextWrapper instance</param>
         /// <returns>Collection of models.</returns>
-        protected virtual List<TEntity> OnGetBySpecification(ISpecification<TEntity> specification, IDataContext dataContext, int? skip ,int? take)
+        protected virtual List<TEntity> OnGetBySpecification(ISpecification<TEntity> specification, IDataContextWrapper dataContextWrapper, int? skip ,int? take)
         {
-            IQueryable<TEntity> collection = dataContext.GetCollectionSet<TEntity>();
+            IQueryable<TEntity> collection = dataContextWrapper.Set<TEntity>();
             collection = collection.Where(specification.IsSatisfiedBy());
 
             List<TEntity> result = LoadCollection(skip, take, collection);
@@ -148,13 +137,13 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// </summary>
         /// <param name="entityId">The entity's identifier.</param>
         /// <returns>The entity, if it exists.</returns>
-        public TEntity Get(object entityId)
+        public TEntity Get<TIdentifier>(TIdentifier entityId)
         {
             try
             {
-                using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
                 {
-                    return OnGet(entityId, dataContext);
+                    return OnGet(entityId, dataContextWrapper);
                 }
             }
             catch (EntityNotFoundException entityNotFoundException)
@@ -181,9 +170,9 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         {
             try
             {
-                using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
                 {
-                    return OnGetAll(dataContext, skip, take);
+                    return OnGetAll(dataContextWrapper, skip, take);
                 }
             }
             catch (Exception ex)
@@ -205,9 +194,9 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         {
             try
             {
-                using (IDataContext dataContext = dataContextFactory.CreateDataContext(contextSettings))
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
                 {
-                    return OnGetBySpecification(specification, dataContext, skip, take);
+                    return OnGetBySpecification(specification, dataContextWrapper, skip, take);
                 }
             }
             catch (Exception ex)

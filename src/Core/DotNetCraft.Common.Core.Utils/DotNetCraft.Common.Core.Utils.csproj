@@ -42,6 +42,8 @@
     <Compile Include="Disposal\INotifyWhenDisposed.cs" />
     <Compile Include="Logging\ICommonLogger.cs" />
     <Compile Include="Logging\ICommonLoggerFactory.cs" />
+    <Compile Include="Mapping\IMapperInstance.cs" />
+    <Compile Include="Mapping\IMapperManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionExtensions\Defenitions\ClassDefenition.cs" />
     <Compile Include="ReflectionExtensions\Defenitions\PropertyDefinition.cs" />

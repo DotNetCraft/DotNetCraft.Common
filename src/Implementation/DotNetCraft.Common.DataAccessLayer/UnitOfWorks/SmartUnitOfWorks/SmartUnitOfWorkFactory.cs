@@ -1,35 +1,32 @@
 ﻿using System;
-using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart;
-using DotNetCraft.Common.Core.Utils.Logging;
+using DotNetCraft.Common.Core.Utils.Mapping;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
 
 namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks
 {
     public class SmartUnitOfWorkFactory: UnitOfWorkFactory, ISmartUnitOfWorkFactory
     {
-        private readonly IEntityModelMapper entityModelMapper;
+        private readonly IMapperManager mapperManager;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="loggerFactory">The <see cref="ICommonLoggerFactory"/> instance.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="loggerFactory"/> is <see langword="null" />.</exception>
-        public SmartUnitOfWorkFactory(IDataContextFactory dataContextFactory, IEntityModelMapper entityModelMapper) : base(dataContextFactory)
+        public SmartUnitOfWorkFactory(IDataContextFactory dataContextFactory, IMapperManager mapperManager) : base(dataContextFactory)
         {
-            if (entityModelMapper == null)
-                throw new ArgumentNullException(nameof(entityModelMapper));
+            if (mapperManager == null)
+                throw new ArgumentNullException(nameof(mapperManager));
 
-            this.entityModelMapper = entityModelMapper;
+            this.mapperManager = mapperManager;
         }
 
         #region Implementation of IUnitOfWorkFactory
 
-        public ISmartUnitOfWork CreateSmartUnitOfWork(IContextSettings contextSettings)
+        public ISmartUnitOfWork CreateSmartUnitOfWork()
         {
-            IDataContext context = dataContextFactory.CreateDataContext(contextSettings);
-            ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(context, entityModelMapper);
+            IDataContextWrapper contextWrapper = dataContextFactory.CreateDataContext();
+            ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(contextWrapper, mapperManager);
             return unitOfWork;
         }
 

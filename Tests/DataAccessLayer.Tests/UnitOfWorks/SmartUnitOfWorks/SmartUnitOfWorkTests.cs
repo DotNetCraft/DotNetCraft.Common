@@ -1,9 +1,7 @@
 ﻿using System;
-using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Smart;
-using DotNetCraft.Common.DataAccessLayer.BaseEntities;
-using DotNetCraft.Common.DataAccessLayer.BaseEntities.Predefined;
+using DotNetCraft.Common.Core.Utils.Mapping;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SmartUnitOfWorks;
 using NSubstitute;
@@ -19,8 +17,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [Test]
         public void ConstructorTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
                 Assert.IsTrue(unitOfWork.IsTransactionOpened);
@@ -38,8 +36,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [ExpectedException(typeof(ArgumentNullException))]
         public void ConstructorNullParameterTest(bool correctContext, bool correctDotNetCraft)
         {
-            IDataContext dataContext = correctContext ? Substitute.For<IDataContext>() : null;
-            IEntityModelMapper entityModelMapper = correctDotNetCraft ? Substitute.For<IEntityModelMapper>() : null;
+            IDataContextWrapper dataContext = correctContext ? Substitute.For<IDataContextWrapper>() : null;
+            IMapperManager entityModelMapper = correctDotNetCraft ? Substitute.For<IMapperManager>() : null;
             new SmartUnitOfWork(dataContext, entityModelMapper);
 
             Assert.Fail("ArgumentNullException expected");
@@ -49,8 +47,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [ExpectedException(typeof(UnitOfWorkException))]
         public void ConstructorExceptionTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
 
             dataContext.When(x => x.BeginTransaction()).Do(
                 x =>
@@ -70,8 +68,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [Test]
         public void CommitTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
             
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
@@ -86,8 +84,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [Test]
         public void CommitExceptionTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
 
             dataContext.When(x => x.Commit()).Do(
                 x =>
@@ -122,8 +120,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [Test]
         public void RollbackTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
 
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
@@ -138,8 +136,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [Test]
         public void RollbackExceptionTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
 
             dataContext.When(x => x.RollBack()).Do(
                 x =>
@@ -175,9 +173,9 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [Test]
         public void InsertEntityCommitTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
+            FakeEntity entity = Substitute.For<FakeEntity>();
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
                 unitOfWork.Insert(entity);
@@ -195,9 +193,9 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [TestCase(false)]
         public void InsertEntityRollbackTest(bool useRollbackMethod)
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
+            FakeEntity entity = Substitute.For<FakeEntity>();
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
                 unitOfWork.Insert(entity);
@@ -214,9 +212,9 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [Test]
         public void InsertEntityExceptionTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
+            FakeEntity entity = Substitute.For<FakeEntity>();
 
             dataContext.When(x => x.Insert(entity)).Do(
                 x =>
@@ -260,9 +258,9 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [Test]
         public void UpdateEntityCommitTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
+            FakeEntity entity = Substitute.For<FakeEntity>();
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
                 unitOfWork.Update(entity);
@@ -280,9 +278,9 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [TestCase(false)]
         public void UpdateEntityRollbackTest(bool useRollbackMethod)
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
+            FakeEntity entity = Substitute.For<FakeEntity>();
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
                 unitOfWork.Update(entity);
@@ -299,9 +297,9 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [Test]
         public void UpdateEntityExceptionTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            BaseEntity<int> entity = Substitute.For<BaseEntity<int>>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
+            FakeEntity entity = Substitute.For<FakeEntity>();
 
             dataContext.When(x => x.Update(entity)).Do(
                 x =>
@@ -345,16 +343,16 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [Test]
         public void DeleteEntityCommitTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            object entityId = 5;
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
+            FakeEntity entity = Substitute.For<FakeEntity>();
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
-                unitOfWork.Delete<BaseEntity<int>>(entityId);
+                unitOfWork.Delete(entity);
                 unitOfWork.Commit();
             }
             dataContext.Received(1).BeginTransaction();
-            dataContext.Received(1).Delete<BaseEntity<int>>(entityId);
+            dataContext.Received(1).Delete(entity);
             dataContext.Received(1).Commit();
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().RollBack();
@@ -365,17 +363,17 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [TestCase(false)]
         public void DeleteEntityRollbackTest(bool useRollbackMethod)
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            object entityId = 5;
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
+            FakeEntity entity = Substitute.For<FakeEntity>();
             using (ISmartUnitOfWork unitOfWork = new SmartUnitOfWork(dataContext, entityModelMapper))
             {
-                unitOfWork.Delete<BaseEntity<int>>(entityId);
+                unitOfWork.Delete(entity);
                 if (useRollbackMethod)
                     unitOfWork.Rollback();
             }
             dataContext.Received(1).BeginTransaction();
-            dataContext.Received(1).Delete<BaseEntity<int>>(entityId);
+            dataContext.Received(1).Delete(entity);
             dataContext.Received(1).RollBack();
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().Commit();
@@ -384,10 +382,10 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
         [Test]
         public void DeleteEntityExceptionTest()
         {
-            IDataContext dataContext = Substitute.For<IDataContext>();
-            IEntityModelMapper entityModelMapper = Substitute.For<IEntityModelMapper>();
-            int entityId = 5;
-            dataContext.When(x => x.Delete<BaseIntEntity>(entityId)).Do(
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IMapperManager entityModelMapper = Substitute.For<IMapperManager>();
+            FakeEntity entity = Substitute.For<FakeEntity>();
+            dataContext.When(x => x.Delete(entity)).Do(
                 x =>
                 {
                     throw new Exception();
@@ -397,7 +395,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
             {
                 try
                 {
-                    unitOfWork.Delete<BaseIntEntity>(entityId);
+                    unitOfWork.Delete(entity);
                     unitOfWork.Commit();
                 }
                 catch (UnitOfWorkException)
@@ -409,7 +407,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SmartUnitOfWorks
                 }
             }
             dataContext.Received(1).BeginTransaction();
-            dataContext.Received(1).Delete<BaseIntEntity>(entityId);
+            dataContext.Received(1).Delete(entity);
             dataContext.Received(1).RollBack();
             dataContext.Received(1).Dispose();
             dataContext.DidNotReceive().Commit();

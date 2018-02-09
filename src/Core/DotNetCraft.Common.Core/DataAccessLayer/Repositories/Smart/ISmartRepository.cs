@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
+using DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple;
 using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Smart
 {
-    public interface ISmartRepository<TEntity>
+    public interface ISmartRepository<TEntity> : IRepository<TEntity>
     {
         /// <summary>
         /// Get model by identifier.
         /// </summary>
         /// <param name="modelId">The model's identifier.</param>
         /// <returns>The model, if it exists.</returns>
-        TModel Get<TModel>(object modelId);
+        TModel Get<TModel, TIdentifier>(TIdentifier modelId);
 
         /// <summary>
         /// Get all models.

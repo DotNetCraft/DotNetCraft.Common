@@ -41,14 +41,14 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
             IContextSettings contextSettings = Substitute.For<IContextSettings>();
-            IDataContext dataContext = Substitute.For<IDataContext>();
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
             IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(dataContextFactory);
 
-            dataContextFactory.CreateDataContext(contextSettings).Returns(dataContext);
+            dataContextFactory.CreateDataContext().Returns(dataContext);
 
-            IUnitOfWork unitOfWork = unitOfWorkFactory.CreateUnitOfWork(contextSettings);
+            IUnitOfWork unitOfWork = unitOfWorkFactory.CreateUnitOfWork();
             Assert.IsNotNull(unitOfWork);
-            dataContextFactory.Received(1).CreateDataContext(contextSettings);
+            dataContextFactory.Received(1).CreateDataContext();
         }
 
         [Test]
@@ -58,14 +58,14 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
             IContextSettings contextSettings = Substitute.For<IContextSettings>();
             IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(dataContextFactory);
 
-            dataContextFactory.When(x=>x.CreateDataContext(contextSettings)).Do(x =>
+            dataContextFactory.When(x=>x.CreateDataContext()).Do(x =>
             {
                 throw new Exception();
             });
 
             try
             {
-                unitOfWorkFactory.CreateUnitOfWork(contextSettings);
+                unitOfWorkFactory.CreateUnitOfWork();
                 Assert.Fail("UnitOfWorkException expected");
             }
             catch (UnitOfWorkException)
@@ -76,7 +76,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
                 Assert.Fail("UnitOfWorkException expected");
             }
 
-            dataContextFactory.Received(1).CreateDataContext(contextSettings);
+            dataContextFactory.Received(1).CreateDataContext();
         }
 
         [Test]
@@ -86,12 +86,12 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
             IContextSettings contextSettings = Substitute.For<IContextSettings>();
             IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(dataContextFactory);
 
-            IDataContext dataContext = null;
-            dataContextFactory.CreateDataContext(contextSettings).Returns(dataContext);
+            IDataContextWrapper dataContext = null;
+            dataContextFactory.CreateDataContext().Returns(dataContext);
 
             try
             {
-                unitOfWorkFactory.CreateUnitOfWork(contextSettings);
+                unitOfWorkFactory.CreateUnitOfWork();
                 Assert.Fail("UnitOfWorkException expected");
             }
             catch (UnitOfWorkException)
@@ -102,7 +102,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
                 Assert.Fail("UnitOfWorkException expected");
             }
 
-            dataContextFactory.Received(1).CreateDataContext(contextSettings);
+            dataContextFactory.Received(1).CreateDataContext();
         }
 
         #endregion

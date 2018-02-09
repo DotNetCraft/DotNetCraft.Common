@@ -7,10 +7,11 @@ using DotNetCraft.Common.DataAccessLayer.Exceptions;
 
 namespace DotNetCraft.Common.DataAccessLayer.DataContexts
 {
-    public abstract class DataContextFactory<TDataContext, TContextSettings> : IDataContextFactory
-        where TDataContext: IDataContext
+    public abstract class BaseDataContextFactory<TDataContext, TContextSettings> : IDataContextFactory
+        where TDataContext: IDataContextWrapper
         where TContextSettings : IContextSettings
     {
+        private readonly IContextSettings contextSettings;
 
         private readonly Dictionary<int, IDataContextPoolItem> dataContextPool;
 
@@ -19,17 +20,20 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected DataContextFactory()
+        protected BaseDataContextFactory(IContextSettings contextSettings)
         {
+            if (contextSettings == null)
+                throw new ArgumentNullException(nameof(contextSettings));
+            this.contextSettings = contextSettings;
+
             dataContextPool = new Dictionary<int, IDataContextPoolItem>();
         }
 
         /// <summary>
-        /// Create a new data context.
+        /// Create a new data contextWrapper.
         /// </summary>
-        /// <param name="contextSettings"></param>
-        /// <returns>The IDataContext instance.</returns>
-        public IDataContext CreateDataContext(IContextSettings contextSettings)
+        /// <returns>The IDataContextWrapper instance.</returns>
+        public IDataContextWrapper CreateDataContext()
         {
             try
             {
@@ -42,7 +46,7 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
                     if (dataContextPool.TryGetValue(threadId, out dataContextPoolItem))
                     {
                         dataContextPoolItem.IncreaseRef();
-                        dataContext = (TDataContext) dataContextPoolItem.DataContext;
+                        dataContext = (TDataContext) dataContextPoolItem.DataContextWrapper;
                     }
                     else
                     {
@@ -60,22 +64,22 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
                 Dictionary<string, string> errorParameters = new Dictionary<string, string>
                 {
                     {"DataBaseSettings", contextSettings.ToString()},
-                    {"Type of DataContext", typeof(TDataContext).ToString()},
+                    {"Type of DataContextWrapper", typeof(TDataContext).ToString()},
                     {"Type of Settings", typeof(TContextSettings).ToString()}
                 };
-                throw new DataAccessLayerException("There was a problem during creating a data context", ex, errorParameters);
+                throw new DataAccessLayerException("There was a problem during creating a data contextWrapper", ex, errorParameters);
             }
         }
 
         /// <summary>
-        /// Release an existing data context.
+        /// Release an existing data contextWrapper.
         /// </summary>
-        /// <param name="dataContext">The IDataContext instance</param>
+        /// <param name="dataContextWrapper">The IDataContextWrapper instance</param>
         /// <returns>
-        /// True if data context has been released. 
-        /// False when data context hasn't been released but it has been returned into the factory.
+        /// True if data contextWrapper has been released. 
+        /// False when data contextWrapper hasn't been released but it has been returned into the factory.
         /// </returns>
-        public bool ReleaseDataContext(IDataContext dataContext)
+        public bool ReleaseDataContext(IDataContextWrapper dataContextWrapper)
         {
             try
             {
@@ -101,11 +105,11 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
             {
                 Dictionary<string, string> errorParameters = new Dictionary<string, string>
                 {
-                    {"dataContext", dataContext.ToString()},
-                    {"Type of DataContext", typeof(TDataContext).ToString()},
+                    {"dataContextWrapper", dataContextWrapper.ToString()},
+                    {"Type of DataContextWrapper", typeof(TDataContext).ToString()},
                     {"Type of Settings", typeof(TContextSettings).ToString()}
                 };
-                throw new DataAccessLayerException("There was a problem during releasering the data context", ex, errorParameters);
+                throw new DataAccessLayerException("There was a problem during releasering the data contextWrapper", ex, errorParameters);
             }
         }
 

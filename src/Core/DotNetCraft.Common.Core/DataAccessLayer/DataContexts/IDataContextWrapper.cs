@@ -6,25 +6,22 @@ using DotNetCraft.Common.Core.Utils.Disposal;
 namespace DotNetCraft.Common.Core.DataAccessLayer.DataContexts
 {
     /// <summary>
-    /// Interface shows that object is a data context.
+    /// Interface shows that object is a data contextWrapper.
     /// </summary>
-    public interface IDataContext : IDisposableObject
+    public interface IDataContextWrapper: IDisposableObject
     {
         /// <summary>
         /// Get a set with entities.
         /// </summary>
         /// <typeparam name="TEntity">Type of entity</typeparam>
         /// <returns>The IQueryable instance.</returns>
-        IQueryable<TEntity> GetCollectionSet<TEntity>()
+        IQueryable<TEntity> Set<TEntity>()
             where TEntity : class;
 
         void Insert<TEntity>(TEntity entity, bool assignIdentifier = true)
             where TEntity : class;
 
         void Update<TEntity>(TEntity entity)
-            where TEntity : class;
-
-        void Delete<TEntity>(object entityId)
             where TEntity : class;
 
         void Delete<TEntity>(TEntity entity)

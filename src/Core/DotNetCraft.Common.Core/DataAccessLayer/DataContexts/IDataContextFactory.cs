@@ -1,25 +1,24 @@
 ﻿namespace DotNetCraft.Common.Core.DataAccessLayer.DataContexts
 {
     /// <summary>
-    /// Interface shows that object is a data context factory.
+    /// Interface shows that object is a data contextWrapper factory.
     /// </summary>
     public interface IDataContextFactory
     {
         /// <summary>
-        /// Create a new data context.
+        /// Create a new data contextWrapper.
         /// </summary>
-        /// <param name="contextSettings"></param>
-        /// <returns>The IDataContext instance.</returns>
-        IDataContext CreateDataContext(IContextSettings contextSettings);
+        /// <returns>The IDataContextWrapper instance.</returns>
+        IDataContextWrapper CreateDataContext();
 
         /// <summary>
-        /// Release an existing data context.
+        /// Release an existing data contextWrapper.
         /// </summary>
-        /// <param name="dataContext">The IDataContext instance</param>
+        /// <param name="dataContextWrapper">The IDataContextWrapper instance</param>
         /// <returns>
-        /// True if data context has been released. 
-        /// False when data context hasn't been released but it has been returned into the factory.
+        /// True if data contextWrapper has been released. 
+        /// False when data contextWrapper hasn't been released but it has been returned into the factory.
         /// </returns>
-        bool ReleaseDataContext(IDataContext dataContext);
+        bool ReleaseDataContext(IDataContextWrapper dataContextWrapper);
     }
 }

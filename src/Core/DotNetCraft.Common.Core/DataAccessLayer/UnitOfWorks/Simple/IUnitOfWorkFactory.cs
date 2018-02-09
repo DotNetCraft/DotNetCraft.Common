@@ -2,6 +2,6 @@
 {
     public interface IUnitOfWorkFactory
     {
-        IUnitOfWork CreateUnitOfWork(IContextSettings contextSettings);        
+        IUnitOfWork CreateUnitOfWork();        
     }
 }
