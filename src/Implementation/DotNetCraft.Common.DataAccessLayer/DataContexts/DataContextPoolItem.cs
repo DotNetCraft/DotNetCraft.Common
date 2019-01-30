@@ -64,5 +64,16 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
             return ReferenceCount;
         }
         #endregion
+
+        #region Overrides of Object
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            return string.Format("{0} has {1} active reference(s)", DataContextWrapper, ReferenceCount);
+        }
+
+        #endregion
     }
 }

@@ -4,15 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
+using DotNetCraft.Common.Core.DataAccessLayer.Repositories;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple;
-using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
+using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.Core.Utils.Logging;
-using DotNetCraft.Common.Core.Utils.ReflectionExtensions;
-using DotNetCraft.Common.Core.Utils.ReflectionExtensions.Defenitions;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.Extentions;
-using DotNetCraft.Common.Utils.Logging;
-using DotNetCraft.Common.Utils.ReflectionExtensions;
+using DotNetCraft.Common.DataAccessLayer.Repositories.Configs;
 
 namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
 {
@@ -23,17 +21,16 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// <summary>
         /// The logger.
         /// </summary>
-        protected readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
+        protected readonly ICommonLogger logger;
 
-        /// <summary>
-        /// The IPropertyManager instance.
-        /// </summary>
-        protected readonly IReflectionManager reflectionManager = ReflectionManager.Manager;
+        private readonly RepositoryConfig repositoryConfig;
 
         /// <summary>
         /// The data contextWrapper factory.
         /// </summary>
         protected readonly IDataContextFactory dataContextFactory;
+
+        private readonly PropertyInfo propertyId;
 
         #endregion
 
@@ -42,41 +39,79 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// </summary>
         /// <param name="dataContextFactory">The data contextWrapper factory.</param>
         /// <exception cref="ArgumentNullException"><paramref name="dataContextFactory"/> is <see langword="null"/></exception>
-        protected BaseRepository(IDataContextFactory dataContextFactory)
+        protected BaseRepository(RepositoryConfig repositoryConfig, IDataContextFactory dataContextFactory, ICommonLoggerFactory loggerFactory)
         {
+            if (repositoryConfig == null)
+                throw new ArgumentNullException(nameof(repositoryConfig));
             if (dataContextFactory == null)
                 throw new ArgumentNullException(nameof(dataContextFactory));
+            if (loggerFactory == null)
+                throw new ArgumentNullException(nameof(loggerFactory));
 
+            this.repositoryConfig = repositoryConfig;
             this.dataContextFactory = dataContextFactory;
+            logger = loggerFactory.Create<BaseRepository<TEntity>>();
+
+            propertyId = GetIdentifiertPropertyInfo();
         }
 
         #region Virtual methods...
 
-        private PropertyInfo GeIdentifiertPropertyInfo()
+        private PropertyInfo GetIdentifiertPropertyInfo()
         {
-            PropertyDefinition propertyId = reflectionManager.SingleOrDefault<TEntity>(typeof(KeyAttribute));
-            if (propertyId == null)
-                throw new DataAccessLayerException("There is no identifier for " + typeof(TEntity));
-
-            PropertyInfo result = propertyId.PropertyInfo;
-            return result;
-        }
-
-        private List<TEntity> LoadCollection(int? skip, int? take, IQueryable<TEntity> collection)
-        {
-            if (skip.HasValue || take.HasValue)
+            logger.Trace("Searching for identifier's property (Config: {0})...", repositoryConfig);
+            PropertyInfo[] propertyInfos = typeof(TEntity).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo id = null;
+            foreach (PropertyInfo propertyInfo in propertyInfos)
             {
-                PropertyInfo propertyId = GeIdentifiertPropertyInfo();
-                collection = collection.OrderByProperty(propertyId.Name);
+                if (repositoryConfig.UseKeyAttribute)
+                {
+                    var attr = Attribute.GetCustomAttribute(propertyInfo, typeof(KeyAttribute));
+                    if (attr != null)
+                    {
+                        logger.Trace("The property has been found by KeyAttribute.");
+                        return propertyInfo;
+                    }
+                }
+
+                if (propertyInfo.Name.ToLower() == repositoryConfig.IdentifierPropertyName)
+                {
+                    logger.Trace("The property has been found by IdentifierPropertyName.");
+                    return propertyInfo;
+                }
             }
 
-            if (skip.HasValue)
-                collection = collection.Skip(skip.Value);
+            logger.Error("Entity doesn't have any identifiers.");
+            throw new DataAccessLayerException("There is no identifier for " + typeof(TEntity));
+        }
 
-            if (take.HasValue)
-                collection = collection.Take(take.Value);
+        private List<TEntity> LoadCollection(IQueryable<TEntity> collection, RepositorySimpleRequest<TEntity> request = null)
+        {
+            if (request != null)
+            {
+                logger.Trace("Preparing query ({0})...", request);
+                int? skip = request.Skip;
+                int? take = request.Take;
+                if (skip.HasValue || take.HasValue)
+                {
+                    string orderBy;
+                    if (string.IsNullOrWhiteSpace(request.OrderBy))
+                        orderBy = propertyId.Name;
+                    else
+                        orderBy = request.OrderBy;
+                    collection = collection.OrderByProperty(orderBy);
+                }               
+
+                if (skip.HasValue)
+                    collection = collection.Skip(skip.Value);
+
+                if (take.HasValue)
+                    collection = collection.Take(take.Value);
+                logger.Trace("The query has been created.");
+            }
 
             List<TEntity> result = collection.ToList();
+            logger.Trace("Collection has been loaded");
             return result;
         }
 
@@ -89,8 +124,6 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// <exception cref="EntityNotFoundException">Entity has not been found by the entity identifier.</exception>
         protected virtual TEntity OnGet<TIdentifier>(TIdentifier entityId, IDataContextWrapper dataContextWrapper)
         {
-            PropertyInfo propertyId = GeIdentifiertPropertyInfo();
-
             IQueryable<TEntity> collection = dataContextWrapper.Set<TEntity>();
             collection = collection.Simplified(propertyId, entityId);
             TEntity result = collection.SingleOrDefault();
@@ -106,10 +139,10 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// </summary>
         /// <param name="dataContextWrapper">The IDataContextWrapper instance</param>
         /// <returns>Collection of models.</returns>
-        protected virtual List<TEntity> OnGetAll(IDataContextWrapper dataContextWrapper, int? skip, int? take)
+        protected virtual List<TEntity> OnGetAll(IDataContextWrapper dataContextWrapper, RepositorySimpleRequest<TEntity> request)
         {
             IQueryable<TEntity> collection = dataContextWrapper.Set<TEntity>();
-            List<TEntity> result = LoadCollection(skip, take, collection);
+            List<TEntity> result = LoadCollection(collection, request);
             return result;
         }
 
@@ -119,29 +152,30 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// <param name="specification">Some specification.</param>
         /// <param name="dataContextWrapper">The IDataContextWrapper instance</param>
         /// <returns>Collection of models.</returns>
-        protected virtual List<TEntity> OnGetBySpecification(ISpecification<TEntity> specification, IDataContextWrapper dataContextWrapper, int? skip ,int? take)
+        protected virtual List<TEntity> OnGetBySpecification(IDataContextWrapper dataContextWrapper, RepositorySpecificationRequest<TEntity> request)
         {
             IQueryable<TEntity> collection = dataContextWrapper.Set<TEntity>();
+            var specification = request.Specification;
             collection = collection.Where(specification.IsSatisfiedBy());
-
-            List<TEntity> result = LoadCollection(skip, take, collection);
+            List<TEntity> result = LoadCollection(collection, request);
             return result;
-        }        
+        }
 
         #endregion
 
         #region Implementation of IRepository<TEntity>
 
+        #region Get methods...
         /// <summary>
         /// Get entity by identifier.
         /// </summary>
         /// <param name="entityId">The entity's identifier.</param>
         /// <returns>The entity, if it exists.</returns>
-        public TEntity Get<TIdentifier>(TIdentifier entityId)
+        public TEntity Get<TIdentifier>(TIdentifier entityId, IUniqueKey uniqueKey = null)
         {
             try
             {
-                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext(uniqueKey))
                 {
                     return OnGet(entityId, dataContextWrapper);
                 }
@@ -166,13 +200,13 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// Get all entities.
         /// </summary>
         /// <returns>Collection of entities.</returns>
-        public List<TEntity> GetAll(int? skip = null, int? take = null)
+        public List<TEntity> GetAll(RepositorySimpleRequest<TEntity> request, IUniqueKey uniqueKey = null)
         {
             try
             {
-                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext(uniqueKey))
                 {
-                    return OnGetAll(dataContextWrapper, skip, take);
+                    return OnGetAll(dataContextWrapper, request);
                 }
             }
             catch (Exception ex)
@@ -190,13 +224,13 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// </summary>
         /// <param name="specification">Some specification.</param>
         /// <returns>Collection of entities.</returns>
-        public List<TEntity> GetBySpecification(ISpecification<TEntity> specification, int? skip = null, int? take = null)
+        public List<TEntity> GetBySpecification(RepositorySpecificationRequest<TEntity> request, IUniqueKey uniqueKey = null)
         {
             try
             {
                 using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
                 {
-                    return OnGetBySpecification(specification, dataContextWrapper, skip, take);
+                    return OnGetBySpecification(dataContextWrapper, request);
                 }
             }
             catch (Exception ex)
@@ -204,12 +238,180 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
                 Dictionary<string, string> errorParameters = new Dictionary<string, string>
                 {
                     {"EntityType", typeof(TEntity).ToString()},
-                    {"Specification", specification.ToString()},
+                    {"Request", request.ToString()},
                 };
                 throw new DataAccessLayerException("There was a problem during retrieving entities from the database by specification", ex, errorParameters);
             }
         }
+        #endregion
 
-        #endregion        
+        #region Insert/Update/Delete methods...
+
+        #region Virtual methods: OnInsert, OnUpdate and OnDelete
+
+        protected virtual void OnInsert(IDataContextWrapper dataContextWrapper, TEntity entity)
+        {
+            logger.Trace("Inserting {0} into the data contextWrapper...", entity);
+            dataContextWrapper.Insert(entity);
+            logger.Trace("The entity has been inserted.");
+        }
+
+        protected virtual void OnUpdate(IDataContextWrapper dataContextWrapper, TEntity entity)
+        {
+            logger.Trace("Updating {0} in the data contextWrapper...", entity);
+            dataContextWrapper.Update(entity);
+            logger.Trace("The entity has been updated.");
+        }
+
+        protected virtual void OnDelete(IDataContextWrapper dataContextWrapper, TEntity entity)
+        {
+            logger.Trace("Deliting {0} from the data contextWrapper...", entity);
+            dataContextWrapper.Delete(entity);
+            logger.Trace("The entity has been deleted.");
+        }
+
+        private ICollection<TEntity> OnExecuteQuery(IDataContextWrapper dataContextWrapper, string query, IDataBaseParameter[] args)
+        {
+            logger.Trace("Executing query {0}...", query);
+            ICollection<TEntity> result = dataContextWrapper.ExecuteQuery<TEntity>(query, args);
+            logger.Trace("The query has been executed.");
+            return result;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Insert an entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <return>The entity that has been inserted.</return>
+        /// <exception cref="UnitOfWorkException">There was a problem during inserting a new entity into the database..</exception>
+        public void Insert(TEntity entity, IUniqueKey uniqueKey = null)
+        {
+            try
+            {
+                logger.Debug("Inserting {0} into the data contextWrapper...", entity);
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext(uniqueKey))
+                {
+                    OnInsert(dataContextWrapper, entity);
+                }
+                logger.Debug("The entity has been inserted.");
+            }
+            catch (Exception ex)
+            {
+                Dictionary<string, string> errorParameters = new Dictionary<string, string>
+                {
+                    {"EntityType", typeof(TEntity).ToString()},
+                    {"Entity", entity.ToString()}
+                };
+                UnitOfWorkException unitOfWorkException = new UnitOfWorkException("There was a problem during inserting a new entity into the database.", ex, errorParameters);
+                logger.Error(unitOfWorkException, unitOfWorkException.ToString());
+                throw unitOfWorkException;
+            }
+        }
+
+        /// <summary>
+        /// Update an entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>        
+        public void Update(TEntity entity, IUniqueKey uniqueKey = null)
+        {
+            try
+            {
+                logger.Debug("Updating {0} in the data contextWrapper...", entity);
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext(uniqueKey))
+                {
+                    OnUpdate(dataContextWrapper, entity);
+                }
+                logger.Debug("The entity has been updated.");
+            }
+            catch (Exception ex)
+            {
+                Dictionary<string, string> errorParameters = new Dictionary<string, string>
+                {
+                    {"EntityType", typeof(TEntity).ToString()},
+                    {"Entity", entity.ToString()}
+                };
+                UnitOfWorkException unitOfWorkException = new UnitOfWorkException("There was a problem during updating an existing entity in the database.", ex, errorParameters);
+                logger.Error(unitOfWorkException, unitOfWorkException.ToString());
+                throw unitOfWorkException;
+            }
+        }
+
+        /// <summary>
+        /// Delete an entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        public void Delete(TEntity entity, IUniqueKey uniqueKey = null)
+        {
+            try
+            {
+                logger.Debug("Deleting {0} from the data contextWrapper...", entity);
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext(uniqueKey))
+                {
+                    OnDelete(dataContextWrapper, entity);
+                }
+                logger.Debug("The entity has been deleted.");
+            }
+            catch (Exception ex)
+            {
+                Dictionary<string, string> errorParameters = new Dictionary<string, string>
+                {
+                    {"EntityType", typeof(TEntity).ToString()},
+                    {"Entity", entity.ToString()}
+                };
+                UnitOfWorkException unitOfWorkException = new UnitOfWorkException("There was a problem during deleting an existing entity from the database.", ex, errorParameters);
+                logger.Error(unitOfWorkException, unitOfWorkException.ToString());
+                throw unitOfWorkException;
+            }
+        }
+
+        /// <summary>
+        /// Execute query.
+        /// </summary>
+        /// <typeparam name="TEntity">Type of entity</typeparam>
+        /// <param name="query">The query</param>
+        /// <param name="args">Qeury's arguments (parameters)</param>
+        /// <returns>List of entities.</returns>
+        public ICollection<TEntity> ExecuteQuery(string query, params IDataBaseParameter[] args)
+        {
+            return ExecuteQuery(null, query, args);
+        }
+
+        /// <summary>
+        /// Execute query.
+        /// </summary>
+        /// <typeparam name="TEntity">Type of entity</typeparam>
+        /// <param name="query">The query</param>
+        /// <param name="args">Qeury's arguments (parameters)</param>
+        /// <returns>List of entities.</returns>
+        public ICollection<TEntity> ExecuteQuery(IUniqueKey uniqueKey, string query, params IDataBaseParameter[] args)
+        {
+            try
+            {
+                logger.Debug("Executing query {0}...", query);
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
+                {
+                    ICollection<TEntity> result = OnExecuteQuery(dataContextWrapper, query, args);
+                    logger.Debug("The query has been executed.");
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                Dictionary<string, string> errorParameters = new Dictionary<string, string>
+                {
+                    {"EntityType", typeof(TEntity).ToString()},
+                    {"Query", query}
+                };
+                UnitOfWorkException unitOfWorkException = new UnitOfWorkException("There was a problem during executing query in the database.", ex, errorParameters);
+                logger.Error(unitOfWorkException, unitOfWorkException.ToString());
+                throw unitOfWorkException;
+            }
+        }
+
+        #endregion
+
+        #endregion
     }
 }

@@ -3,35 +3,37 @@ using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
-using DotNetCraft.Common.Utils.Logging;
 
 namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 {
     public class UnitOfWorkFactory: IUnitOfWorkFactory
     {
-        private readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
+        private readonly ICommonLogger logger;
 
         protected readonly IDataContextFactory dataContextFactory;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UnitOfWorkFactory(IDataContextFactory dataContextFactory)
+        public UnitOfWorkFactory(IDataContextFactory dataContextFactory, ICommonLoggerFactory loggerFactory)
         {
             if (dataContextFactory == null)
                 throw new ArgumentNullException(nameof(dataContextFactory));
+            if (loggerFactory == null)
+                throw new ArgumentNullException(nameof(loggerFactory));
 
             this.dataContextFactory = dataContextFactory;
+            logger = loggerFactory.Create<UnitOfWorkFactory>();
         }
 
         #region Implementation of IUnitOfWorkFactory
 
-        public IUnitOfWork CreateUnitOfWork()
+        public IUnitOfWork CreateUnitOfWork(IUniqueKey uniqueKey = null)
         {
             try
             {
                 IDataContextWrapper contextWrapper = dataContextFactory.CreateDataContext();
-                IUnitOfWork unitOfWork = new UnitOfWork(contextWrapper);
+                IUnitOfWork unitOfWork = new UnitOfWork(contextWrapper, logger);
                 return unitOfWork;
             }
             catch (Exception ex)

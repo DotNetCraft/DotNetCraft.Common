@@ -11,6 +11,11 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.DataContexts
     public interface IDataContextWrapper: IDisposableObject
     {
         /// <summary>
+        /// Unikue key that was assign to this DataContext.
+        /// </summary>
+        IUniqueKey UniqueKey { get; }
+
+        /// <summary>
         /// Get a set with entities.
         /// </summary>
         /// <typeparam name="TEntity">Type of entity</typeparam>
@@ -18,7 +23,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.DataContexts
         IQueryable<TEntity> Set<TEntity>()
             where TEntity : class;
 
-        void Insert<TEntity>(TEntity entity, bool assignIdentifier = true)
+        void Insert<TEntity>(TEntity entity)
             where TEntity : class;
 
         void Update<TEntity>(TEntity entity)

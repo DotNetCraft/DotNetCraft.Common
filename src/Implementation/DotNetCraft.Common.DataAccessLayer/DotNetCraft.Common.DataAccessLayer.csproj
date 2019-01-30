@@ -37,14 +37,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContexts\BaseDataContextWrapper.cs" />
+    <Compile Include="DataContexts\UniqueKeys\ThreadUniqueKey.cs" />
     <Compile Include="Exceptions\EntityNotFoundException.cs" />
     <Compile Include="Exceptions\UnitOfWorkException.cs" />
     <Compile Include="Extentions\DotNetCraftQueryableExtentions.cs" />
+    <Compile Include="Repositories\Configs\RepositoryConfig.cs" />
     <Compile Include="Repositories\Simple\BaseRepository.cs" />
     <Compile Include="Repositories\Smart\BaseSmartRepository.cs" />
     <Compile Include="UnitOfWorks\DataBaseParameter.cs" />
-    <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWork.cs" />
-    <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWorks\SimpleUnitOfWorks\UnitOfWork.cs" />
     <Compile Include="DataContexts\DataContextPoolItem.cs" />
     <Compile Include="Exceptions\DataAccessLayerException.cs" />

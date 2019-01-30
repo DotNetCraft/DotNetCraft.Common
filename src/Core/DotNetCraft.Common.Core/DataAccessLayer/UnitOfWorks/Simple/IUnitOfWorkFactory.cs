@@ -1,7 +1,9 @@
-﻿namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple
+﻿using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
+
+namespace DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple
 {
     public interface IUnitOfWorkFactory
     {
-        IUnitOfWork CreateUnitOfWork();        
+        IUnitOfWork CreateUnitOfWork(IUniqueKey uniqueKey = null);        
     }
 }

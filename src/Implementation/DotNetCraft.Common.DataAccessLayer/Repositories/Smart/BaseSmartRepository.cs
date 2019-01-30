@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
+using DotNetCraft.Common.Core.DataAccessLayer.Repositories;
 using DotNetCraft.Common.Core.DataAccessLayer.Repositories.Smart;
-using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
+using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.Core.Utils.Mapping;
-using DotNetCraft.Common.Core.Utils.ReflectionExtensions;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
+using DotNetCraft.Common.DataAccessLayer.Repositories.Configs;
 using DotNetCraft.Common.DataAccessLayer.Repositories.Simple;
-using DotNetCraft.Common.Utils.ReflectionExtensions;
 
 namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
 {
     public abstract class BaseSmartRepository<TEntity> : BaseRepository<TEntity>, ISmartRepository<TEntity> 
         where TEntity : class
     {
-        private readonly IReflectionManager reflectionManager = ReflectionManager.Manager;
         private readonly IMapperManager mapperManager;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        protected BaseSmartRepository(IDataContextFactory dataContextFactory, IMapperManager mapperManager) : base(dataContextFactory)
+        protected BaseSmartRepository(RepositoryConfig repositoryConfig, IDataContextFactory dataContextFactory, IMapperManager mapperManager, ICommonLoggerFactory loggerFactory) : base(repositoryConfig, dataContextFactory, loggerFactory)
         {
             if (mapperManager == null)
                 throw new ArgumentNullException(nameof(mapperManager));
@@ -36,17 +34,12 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
         /// </summary>
         /// <param name="modelId">The model's identifier.</param>
         /// <returns>The model, if it exists.</returns>
-        public TModel Get<TModel, TIdentifier>(TIdentifier modelId)
+        public TModel Get<TModel, TIdentifier>(TIdentifier modelId, IUniqueKey uniqueKey = null)
         {
             try
             {
-                Type entityType = typeof(TEntity);
-                var propertyId = reflectionManager.Single(entityType, typeof(KeyAttribute));
-
-                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext(uniqueKey))
                 {
-                    //TypeConverter converter = TypeDescriptor.GetConverter(propertyId.PropertyType);
-                    //TIdentifier entityId = converter.ConvertFrom(modelId);
                     TIdentifier entityId = modelId;
                     TEntity entity = OnGet(entityId, dataContextWrapper);
                     TModel model = mapperManager.Map<TEntity, TModel>(entity);
@@ -69,13 +62,13 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
         /// Get all models.
         /// </summary>
         /// <returns>Collection of models.</returns>
-        public List<TModel> GetAll<TModel>(int? skip = null, int? take = null)
+        public List<TModel> GetAll<TModel>(RepositorySimpleRequest<TEntity> request, IUniqueKey uniqueKey = null)
         {
             try
             {
-                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext(uniqueKey))
                 {
-                    List<TEntity> entities = OnGetAll(dataContextWrapper, skip, take);
+                    List<TEntity> entities = OnGetAll(dataContextWrapper, request);
 
                     if (entities.Count == 0)
                         return new List<TModel>();
@@ -100,13 +93,13 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
         /// </summary>
         /// <param name="specification">Some specification.</param>
         /// <returns>Collection of models.</returns>
-        public List<TModel> GetBySpecification<TModel>(ISpecification<TEntity> specification, int? skip = null, int? take = null)
+        public List<TModel> GetBySpecification<TModel>(RepositorySpecificationRequest<TEntity> request, IUniqueKey uniqueKey = null)
         {
             try
             {
-                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext())
+                using (IDataContextWrapper dataContextWrapper = dataContextFactory.CreateDataContext(uniqueKey))
                 {
-                    List<TEntity> entities = OnGetBySpecification(specification, dataContextWrapper, skip, take);
+                    List<TEntity> entities = OnGetBySpecification(dataContextWrapper, request);
 
                     if (entities.Count == 0 )
                         return new List<TModel>();
@@ -121,7 +114,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Smart
                 {
                     {"EntityType", typeof(TEntity).ToString()},
                     {"ModelType", typeof(TModel).ToString()},
-                    {"Specification", specification.ToString()},
+                    {"Request", request.ToString()},
                 };
                 throw new DataAccessLayerException("There was a problem during retrieving models from the database", ex, errorParameters);
             }

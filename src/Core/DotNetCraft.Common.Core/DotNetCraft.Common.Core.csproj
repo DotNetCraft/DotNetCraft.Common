@@ -35,15 +35,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccessLayer\IContextSettings.cs" />
+    <Compile Include="DataAccessLayer\DataContexts\IUniqueKey.cs" />
     <Compile Include="DataAccessLayer\DataContexts\IDataContextWrapper.cs" />
     <Compile Include="DataAccessLayer\DataContexts\IDataContextFactory.cs" />
-    <Compile Include="DataAccessLayer\IEntityModelMapper.cs" />
+    <Compile Include="DataAccessLayer\Repositories\RepositoryRequest.cs" />
     <Compile Include="DataAccessLayer\Repositories\Simple\IRepository.cs" />
     <Compile Include="DataAccessLayer\Repositories\Smart\ISmartRepository.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\IDataBaseParameter.cs" />
-    <Compile Include="DataAccessLayer\UnitOfWorks\Smart\ISmartUnitOfWork.cs" />
-    <Compile Include="DataAccessLayer\UnitOfWorks\Smart\ISmartUnitOfWorkFactory.cs" />
     <Compile Include="DataAccessLayer\Specifications\ISpecification.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\Simple\IUnitOfWork.cs" />
     <Compile Include="DataAccessLayer\UnitOfWorks\Simple\IUnitOfWorkFactory.cs" />

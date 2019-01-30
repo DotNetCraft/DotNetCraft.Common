@@ -36,3 +36,4 @@ Tests/Domain.Tests/bin/
 lib/
 src/ReadyToUse/DotNetCraft.Common.ReadyDataAccessLayer/bin/
 Build/
+src/ConfigurationParser/DotNetCraft.ConfigurationParser.Example/bin/

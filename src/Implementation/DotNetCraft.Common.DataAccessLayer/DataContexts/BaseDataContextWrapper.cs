@@ -12,12 +12,21 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
     {
         private readonly IDataContextFactory owner;
 
-        protected BaseDataContextWrapper(IDataContextFactory owner)
+        /// <summary>
+        /// Unikue key that was assign to this DataContext.
+        /// </summary>
+        public IUniqueKey UniqueKey { get; }
+
+
+        protected BaseDataContextWrapper(IDataContextFactory owner, IUniqueKey uniqueKey)
         {
             if (owner == null)
                 throw new ArgumentNullException(nameof(owner));
+            if (uniqueKey == null)
+                throw new ArgumentNullException(nameof(uniqueKey));
 
             this.owner = owner;
+            UniqueKey = uniqueKey;
         }
 
 
@@ -56,7 +65,7 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
         protected abstract IQueryable<TEntity> OnSet<TEntity>()
             where TEntity : class;
 
-        protected abstract void OnInsert<TEntity>(TEntity entity, bool assignIdentifier = true)
+        protected abstract void OnInsert<TEntity>(TEntity entity)
             where TEntity : class;
 
         protected abstract void OnUpdate<TEntity>(TEntity entity)
@@ -67,7 +76,7 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
 
         protected abstract ICollection<TEntity> OnExecuteQuery<TEntity>(string query, IDataBaseParameter[] args)
             where TEntity : class;
-
+        
         /// <summary>
         /// Get a set with entities.
         /// </summary>
@@ -90,13 +99,13 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
                 throw new DataAccessLayerException("There was a problem during retrieving a collection set", ex, errorParameters);
             }
         }
-       
-        public void Insert<TEntity>(TEntity entity, bool assignIdentifier = true)
+
+        public void Insert<TEntity>(TEntity entity)
             where TEntity : class
         {
             try
             {
-                OnInsert(entity, assignIdentifier);
+                OnInsert(entity);
             }
             catch (Exception ex)
             {

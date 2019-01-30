@@ -61,8 +61,6 @@
     <Compile Include="UnitOfWorks\SimpleUnitOfWorks\UnitOfWorkTests.cs" />
     <Compile Include="DataContextPoolItemTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWorkFactoryTests.cs" />
-    <Compile Include="UnitOfWorks\SmartUnitOfWorks\SmartUnitOfWorkTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

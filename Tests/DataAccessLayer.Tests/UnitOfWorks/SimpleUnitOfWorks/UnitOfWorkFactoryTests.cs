@@ -4,6 +4,7 @@ using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
+using DotNetCraft.Common.Utils.Logging;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -18,7 +19,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void ConstructorTest()
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
-            IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(dataContextFactory);
+            IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(dataContextFactory, new DebugLoggerFactory());
             Assert.IsNotNull(unitOfWorkFactory);
         }
 
@@ -27,7 +28,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void ConstructorNullParameterTest()
         {
             IDataContextFactory dataContextFactoryt = null;
-            new UnitOfWorkFactory(dataContextFactoryt);
+            new UnitOfWorkFactory(dataContextFactoryt, new DebugLoggerFactory());
 
             Assert.Fail("ArgumentNullException expected");
         }
@@ -40,9 +41,8 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void CreateDataContextTest()
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
-            IContextSettings contextSettings = Substitute.For<IContextSettings>();
             IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
-            IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(dataContextFactory);
+            IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(dataContextFactory, new DebugLoggerFactory());
 
             dataContextFactory.CreateDataContext().Returns(dataContext);
 
@@ -55,8 +55,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void CreateDataContextExceptionTest()
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
-            IContextSettings contextSettings = Substitute.For<IContextSettings>();
-            IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(dataContextFactory);
+            IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(dataContextFactory, new DebugLoggerFactory());
 
             dataContextFactory.When(x=>x.CreateDataContext()).Do(x =>
             {
@@ -83,8 +82,7 @@ namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void CreateDataContextBadContextTest()
         {
             IDataContextFactory dataContextFactory = Substitute.For<IDataContextFactory>();
-            IContextSettings contextSettings = Substitute.For<IContextSettings>();
-            IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(dataContextFactory);
+            IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(dataContextFactory, new DebugLoggerFactory());
 
             IDataContextWrapper dataContext = null;
             dataContextFactory.CreateDataContext().Returns(dataContext);
