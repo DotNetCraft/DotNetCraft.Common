@@ -36,18 +36,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Caching\ISimpleCache.cs" />
-    <Compile Include="DependencyInjection\IDependencyResolver.cs" />
+    <Compile Include="DependencyInjection\Enums\DependencyStrategy.cs" />
+    <Compile Include="DependencyInjection\IDependencyActivator.cs" />
+    <Compile Include="DependencyInjection\IDependencyContainer.cs" />
+    <Compile Include="DependencyInjection\IDependencyItem.cs" />
     <Compile Include="Disposal\IDisposableObject.cs" />
-    <Compile Include="IStartStoppable.cs" />
     <Compile Include="Disposal\INotifyWhenDisposed.cs" />
+    <Compile Include="ICloneable.cs" />
+    <Compile Include="INotifyWhenDisposed.cs" />
+    <Compile Include="IStartStoppable.cs" />
     <Compile Include="Logging\ICommonLogger.cs" />
     <Compile Include="Logging\ICommonLoggerFactory.cs" />
     <Compile Include="Mapping\IMapperInstance.cs" />
     <Compile Include="Mapping\IMapperManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReflectionExtensions\Defenitions\ClassDefenition.cs" />
-    <Compile Include="ReflectionExtensions\Defenitions\PropertyDefinition.cs" />
     <Compile Include="ReflectionExtensions\IReflectionManager.cs" />
+    <Compile Include="ReflectionExtensions\MethodInfoDetails.cs" />
+    <Compile Include="Tracking\ITrackingManager.cs" />
+    <Compile Include="Tracking\PropertyChangedExtendedEventArgs.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

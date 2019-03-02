@@ -22,7 +22,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple
         /// Get all entities.
         /// </summary>
         /// <returns>Collection of entities.</returns>
-        List<TEntity> GetAll(RepositorySimpleRequest<TEntity> request, IUniqueKey uniqueKey = null);
+        List<TEntity> GetAll(RepositorySimpleRequest request, IUniqueKey uniqueKey = null);
 
         /// <summary>
         /// Get entities by specification.

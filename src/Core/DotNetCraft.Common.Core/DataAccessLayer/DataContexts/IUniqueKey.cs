@@ -2,7 +2,7 @@
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.DataContexts
 {
-    public interface IUniqueKey: IEquatable<IUniqueKey>
+    public interface IUniqueKey
     {
         string Key { get; }
     }

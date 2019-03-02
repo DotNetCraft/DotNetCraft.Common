@@ -18,7 +18,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Smart
         /// Get all models.
         /// </summary>
         /// <returns>Collection of models.</returns>
-        List<TModel> GetAll<TModel>(RepositorySimpleRequest<TEntity> request, IUniqueKey uniqueKey = null);
+        List<TModel> GetAll<TModel>(RepositorySimpleRequest request, IUniqueKey uniqueKey = null);
 
         /// <summary>
         /// Get models by specification.

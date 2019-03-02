@@ -85,7 +85,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
             throw new DataAccessLayerException("There is no identifier for " + typeof(TEntity));
         }
 
-        private List<TEntity> LoadCollection(IQueryable<TEntity> collection, RepositorySimpleRequest<TEntity> request = null)
+        private List<TEntity> LoadCollection(IQueryable<TEntity> collection, RepositorySimpleRequest request = null)
         {
             if (request != null)
             {
@@ -139,7 +139,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// </summary>
         /// <param name="dataContextWrapper">The IDataContextWrapper instance</param>
         /// <returns>Collection of models.</returns>
-        protected virtual List<TEntity> OnGetAll(IDataContextWrapper dataContextWrapper, RepositorySimpleRequest<TEntity> request)
+        protected virtual List<TEntity> OnGetAll(IDataContextWrapper dataContextWrapper, RepositorySimpleRequest request)
         {
             IQueryable<TEntity> collection = dataContextWrapper.Set<TEntity>();
             List<TEntity> result = LoadCollection(collection, request);
@@ -200,7 +200,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Repositories.Simple
         /// Get all entities.
         /// </summary>
         /// <returns>Collection of entities.</returns>
-        public List<TEntity> GetAll(RepositorySimpleRequest<TEntity> request, IUniqueKey uniqueKey = null)
+        public List<TEntity> GetAll(RepositorySimpleRequest request, IUniqueKey uniqueKey = null)
         {
             try
             {

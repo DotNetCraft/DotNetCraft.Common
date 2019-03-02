@@ -15,7 +15,7 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
 
         private readonly ICommonLogger logger;
 
-        private readonly Dictionary<IUniqueKey, IDataContextPoolItem> dataContextPool;
+        private readonly Dictionary<string, IDataContextPoolItem> dataContextPool;
         #endregion
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
             this.contextSettings = contextSettings;
             logger = loggerFactory.Create<BaseDataContextFactory<TDataContext, TContextSettings>>();
 
-            dataContextPool = new Dictionary<IUniqueKey, IDataContextPoolItem>();
+            dataContextPool = new Dictionary<string, IDataContextPoolItem>();
         }
 
         #region Implementation of IDataContextFactory
@@ -45,32 +45,32 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
             try
             {
                 logger.Debug("Createing DataContext...");
-                IUniqueKey key = uniqueKey;
-                if (key == null)
+
+                IUniqueKey currentUniqueKey = uniqueKey;
+                if (currentUniqueKey == null)
                 {
-                    key = new ThreadUniqueKey();
-                    logger.Trace("UniqueKey was not provided so default one will be used: " + key);
+                    currentUniqueKey = new ThreadUniqueKey();
+                    logger.Trace("UniqueKey was not provided so default one will be used: " + currentUniqueKey);
                 }
 
-                logger.Trace("UniqueKey: {0}", key);
+                logger.Trace("UniqueKey: {0}", currentUniqueKey);
 
                 TDataContext dataContext;
                 lock (dataContextPool)
                 {
                     IDataContextPoolItem dataContextPoolItem;
-                    if (dataContextPool.TryGetValue(key, out dataContextPoolItem))
+                    if (dataContextPool.TryGetValue(currentUniqueKey.Key, out dataContextPoolItem))
                     {
                         int count = dataContextPoolItem.IncreaseRef();
                         dataContext = (TDataContext) dataContextPoolItem.DataContextWrapper;
-                        logger.Trace("DataContext has been found in the pool (RefCount: {0])", count);
+                        logger.Trace("DataContext has been found in the pool (RefCount: {0})", count);
                     }
                     else
                     {
                         logger.Trace("DataContext has not been found in the pool. Creating...");
-                        TContextSettings settings = (TContextSettings) contextSettings;
-                        dataContext = OnCreateDataContext(settings);
+                        dataContext = OnCreateDataContext(contextSettings, currentUniqueKey);
                         dataContextPoolItem = new DataContextPoolItem(dataContext);
-                        dataContextPool.Add(key, dataContextPoolItem);
+                        dataContextPool.Add(currentUniqueKey.Key, dataContextPoolItem);
                         logger.Trace("DataContext has been created.");
                     }
                 }
@@ -104,25 +104,26 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
             try
             {
                 logger.Debug("Releasing DataContext...");
-                IUniqueKey key = uniqueKey;
-                if (key == null)
+
+                IUniqueKey currentUniqueKey = uniqueKey;
+                if (currentUniqueKey == null)
                 {
-                    key = new ThreadUniqueKey();
-                    logger.Trace("UniqueKey was not provided so default one will be used: " + key);
+                    currentUniqueKey = new ThreadUniqueKey();
+                    logger.Trace("UniqueKey was not provided so default one will be used: " + currentUniqueKey);
                 }
 
-                logger.Trace("UniqueKey: {0}", key);
+                logger.Trace("UniqueKey: {0}", currentUniqueKey);
 
                 lock (dataContextPool)
                 {
                     IDataContextPoolItem dataContextPoolItem;
-                    if (dataContextPool.TryGetValue(key, out dataContextPoolItem))
+                    if (dataContextPool.TryGetValue(currentUniqueKey.Key, out dataContextPoolItem))
                     {
                         logger.Trace("DataContext has been found: {0}", dataContextPoolItem);
                         int currentRefCount = dataContextPoolItem.DecreaseRef();
                         if (currentRefCount == 0)
                         {                            
-                            dataContextPool.Remove(key);
+                            dataContextPool.Remove(currentUniqueKey.Key);
                             logger.Debug("As DataContext doesn't have any references it's been deleted from the pool");
                             return true;
                         }
@@ -145,7 +146,7 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
             }
         }
 
-        protected abstract TDataContext OnCreateDataContext(TContextSettings dataBaseSettings);
+        protected abstract TDataContext OnCreateDataContext(TContextSettings dataBaseSettings, IUniqueKey key);
 
         #endregion
     }

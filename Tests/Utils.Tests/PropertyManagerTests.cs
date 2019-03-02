@@ -1,7 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using DotNetCraft.Common.Core.Utils.ReflectionExtensions;
-using DotNetCraft.Common.Utils.ReflectionExtensions;
+using DotNetCraft.Common.Utils.Logging;
+using DotNetCraft.Common.Utils.Reflection;
 using NUnit.Framework;
 
 namespace Utils.Tests
@@ -28,107 +29,49 @@ namespace Utils.Tests
         [TestCase(typeof(CategoryAttribute), false)]
         public void SingleOrDefaultTest(Type attributeType, bool shouldExist)
         {
-            IReflectionManager reflectionManager = new ReflectionManager();
-            var propertyDefinition = reflectionManager.SingleOrDefault(typeof(Sample), attributeType);
+            IReflectionManager reflectionManager = new ReflectionManager(new DebugLoggerFactory());
+            var propertyDefinition = reflectionManager.GetPropertyInfosByAttribute(attributeType, typeof(Sample));
             if (shouldExist)
             {
                 Assert.IsNotNull(propertyDefinition);
-                Assert.AreEqual("SingleProperty", propertyDefinition.Name);
+                Assert.AreEqual(1, propertyDefinition.Count);
+                Assert.AreEqual("SingleProperty", propertyDefinition[0].Name);
             }
             else
             {
-                Assert.IsNull(propertyDefinition);
+                Assert.AreEqual(0, propertyDefinition.Count);
             }
         }
 
         [Test]
-        [TestCase(typeof(Sample), null)]
-        [TestCase(null, typeof(KeyAttribute))]
-        [TestCase(null, null)]
+        [TestCase(null, typeof(Sample))]
         [ExpectedException(typeof(ArgumentNullException))]
         public void SingleOrDefaultNullParametersTest(Type objectType, Type attributeType)
         {
-            IReflectionManager reflectionManager = new ReflectionManager();
-            reflectionManager.SingleOrDefault(objectType, attributeType);
+            IReflectionManager reflectionManager = new ReflectionManager(new DebugLoggerFactory());
+            reflectionManager.GetPropertyInfosByAttribute(attributeType, objectType);
             Assert.Fail("ArgumentNullException expected");
         }
 
         [Test]
-        [TestCase(typeof(KeyAttribute), true)]
-        [TestCase(typeof(CategoryAttribute), false)]
-        public void SingleOrDefaultGenericTest(Type attributeType, bool shouldExist)
+        [TestCase(null, typeof(KeyAttribute))]
+        [TestCase(null, null)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void DefaultNullFirstParametersTest(Type objectType, Type attributeType)
         {
-            IReflectionManager reflectionManager = new ReflectionManager();
-            var propertyDefinition = reflectionManager.SingleOrDefault<Sample>(attributeType);
-            if (shouldExist)
-            {
-                Assert.IsNotNull(propertyDefinition);
-                Assert.AreEqual("SingleProperty", propertyDefinition.Name);
-            }
-            else
-            {
-                Assert.IsNull(propertyDefinition);
-            }
+            IReflectionManager reflectionManager = new ReflectionManager(new DebugLoggerFactory());
+            reflectionManager.GetPropertyInfosByAttribute(attributeType, objectType);
+            Assert.Fail("ArgumentException expected");
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void SingleOrDefaultGenericNullParametersTest()
         {
-            IReflectionManager reflectionManager = new ReflectionManager();
-            reflectionManager.SingleOrDefault<Sample>(null);
+            IReflectionManager reflectionManager = new ReflectionManager(new DebugLoggerFactory());
+            reflectionManager.GetPropertyInfosByAttribute(null, typeof(Sample));
             
             Assert.Fail("ArgumentNullException expected");
-        }
-
-        #endregion
-
-        #region Single...
-
-        [Test]
-        public void SingleTest()
-        {
-            IReflectionManager reflectionManager = new ReflectionManager();
-            var propertyInfo = reflectionManager.Single(typeof(Sample), typeof(KeyAttribute));            
-            Assert.IsNotNull(propertyInfo);
-        }
-
-        [Test]
-        public void SingleGenericTest()
-        {
-            IReflectionManager reflectionManager = new ReflectionManager();
-            var propertyInfo = reflectionManager.Single<Sample>(typeof(KeyAttribute));
-            Assert.IsNotNull(propertyInfo);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ReflectionManagerException))]
-        public void SingleWithoutPropetyTest()
-        {
-            IReflectionManager reflectionManager = new ReflectionManager();
-            reflectionManager.Single(typeof(Sample), typeof(CategoryAttribute));
-            Assert.Fail("ReflectionManagerException expected");
-        }
-
-        [Test]
-        [TestCase(typeof(Sample), null)]
-        [TestCase(null, typeof(KeyAttribute))]
-        [TestCase(null, null)]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void SingleTest(Type objectType, Type attributeType)
-        {
-            IReflectionManager reflectionManager = new ReflectionManager();
-            reflectionManager.Single(objectType, attributeType);
-            Assert.Fail("ArgumentNullException expected");
-        }
-
-        [Test]
-        [ExpectedException(typeof(ReflectionManagerException))]
-        public void SingleWithDublicateTest()
-        {
-            IReflectionManager reflectionManager = new ReflectionManager();
-            reflectionManager.Single(typeof(Sample), typeof(RequiredAttribute));
-            Assert.Fail("ReflectionManagerException expected");
         }
 
         #endregion

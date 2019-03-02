@@ -32,15 +32,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Caching\SimpleCache.cs" />
+    <Compile Include="DependencyInjection\DependencyActivator.cs" />
+    <Compile Include="DependencyInjection\DependencyContainer.cs" />
+    <Compile Include="DependencyInjection\DependencyItem.cs" />
+    <Compile Include="DependencyInjection\ObjectDependencyItem.cs" />
     <Compile Include="Disposal\DisposableObject.cs" />
-    <Compile Include="DependencyInjection\BaseDependencyResolver.cs" />
-    <Compile Include="DependencyInjection\DependencyResolver.cs" />
     <Compile Include="Exceptions\DotNetCraftExtendedException.cs" />
-    <Compile Include="DependencyInjection\Exceptions\ResolveException.cs" />
     <Compile Include="Extensions\AssemblyExtentions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Logging\DebugLogger.cs" />
@@ -49,8 +51,13 @@
     <Compile Include="Mapping\BaseMapperInstance.cs" />
     <Compile Include="Mapping\MapperManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReflectionExtensions\ReflectionManagerException.cs" />
-    <Compile Include="ReflectionExtensions\ReflectionManager.cs" />
+    <Compile Include="Reflection\ObjectReflectionData.cs" />
+    <Compile Include="Reflection\ReflectionExtensions.cs" />
+    <Compile Include="Reflection\ReflectionManager.cs" />
+    <Compile Include="Tracking\Config\TrackingManagerConfig.cs" />
+    <Compile Include="Tracking\Entities\BasePropertyChanged.cs" />
+    <Compile Include="Tracking\TrackDetails.cs" />
+    <Compile Include="Tracking\TrackingManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\DotNetCraft.Common.Core.Utils\DotNetCraft.Common.Core.Utils.csproj">

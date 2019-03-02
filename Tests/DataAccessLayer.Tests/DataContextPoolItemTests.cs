@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using DotNetCraft.Common.Core;
 using DotNetCraft.Common.Core.DataAccessLayer;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.DataAccessLayer;
 using DotNetCraft.Common.DataAccessLayer.DataContexts;
+using DotNetCraft.Common.DataAccessLayer.DataContexts.UniqueKeys;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -72,6 +74,22 @@ namespace DataAccessLayer.Tests
 
             dataContextPoolItem.DecreaseRef();
             Assert.Fail("Exception expected");
-        }        
+        }
+
+        [Test]
+        public void UniqueKeyDataContextPoolTest()
+        {
+            Dictionary<string, IDataContextPoolItem> dataContextPool = new Dictionary<string, IDataContextPoolItem>();
+            IUniqueKey uniqueKey1 = new ThreadUniqueKey();
+
+            IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
+            IDataContextPoolItem dataContextPoolItem = new DataContextPoolItem(dataContext);
+
+            dataContextPool.Add(uniqueKey1.Key, dataContextPoolItem);
+
+            IUniqueKey uniqueKey2 = new ThreadUniqueKey();
+            IDataContextPoolItem actual = dataContextPool[uniqueKey2.Key];
+            Assert.AreEqual(dataContextPoolItem.GetHashCode(), actual.GetHashCode());
+        }
     }
 }
