@@ -1,4 +1,4 @@
-﻿namespace DataAccessLayer.Tests.UnitOfWorks
+﻿namespace DotNetCraft.Common.DataAccessLayer.Tests.UnitOfWorks
 {
     public class FakeEntity
     {

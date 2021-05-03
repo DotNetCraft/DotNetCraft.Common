@@ -3,7 +3,7 @@ using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks;
 using NUnit.Framework;
 
-namespace DataAccessLayer.Tests.UnitOfWorks
+namespace DotNetCraft.Common.DataAccessLayer.Tests.UnitOfWorks
 {
     [TestFixture]
     public class DataBaseParameterTests

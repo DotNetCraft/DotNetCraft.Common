@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using DotNetCraft.Common.Core.Utils.Mapping;
 using DotNetCraft.Common.Utils.Mapping;
 using NUnit.Framework;
 
-namespace Utils.Tests
+namespace DotNetCraft.Common.Utils.Tests
 {
     [TestFixture]
     public class MappingTests

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using CommonClasses;
 using DotNetCraft.Common.Core.Utils.ReflectionExtensions;
 using DotNetCraft.Common.Utils.Logging;
 using DotNetCraft.Common.Utils.Reflection;
 using NUnit.Framework;
 
-namespace Utils.Tests
+namespace DotNetCraft.Common.Utils.Tests
 {
     [TestFixture]
     public class PropertyManagerTests

@@ -1,8 +1,9 @@
 ﻿using System;
+using CommonClasses;
 using DotNetCraft.Common.Domain.ServiceMessenger;
 using NUnit.Framework;
 
-namespace Domain.Tests
+namespace DotNetCraft.Common.Domain.Tests
 {
     [TestFixture]
     public class BaseServiceMessageTests

@@ -1,7 +1,7 @@
 ﻿using DotNetCraft.Common.Utils.Disposal;
 using NUnit.Framework;
 
-namespace Utils.Tests
+namespace DotNetCraft.Common.Utils.Tests
 {
     [TestFixture]
     public class DisposableObjectTests

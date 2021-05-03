@@ -1,15 +1,14 @@
 ﻿using System;
+using CommonClasses;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
-using DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
-using DotNetCraft.Common.DataAccessLayer.Repositories.Simple;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
 using DotNetCraft.Common.Utils.Logging;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
+namespace DotNetCraft.Common.DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
 {
     [TestFixture]
     public class UnitOfWorkTests

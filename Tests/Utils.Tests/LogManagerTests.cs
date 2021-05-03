@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using DotNetCraft.Common.Core.Utils.Logging;
+﻿using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.Utils.Logging;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace Utils.Tests
+namespace DotNetCraft.Common.Utils.Tests
 {
     [TestFixture]
     public class LogManagerTests

@@ -1,5 +1,5 @@
 ﻿using System;
-using DotNetCraft.Common.Core.DataAccessLayer;
+using CommonClasses;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
@@ -8,7 +8,7 @@ using DotNetCraft.Common.Utils.Logging;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
+namespace DotNetCraft.Common.DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
 {
     [TestFixture]
     public class UnitOfWorkFactoryTests

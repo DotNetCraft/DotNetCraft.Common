@@ -1,4 +1,5 @@
 ﻿using System;
+using CommonClasses;
 using DotNetCraft.Common.Core.Domain.ServiceMessenger;
 using DotNetCraft.Common.Domain.ServiceMessenger;
 using DotNetCraft.Common.Domain.ServiceMessenger.Exceptions;
@@ -6,7 +7,7 @@ using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 
-namespace Domain.Tests
+namespace DotNetCraft.Common.Domain.Tests
 {
     [TestFixture]
     public class ServiceMessageProcessorTests

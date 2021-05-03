@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using DotNetCraft.Common.Core;
-using DotNetCraft.Common.Core.DataAccessLayer;
+using CommonClasses;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
-using DotNetCraft.Common.DataAccessLayer;
 using DotNetCraft.Common.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.DataAccessLayer.DataContexts.UniqueKeys;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace DataAccessLayer.Tests
+namespace DotNetCraft.Common.DataAccessLayer.Tests
 {
     [TestFixture]
     public class DataContextPoolItemTests

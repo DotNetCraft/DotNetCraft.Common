@@ -4,7 +4,7 @@ using DotNetCraft.Common.Core.Utils.Caching;
 using DotNetCraft.Common.Utils.Caching;
 using NUnit.Framework;
 
-namespace Utils.Tests
+namespace DotNetCraft.Common.Utils.Tests
 {
     [TestFixture]
     public class SimpleCacheTests

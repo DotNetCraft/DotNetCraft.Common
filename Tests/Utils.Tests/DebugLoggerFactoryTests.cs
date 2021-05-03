@@ -3,7 +3,7 @@ using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.Utils.Logging;
 using NUnit.Framework;
 
-namespace Utils.Tests
+namespace DotNetCraft.Common.Utils.Tests
 {
     [TestFixture]
     public class DebugLoggerFactoryTests
