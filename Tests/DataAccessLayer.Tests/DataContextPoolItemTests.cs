@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommonClasses;
+using DotNetCraft.Common.CommonClasses.Tests;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.DataAccessLayer.DataContexts.UniqueKeys;

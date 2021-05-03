@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using CommonClasses;
+using DotNetCraft.Common.CommonClasses.Tests;
 using DotNetCraft.Common.Core.Utils.ReflectionExtensions;
 using DotNetCraft.Common.Utils.Logging;
 using DotNetCraft.Common.Utils.Reflection;

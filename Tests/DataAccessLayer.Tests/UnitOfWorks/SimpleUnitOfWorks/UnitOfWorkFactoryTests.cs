@@ -1,5 +1,5 @@
 ﻿using System;
-using CommonClasses;
+using DotNetCraft.Common.CommonClasses.Tests;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;

@@ -1,5 +1,5 @@
 ﻿using System;
-using CommonClasses;
+using DotNetCraft.Common.CommonClasses.Tests;
 using DotNetCraft.Common.Core.Domain.ServiceMessenger;
 using DotNetCraft.Common.Domain.ServiceMessenger;
 using DotNetCraft.Common.Domain.ServiceMessenger.Exceptions;

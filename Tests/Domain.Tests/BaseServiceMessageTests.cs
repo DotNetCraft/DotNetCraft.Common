@@ -1,5 +1,5 @@
 ﻿using System;
-using CommonClasses;
+using DotNetCraft.Common.CommonClasses.Tests;
 using DotNetCraft.Common.Domain.ServiceMessenger;
 using NUnit.Framework;
 
