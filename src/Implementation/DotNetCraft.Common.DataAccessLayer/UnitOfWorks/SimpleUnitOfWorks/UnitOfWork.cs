@@ -1,15 +1,15 @@
 ﻿using System;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.Utils.Disposal;
+using Microsoft.Extensions.Logging;
 
 namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 {
     public class UnitOfWork: DisposableObject, IUnitOfWork
     {
-        private readonly ICommonLogger logger;
+        private readonly ILogger<UnitOfWork> _logger;
 
         protected readonly IDataContextWrapper dataContextWrapper;
 
@@ -29,7 +29,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UnitOfWork(IDataContextWrapper dataContextWrapper, ICommonLogger logger)
+        public UnitOfWork(IDataContextWrapper dataContextWrapper, ILogger<UnitOfWork> logger)
         {
             if (dataContextWrapper == null)
                 throw new ArgumentNullException(nameof(dataContextWrapper));
@@ -37,18 +37,18 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
                 throw new ArgumentNullException(nameof(logger));
 
             this.dataContextWrapper = dataContextWrapper;
-            this.logger = logger;
+            _logger = logger;
 
             try
             {
-                logger.Debug("Opening transaction...");
+                _logger.LogDebug("Opening transaction...");
                 dataContextWrapper.BeginTransaction();
                 IsTransactionOpened = true;
-                logger.Debug("Transaction has been opened.");
+                _logger.LogDebug("Transaction has been opened.");
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "There was an exception during opening a transaction.");
+                _logger.LogError(ex, "There was an exception during opening a transaction.");
                 throw new UnitOfWorkException("There was an exception during opening a transaction.", ex);
             }
         }
@@ -70,7 +70,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "There was an exception during committing changes.");
+                _logger.LogError(ex, "There was an exception during committing changes.");
                 throw new UnitOfWorkException("There was an exception during committing changes.", ex);
             }
         }
@@ -90,7 +90,7 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "There was an exception during rolling back changes.");
+                _logger.LogError(ex, "There was an exception during rolling back changes.");
                 throw new UnitOfWorkException("There was an exception during rolling back changes.", ex);
             }
         }
@@ -107,22 +107,22 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
         {
             if (disposing)
             {
-                logger.Trace("Disposing UnitOfWork: IsTransactionOpened = {0}...", IsTransactionOpened);
+                _logger.LogTrace("Disposing UnitOfWork: IsTransactionOpened = {0}...", IsTransactionOpened);
                 if (IsTransactionOpened)
                 {
                     try
                     {
-                        logger.Trace("Transaction still opened. Closing...");
+                        _logger.LogTrace("Transaction still opened. Closing...");
                         Rollback();
-                        logger.Trace("Transaction has been closed.");
+                        _logger.LogTrace("Transaction has been closed.");
                     }
                     catch (UnitOfWorkException unitOfWorkException)
                     {
-                        logger.Error(unitOfWorkException, "The was an exception during closing transaction. However, disposing will be continue...");
+                        _logger.LogError(unitOfWorkException, "The was an exception during closing transaction. However, disposing will be continue...");
                     }
                 }
                 dataContextWrapper.Dispose();
-                logger.Trace("The object has been disposed.");
+                _logger.LogTrace("The object has been disposed.");
             }
 
             base.Dispose(disposing);

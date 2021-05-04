@@ -23,9 +23,9 @@ install:
 # Run the build script
 script:
  - xbuild /p:Configuration=Release DotNetCraft.Common.sln
- - mono ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./Tests/DataAccessLayer.Tests/bin/Release/DataAccessLayer.Tests.dll
- - mono ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./Tests/Utils.Tests/bin/Release/Utils.Tests.dll
- - mono ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./Tests/Domain.Tests/bin/Release/Domain.Tests.dll
+ - mono ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./Tests/DataAccessLayer.Tests/bin/Release/net461/DataAccessLayer.Tests.dll
+ - mono ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./Tests/Utils.Tests/bin/Release/net461/Utils.Tests.dll
+ - mono ./testrunner/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./Tests/Domain.Tests/bin/Release/net461/Domain.Tests.dll
 
 # Only watch the master branch.
 branches:

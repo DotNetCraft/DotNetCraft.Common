@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.Core.Utils.ReflectionExtensions;
 using DotNetCraft.Common.Core.Utils.Tracking;
 using DotNetCraft.Common.Utils.Tracking.Config;
+using Microsoft.Extensions.Logging;
 
 namespace DotNetCraft.Common.Utils.Tracking
 {
@@ -12,26 +12,26 @@ namespace DotNetCraft.Common.Utils.Tracking
         private readonly IReflectionManager _reflectionManager;
         private readonly TrackingManagerConfig _trackingManagerConfig;
         private readonly List<TrackDetails> _trackQueue;
-        private readonly ICommonLogger _logger;
+        private readonly ILogger<TrackingManager> _logger;
         private readonly List<INotifyPropertyChangedExtended> _trackingObjects;
 
         private readonly object _syncObject = new object();
 
-        public TrackingManager(IReflectionManager reflectionManager, TrackingManagerConfig trackingManagerConfig, ICommonLoggerFactory simpleLoggerFactory)
+        public TrackingManager(IReflectionManager reflectionManager, TrackingManagerConfig trackingManagerConfig, ILogger<TrackingManager> logger)
         {
             if (reflectionManager == null)
                 throw new ArgumentNullException(nameof(reflectionManager));
             if (trackingManagerConfig == null)
                 throw new ArgumentNullException(nameof(trackingManagerConfig));
-            if (simpleLoggerFactory == null)
-                throw new ArgumentNullException(nameof(simpleLoggerFactory));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
 
             _reflectionManager = reflectionManager;
             _trackingManagerConfig = trackingManagerConfig;
             _trackQueue = new List<TrackDetails>();
             _trackingObjects = new List<INotifyPropertyChangedExtended>();
 
-            _logger = simpleLoggerFactory.Create<TrackingManager>();
+            _logger = logger;
         }
 
         #region IDisposable
@@ -61,7 +61,7 @@ namespace DotNetCraft.Common.Utils.Tracking
             if (instance == null)
                 throw new ArgumentNullException(nameof(instance));
 
-            _logger.Trace("Attaching {0}...", instance);
+            _logger.LogTrace("Attaching {0}...", instance);
 
             lock (_syncObject)
             {
@@ -69,7 +69,7 @@ namespace DotNetCraft.Common.Utils.Tracking
                 _trackingObjects.Add(instance);
             }
 
-            _logger.Trace("The object has been attached");
+            _logger.LogTrace("The object has been attached");
         }
 
         public void Detach(INotifyPropertyChangedExtended instance)
@@ -80,7 +80,7 @@ namespace DotNetCraft.Common.Utils.Tracking
             if (instance == null)
                 throw new ArgumentNullException(nameof(instance));
 
-            _logger.Trace("Detaching {0}...", instance);
+            _logger.LogTrace("Detaching {0}...", instance);
 
             lock (_syncObject)
             {
@@ -89,31 +89,31 @@ namespace DotNetCraft.Common.Utils.Tracking
                 if (isRemoved)
                 {
                     instance.PropertyChanged -= Instance_PropertyChanged;
-                    _logger.Trace("The {0} has been removed from tracking collection.");
+                    _logger.LogTrace("The {0} has been removed from tracking collection.");
                 }
                 else
                 {
-                    _logger.Trace("There was no such object ({0}) in the tracking collection.", instance);
+                    _logger.LogTrace("There was no such object ({0}) in the tracking collection.", instance);
                 }
             }
 
-            _logger.Trace("The {0} has been detached");
+            _logger.LogTrace("The {0} has been detached");
         }
 
         private void Instance_PropertyChanged(object sender, PropertyChangedExtendedEventArgs e)
         {
-            _logger.Trace("The value has been changed in {0}: {1} => Adding to tracking queue...", sender, e);
+            _logger.LogTrace("The value has been changed in {0}: {1} => Adding to tracking queue...", sender, e);
             TrackDetails trackDetails = new TrackDetails(sender, e.PropertyName, e.OldValue);
             _trackQueue.Add(trackDetails);
 
             if (_trackQueue.Count > _trackingManagerConfig.MaxSize)
             {
-                _logger.Trace("Limit of the tracking queue has been overcame => removing the oldest item...");
+                _logger.LogTrace("Limit of the tracking queue has been overcame => removing the oldest item...");
                 _trackQueue.RemoveAt(0);
-                _logger.Trace("The item has been removed.");
+                _logger.LogTrace("The item has been removed.");
             }
 
-            _logger.Trace("Item has been added.");
+            _logger.LogTrace("Item has been added.");
         }
 
         public bool Undo()

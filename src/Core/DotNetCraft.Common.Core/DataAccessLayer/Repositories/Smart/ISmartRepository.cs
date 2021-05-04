@@ -46,23 +46,5 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Smart
         /// </summary>
         /// <param name="entity">The entity.</param>
         void Delete(TEntity entity, IUniqueKey uniqueKey = null);
-
-        /// <summary>
-        /// Execute query.
-        /// </summary>
-        /// <typeparam name="TEntity">Type of entity</typeparam>
-        /// <param name="query">The query</param>
-        /// <param name="args">Qeury's arguments (parameters)</param>
-        /// <returns>List of entities.</returns>
-        ICollection<TEntity> ExecuteQuery(string query, params IDataBaseParameter[] args);
-
-        /// <summary>
-        /// Execute query.
-        /// </summary>
-        /// <typeparam name="TEntity">Type of entity</typeparam>
-        /// <param name="query">The query</param>
-        /// <param name="args">Qeury's arguments (parameters)</param>
-        /// <returns>List of entities.</returns>
-        ICollection<TEntity> ExecuteQuery(IUniqueKey uniqueKey, string query, params IDataBaseParameter[] args);
     }
 }

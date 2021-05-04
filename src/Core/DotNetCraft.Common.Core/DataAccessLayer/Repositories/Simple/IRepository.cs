@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
-using DotNetCraft.Common.Core.DataAccessLayer.Specifications;
-using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 
 namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple
 {
@@ -49,23 +47,5 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories.Simple
         /// </summary>
         /// <param name="entity">The entity.</param>
         void Delete(TEntity entity, IUniqueKey uniqueKey = null);
-
-        /// <summary>
-        /// Execute query.
-        /// </summary>
-        /// <typeparam name="TEntity">Type of entity</typeparam>
-        /// <param name="query">The query</param>
-        /// <param name="args">Qeury's arguments (parameters)</param>
-        /// <returns>List of entities.</returns>
-        ICollection<TEntity> ExecuteQuery(string query, params IDataBaseParameter[] args);
-
-        /// <summary>
-        /// Execute query.
-        /// </summary>
-        /// <typeparam name="TEntity">Type of entity</typeparam>
-        /// <param name="query">The query</param>
-        /// <param name="args">Qeury's arguments (parameters)</param>
-        /// <returns>List of entities.</returns>
-        ICollection<TEntity> ExecuteQuery(IUniqueKey uniqueKey, string query, params IDataBaseParameter[] args);
     }
 }

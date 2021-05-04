@@ -2,16 +2,14 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DotNetCraft.Common.Core.Domain.Management;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.Domain.Management.Exceptions;
-using DotNetCraft.Common.Utils.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace DotNetCraft.Common.Domain.Management
 {
     public abstract class BaseBackgroundManager<TManagerConfiguration> : BaseManager<TManagerConfiguration>, IBackgroundManager
         where TManagerConfiguration : IBackgroundManagerConfiguration
     {
-        private readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
         protected CancellationTokenSource cancellationTokenSource;
         private Task worker;
         private readonly ManualResetEvent resetEvent;
@@ -25,14 +23,17 @@ namespace DotNetCraft.Common.Domain.Management
         /// Constructor.
         /// </summary>
         /// <param name="managerConfiguration">The TManagerConfiguration instance.</param>
-        protected BaseBackgroundManager(TManagerConfiguration managerConfiguration) : base(managerConfiguration)
+        protected BaseBackgroundManager(TManagerConfiguration managerConfiguration, ILogger<BaseBackgroundManager<TManagerConfiguration>> logger) : base(managerConfiguration, logger)
         {
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
+
             resetEvent = new ManualResetEvent(false);
             if (managerConfiguration.StartImmediately)
             {
-                logger.Info("{0} is starting immediately...", Name);
+                _logger.LogInformation("{0} is starting immediately...", Name);
                 Start();
-                logger.Info("The {0} has been started.", Name);
+                _logger.LogInformation("The {0} has been started.", Name);
             }
         }
 
@@ -50,25 +51,25 @@ namespace DotNetCraft.Common.Domain.Management
         /// Occurs when exception has been raised in the background work.
         /// </summary>
         /// <param name="exception">The exception</param>
-        protected virtual void OnBackroundException(Exception exception) { }
+        protected virtual void OnBackgroundException(Exception exception) { }
 
         /// <summary>
         /// Occurs when manager should do background work.
         /// </summary>
-        protected virtual void OnBackroundExecution() { }
+        protected virtual void OnBackgroundExecution() { }
 
         /// <summary>
         /// Occurs when background work has been completed.
         /// </summary>
-        protected virtual void OnBackgorundWorkCompleted() { }
+        protected virtual void OnBackgroundWorkCompleted() { }
 
-        protected virtual void OnBackgorundWorkFailed() { }
+        protected virtual void OnBackgroundWorkFailed() { }
 
-        private void ManagerBackgorundProcess(object state)
+        private void ManagerBackgroundProcess(object state)
         {
             try
             {
-                Thread.CurrentThread.Name = string.Format("Thread_{0}", Name);
+                Thread.CurrentThread.Name = $"Thread_{Name}";
                 CancellationToken cancellationToken = cancellationTokenSource.Token;
                 //CancellationToken cancellationToken = (CancellationToken) state;
                 TimeSpan sleepTime = managerConfiguration.SleepTime;
@@ -79,12 +80,12 @@ namespace DotNetCraft.Common.Domain.Management
                 {
                     try
                     {
-                        OnBackroundExecution();
+                        OnBackgroundExecution();
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(ex, "There was an exception during background job execution.");
-                        OnBackroundException(ex); //TODO: Make a decision to terminate, sleep or something else
+                        _logger.LogError(ex, "There was an exception during background job execution.");
+                        OnBackgroundException(ex); //TODO: Make a decision to terminate, sleep or something else
                     }
 
                     int signal = WaitHandle.WaitAny(waitHandlers, sleepTime);//TODO: Change to decision maker
@@ -94,13 +95,13 @@ namespace DotNetCraft.Common.Domain.Management
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Manager working thread has been crashed");
-                OnBackgorundWorkFailed();
+                _logger.LogError(ex, "Manager working thread has been crashed");
+                OnBackgroundWorkFailed();
                 return;
             }
 
-            logger.Trace("The {0}'s background work has been completed.", Name);
-            OnBackgorundWorkCompleted();
+            _logger.LogTrace("The {0}'s background work has been completed.", Name);
+            OnBackgroundWorkCompleted();
         }        
 
         #region Implementation of IStartStoppable        
@@ -110,16 +111,16 @@ namespace DotNetCraft.Common.Domain.Management
         /// </summary>
         public void Start()
         {
-            logger.Debug("{0} is starting...", Name);
+            _logger.LogDebug("{0} is starting...", Name);
             if (IsRunning)
                 throw new ManagerException("The manager has been already run.");
 
             cancellationTokenSource = new CancellationTokenSource();
             CancellationToken cancellationToken = cancellationTokenSource.Token;
-            worker = new Task(ManagerBackgorundProcess, new object[] {resetEvent, cancellationToken});
+            worker = new Task(ManagerBackgroundProcess, new object[] {resetEvent, cancellationToken});
             worker.Start();
             IsRunning = true;
-            logger.Trace("The {0} has been started.", Name);
+            _logger.LogTrace("The {0} has been started.", Name);
         }
 
         /// <summary>
@@ -142,7 +143,7 @@ namespace DotNetCraft.Common.Domain.Management
         /// <param name="reason">The reason</param>
         public void ForceRun(string reason)
         {
-            logger.Debug("{0} will be wake up immediately: {1}", Name, reason);
+            _logger.LogDebug("{0} will be wake up immediately: {1}", Name, reason);
             resetEvent.Set();
         }
 

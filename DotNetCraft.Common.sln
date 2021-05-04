@@ -7,15 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{992E4A18-C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementation", "Implementation", "{9B74ABAB-0FE6-45E7-B843-F872B1BCDF00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCraft.Common.Core", "src\Core\DotNetCraft.Common.Core\DotNetCraft.Common.Core.csproj", "{784430D4-9160-4CE8-9AED-04C07A8878E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCraft.Common.Core", "src\Core\DotNetCraft.Common.Core\DotNetCraft.Common.Core.csproj", "{784430D4-9160-4CE8-9AED-04C07A8878E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCraft.Common.Core.Domain", "src\Core\DotNetCraft.Common.Core.Domain\DotNetCraft.Common.Core.Domain.csproj", "{8ED0D131-647C-47C6-8DFD-5C7F40AC1397}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCraft.Common.Core.Domain", "src\Core\DotNetCraft.Common.Core.Domain\DotNetCraft.Common.Core.Domain.csproj", "{8ED0D131-647C-47C6-8DFD-5C7F40AC1397}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCraft.Common.Core.Utils", "src\Core\DotNetCraft.Common.Core.Utils\DotNetCraft.Common.Core.Utils.csproj", "{CB52AB07-D66A-4953-A4E4-47BB608B09FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCraft.Common.Core.Utils", "src\Core\DotNetCraft.Common.Core.Utils\DotNetCraft.Common.Core.Utils.csproj", "{CB52AB07-D66A-4953-A4E4-47BB608B09FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCraft.Common.DataAccessLayer", "src\Implementation\DotNetCraft.Common.DataAccessLayer\DotNetCraft.Common.DataAccessLayer.csproj", "{81476D69-0BF6-4F24-A936-0334B8025B09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCraft.Common.DataAccessLayer", "src\Implementation\DotNetCraft.Common.DataAccessLayer\DotNetCraft.Common.DataAccessLayer.csproj", "{81476D69-0BF6-4F24-A936-0334B8025B09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCraft.Common.Domain", "src\Implementation\DotNetCraft.Common.Domain\DotNetCraft.Common.Domain.csproj", "{866D3623-F34A-49F4-998B-D420589C08B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCraft.Common.Domain", "src\Implementation\DotNetCraft.Common.Domain\DotNetCraft.Common.Domain.csproj", "{866D3623-F34A-49F4-998B-D420589C08B2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CFE1D58B-BC02-4A21-90C1-677EFEF7C4C6}"
 	ProjectSection(SolutionItems) = preProject
@@ -25,15 +25,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CFE1D5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C2EB6219-FE71-406B-B815-B7B5AAF71AEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer.Tests", "Tests\DataAccessLayer.Tests\DataAccessLayer.Tests.csproj", "{03CDE7EE-4F98-4F18-B612-8B351F6B158F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer.Tests", "Tests\DataAccessLayer.Tests\DataAccessLayer.Tests.csproj", "{03CDE7EE-4F98-4F18-B612-8B351F6B158F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCraft.Common.Utils", "src\Implementation\DotNetCraft.Common.Utils\DotNetCraft.Common.Utils.csproj", "{626E50A3-37C3-41CC-B08C-38410615E45C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCraft.Common.Utils", "src\Implementation\DotNetCraft.Common.Utils\DotNetCraft.Common.Utils.csproj", "{626E50A3-37C3-41CC-B08C-38410615E45C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils.Tests", "Tests\Utils.Tests\Utils.Tests.csproj", "{EE9664BD-059E-4377-B720-5B246E50F8FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils.Tests", "Tests\Utils.Tests\Utils.Tests.csproj", "{EE9664BD-059E-4377-B720-5B246E50F8FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Tests", "Tests\Domain.Tests\Domain.Tests.csproj", "{6691D630-A350-4EC2-9C45-CBCA9E2184B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Tests", "Tests\Domain.Tests\Domain.Tests.csproj", "{6691D630-A350-4EC2-9C45-CBCA9E2184B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonClasses", "Tests\CommonClasses\CommonClasses.csproj", "{AF1EB97C-011F-470C-AF01-740EEA1DF34A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonClasses", "Tests\CommonClasses\CommonClasses.csproj", "{AF1EB97C-011F-470C-AF01-740EEA1DF34A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCraft.Common.SmartDataAccessLayer", "src\Implementation\DotNetCraft.Common.SmartDataAccessLayer\DotNetCraft.Common.SmartDataAccessLayer.csproj", "{1AACCAC2-8F68-4B2B-A1B5-4512B7D41C46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,10 @@ Global
 		{AF1EB97C-011F-470C-AF01-740EEA1DF34A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF1EB97C-011F-470C-AF01-740EEA1DF34A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF1EB97C-011F-470C-AF01-740EEA1DF34A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AACCAC2-8F68-4B2B-A1B5-4512B7D41C46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AACCAC2-8F68-4B2B-A1B5-4512B7D41C46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AACCAC2-8F68-4B2B-A1B5-4512B7D41C46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AACCAC2-8F68-4B2B-A1B5-4512B7D41C46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +102,7 @@ Global
 		{EE9664BD-059E-4377-B720-5B246E50F8FC} = {C2EB6219-FE71-406B-B815-B7B5AAF71AEE}
 		{6691D630-A350-4EC2-9C45-CBCA9E2184B6} = {C2EB6219-FE71-406B-B815-B7B5AAF71AEE}
 		{AF1EB97C-011F-470C-AF01-740EEA1DF34A} = {C2EB6219-FE71-406B-B815-B7B5AAF71AEE}
+		{1AACCAC2-8F68-4B2B-A1B5-4512B7D41C46} = {9B74ABAB-0FE6-45E7-B843-F872B1BCDF00}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E3E50979-F712-46F9-A5D6-5009B1998836}

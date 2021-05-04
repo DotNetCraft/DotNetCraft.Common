@@ -1,29 +1,34 @@
 ﻿using System;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
 {
     public class UnitOfWorkFactory: IUnitOfWorkFactory
     {
-        private readonly ICommonLogger logger;
+        private readonly ILogger<UnitOfWorkFactory> _logger;
 
+        private readonly IServiceProvider _serviceProvider;
         protected readonly IDataContextFactory dataContextFactory;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UnitOfWorkFactory(IDataContextFactory dataContextFactory, ICommonLoggerFactory loggerFactory)
+        public UnitOfWorkFactory(IServiceProvider serviceProvider, IDataContextFactory dataContextFactory, ILogger<UnitOfWorkFactory> logger)
         {
+            if (serviceProvider == null)
+                throw new ArgumentNullException(nameof(serviceProvider));
             if (dataContextFactory == null)
                 throw new ArgumentNullException(nameof(dataContextFactory));
-            if (loggerFactory == null)
-                throw new ArgumentNullException(nameof(loggerFactory));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
 
+            _serviceProvider = serviceProvider;
             this.dataContextFactory = dataContextFactory;
-            logger = loggerFactory.Create<UnitOfWorkFactory>();
+            _logger = logger;
         }
 
         #region Implementation of IUnitOfWorkFactory
@@ -33,12 +38,12 @@ namespace DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks
             try
             {
                 IDataContextWrapper contextWrapper = dataContextFactory.CreateDataContext();
-                IUnitOfWork unitOfWork = new UnitOfWork(contextWrapper, logger);
+                IUnitOfWork unitOfWork = ActivatorUtilities.CreateInstance<UnitOfWork>(_serviceProvider, contextWrapper);
                 return unitOfWork;
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "There was an exception during creating a data contextWrapper.");
+                _logger.LogError(ex, "There was an exception during creating a data contextWrapper.");
                 throw new UnitOfWorkException("There was an exception during creating a data contextWrapper.", ex);
             }
         }

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using DotNetCraft.Common.Core.Domain.Management.StopwatchManager;
-using DotNetCraft.Common.Core.Utils.Logging;
-using DotNetCraft.Common.Utils.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
 {
@@ -13,8 +12,6 @@ namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
     /// </summary>
     public class StopwatchManager : BaseBackgroundManager<StopwatchManagerConfig>, IStopwatchManager
     {
-        private readonly ICommonLogger logger = LogManager.GetCurrentClassLogger();
-
         #region Fields...
 
         /// <summary>
@@ -34,8 +31,8 @@ namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
         /// <summary>
         /// Constructor.
         /// </summary>
-        public StopwatchManager(StopwatchManagerConfig config)
-            : base(config)
+        public StopwatchManager(StopwatchManagerConfig config, ILogger<StopwatchManager> logger)
+            : base(config, logger)
         {
             stopwatchDictionary = new Dictionary<string, StopwatchInfo>();
         }
@@ -110,7 +107,7 @@ namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
             }
             stringBuilder.AppendLine("-==== End statistic ====-");
 
-            logger.Debug(stringBuilder.ToString());
+            _logger.LogDebug(stringBuilder.ToString());
         }
 
         /// <summary>
@@ -137,7 +134,7 @@ namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
                 }
             }
 
-            logger.Debug(stringBuilder.ToString());
+            _logger.LogDebug(stringBuilder.ToString());
         }
         #endregion
 
@@ -148,7 +145,7 @@ namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
         /// <summary>
         /// Occurs when manager should do background work.
         /// </summary>
-        protected override void OnBackroundExecution()
+        protected override void OnBackgroundExecution()
         {
             if (stopwatchDictionary == null)
                 return;
@@ -159,13 +156,13 @@ namespace DotNetCraft.Common.Domain.Management.StopwatchManagement
         /// <summary>
         /// Occurs when background work has been completed.
         /// </summary>
-        protected override void OnBackgorundWorkCompleted()
+        protected override void OnBackgroundWorkCompleted()
         {
             if (stopwatchDictionary == null)
                 return;
 
             DisplayAllStatistic();
-            base.OnBackgorundWorkCompleted();
+            base.OnBackgroundWorkCompleted();
         }
 
         #endregion        

@@ -2,8 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using DotNetCraft.Common.CommonClasses.Tests;
 using DotNetCraft.Common.Core.Utils.ReflectionExtensions;
-using DotNetCraft.Common.Utils.Logging;
 using DotNetCraft.Common.Utils.Reflection;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 namespace DotNetCraft.Common.Utils.Tests
@@ -30,7 +30,7 @@ namespace DotNetCraft.Common.Utils.Tests
         [TestCase(typeof(CategoryAttribute), false)]
         public void SingleOrDefaultTest(Type attributeType, bool shouldExist)
         {
-            IReflectionManager reflectionManager = new ReflectionManager(new DebugLoggerFactory());
+            IReflectionManager reflectionManager = new ReflectionManager(new NullLogger<ReflectionManager>());
             var propertyDefinition = reflectionManager.GetPropertyInfosByAttribute(attributeType, typeof(Sample));
             if (shouldExist)
             {
@@ -49,7 +49,7 @@ namespace DotNetCraft.Common.Utils.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void SingleOrDefaultNullParametersTest(Type objectType, Type attributeType)
         {
-            IReflectionManager reflectionManager = new ReflectionManager(new DebugLoggerFactory());
+            IReflectionManager reflectionManager = new ReflectionManager(new NullLogger<ReflectionManager>());
             reflectionManager.GetPropertyInfosByAttribute(attributeType, objectType);
             Assert.Fail("ArgumentNullException expected");
         }
@@ -60,7 +60,7 @@ namespace DotNetCraft.Common.Utils.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void DefaultNullFirstParametersTest(Type objectType, Type attributeType)
         {
-            IReflectionManager reflectionManager = new ReflectionManager(new DebugLoggerFactory());
+            IReflectionManager reflectionManager = new ReflectionManager(new NullLogger<ReflectionManager>());
             reflectionManager.GetPropertyInfosByAttribute(attributeType, objectType);
             Assert.Fail("ArgumentException expected");
         }
@@ -69,7 +69,7 @@ namespace DotNetCraft.Common.Utils.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void SingleOrDefaultGenericNullParametersTest()
         {
-            IReflectionManager reflectionManager = new ReflectionManager(new DebugLoggerFactory());
+            IReflectionManager reflectionManager = new ReflectionManager(new NullLogger<ReflectionManager>());
             reflectionManager.GetPropertyInfosByAttribute(null, typeof(Sample));
             
             Assert.Fail("ArgumentNullException expected");

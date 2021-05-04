@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using DotNetCraft.Common.Core.Utils.Logging;
 using DotNetCraft.Common.Core.Utils.ReflectionExtensions;
+using Microsoft.Extensions.Logging;
 
 namespace DotNetCraft.Common.Utils.Reflection
 {
     public class ReflectionManager : IReflectionManager
     {
         private readonly object _syncObject = new object();
-        private readonly ICommonLogger _logger;
+        private readonly ILogger<ReflectionManager> _logger;
 
         private readonly Dictionary<string, ObjectReflectionData> _objectReflectionDictionary;
 
-        public ReflectionManager(ICommonLoggerFactory simpleLoggerFactory)
+        public ReflectionManager(ILogger<ReflectionManager> logger)
         {
-            if (simpleLoggerFactory == null)
-                throw new ArgumentNullException(nameof(simpleLoggerFactory));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
 
             _objectReflectionDictionary = new Dictionary<string, ObjectReflectionData>();
 
-            _logger = simpleLoggerFactory.Create<ReflectionManager>();
+            _logger = logger;
         }
 
         #region Implementation of IReflectionManager

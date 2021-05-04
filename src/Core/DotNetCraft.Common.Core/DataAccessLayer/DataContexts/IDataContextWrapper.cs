@@ -35,8 +35,5 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.DataContexts
         void BeginTransaction();
         void Commit();
         void RollBack();
-
-        ICollection<TEntity> ExecuteQuery<TEntity>(string query, IDataBaseParameter[] args) 
-            where TEntity : class;
     }
 }

@@ -21,7 +21,7 @@ namespace DotNetCraft.Common.Core.DataAccessLayer.Repositories
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return string.Format("Specification: {0}; Base: {1}", Specification, base.ToString());
+            return $"Specification: {Specification}; Base: {base.ToString()}";
         }
 
         #endregion

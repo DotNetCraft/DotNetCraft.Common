@@ -12,7 +12,7 @@
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return string.Format("Skip: {0}; Take: {1}; OrderBy: {2}", Skip, Take, OrderBy);
+            return $"Skip: {Skip}; Take: {Take}; OrderBy: {OrderBy}";
         }
 
         #endregion

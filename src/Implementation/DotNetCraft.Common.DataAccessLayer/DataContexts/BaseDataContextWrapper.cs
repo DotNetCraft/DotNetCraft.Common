@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
-using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.Utils.Disposal;
 
@@ -74,9 +73,6 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
         protected abstract void OnDelete<TEntity>(TEntity entity)
             where TEntity : class;
 
-        protected abstract ICollection<TEntity> OnExecuteQuery<TEntity>(string query, IDataBaseParameter[] args)
-            where TEntity : class;
-        
         /// <summary>
         /// Get a set with entities.
         /// </summary>
@@ -188,20 +184,6 @@ namespace DotNetCraft.Common.DataAccessLayer.DataContexts
             try
             {
                 OnRollBack();
-            }
-            catch (Exception ex)
-            {
-                throw new DataAccessLayerException("There was a problem during rolling back changes", ex);
-            }
-        }
-
-        public ICollection<TEntity> ExecuteQuery<TEntity>(string query, IDataBaseParameter[] args) 
-            where TEntity : class
-        {
-            try
-            {
-                var result = OnExecuteQuery<TEntity>(query, args);
-                return result;
             }
             catch (Exception ex)
             {

@@ -4,7 +4,7 @@ using DotNetCraft.Common.Core.DataAccessLayer.DataContexts;
 using DotNetCraft.Common.Core.DataAccessLayer.UnitOfWorks.Simple;
 using DotNetCraft.Common.DataAccessLayer.Exceptions;
 using DotNetCraft.Common.DataAccessLayer.UnitOfWorks.SimpleUnitOfWorks;
-using DotNetCraft.Common.Utils.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -19,7 +19,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void ConstructorTest()
         {
             IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, new DebugLogger(GetType())))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, new NullLogger<UnitOfWork>()))
             {
                 Assert.IsTrue(unitOfWork.IsTransactionOpened);
             }
@@ -34,7 +34,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void ConstructorNullParameterTest()
         {
             IDataContextWrapper dataContext = null;
-            new UnitOfWork(dataContext, new DebugLogger(GetType()));
+            new UnitOfWork(dataContext, new NullLogger<UnitOfWork>());
 
             Assert.Fail("ArgumentNullException expected");
         }
@@ -51,7 +51,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
                     throw new Exception();
                 });
 
-            new UnitOfWork(dataContext, new DebugLogger(GetType()));
+            new UnitOfWork(dataContext, new NullLogger<UnitOfWork>());
 
             Assert.Fail("ArgumentNullException expected");
         }
@@ -64,7 +64,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         public void CommitTest()
         {
             IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, new DebugLogger(GetType())))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, new NullLogger<UnitOfWork>()))
             {
                 unitOfWork.Commit();
             }
@@ -85,7 +85,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
                     throw new Exception();
                 });
 
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, new DebugLogger(GetType())))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, new NullLogger<UnitOfWork>()))
             {
                 try
                 {
@@ -114,7 +114,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
         {
             IDataContextWrapper dataContext = Substitute.For<IDataContextWrapper>();
 
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, new DebugLogger(GetType())))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, new NullLogger<UnitOfWork>()))
             {
                 unitOfWork.Rollback();
             }
@@ -135,7 +135,7 @@ namespace DotNetCraft.Common.DataAccessLayer.Tests.UnitOfWorks.SimpleUnitOfWorks
                     throw new Exception();
                 });
 
-            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, new DebugLogger(GetType())))
+            using (IUnitOfWork unitOfWork = new UnitOfWork(dataContext, new NullLogger<UnitOfWork>()))
             {
                 try
                 {
