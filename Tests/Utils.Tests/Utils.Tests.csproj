@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
     <RootNamespace>DotNetCraft.Common.Utils.Tests</RootNamespace>
-    <AssemblyName>DotNetCraft.Common.Utils.Tests</AssemblyName>
+    <AssemblyName>Utils.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

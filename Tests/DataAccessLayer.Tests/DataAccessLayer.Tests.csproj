@@ -3,7 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
     <RootNamespace>DotNetCraft.Common.DataAccessLayer.Tests</RootNamespace>
-    <AssemblyName>DotNetCraft.Common.DataAccessLayer.Tests</AssemblyName>
+    <AssemblyName>DataAccessLayer.Tests</AssemblyName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <WarningLevel>1</WarningLevel>
   </PropertyGroup>
 
   <ItemGroup>
